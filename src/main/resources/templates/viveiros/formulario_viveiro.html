@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Criar Viveiro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+          crossorigin="anonymous">
+</head>
+<body class="bg-light">
+<section class="d-flex justify-content-center mt-5 mb-5">
+    <div class="card shadow-sm p-4 col-12 col-md-6 col-lg-4">
+        <h2 class="mb-3">Adicionar viveiro</h2>
+
+        <!-- Alerta de erro -->
+        <div th:if="${erro}" class="alert alert-danger" role="alert">
+            <p th:text="${erro}"></p>
+        </div>
+
+        <!-- Alerta de sucesso -->
+        <div th:if="${info}" class="alert alert-success" role="alert">
+            <p th:text="${info}"></p>
+        </div>
+
+        <!-- Formulário -->
+        <form th:action="@{/fazenda/{id}/cadastrar-viveiro(id=${idFazenda})}" method="post">
+            <div class="mb-3">
+                <label for="area" class="form-label">Área do viveiro (m²)</label>
+                <input type="number" class="form-control" id="area" name="area"
+                       step="0.01" min="0.01" required>
+            </div>
+            <div class="mb-3">
+                <label for="idPersonalizado" class="form-label">Nº Identificador</label>
+                <div class="input-group">
+                    <span class="input-group-text"><strong>V-</strong></span>
+                    <input type="number" class="form-control" id="idPersonalizado" name="idPersonalizado"
+                           step="1" min="1" required>
+                </div>
+                <div id="idHelp" class="form-text">
+                    O Identificador do seu viveiro ficará no formato <strong>V - xx</strong>. <br>
+                    Informe apenas valor numérico.
+                </div>
+            </div>
+
+            <div class="text-end">
+                <a th:href="@{/fazenda/{id}(id=${idFazenda})}" class="btn btn-danger">Cancelar</a>
+                <button type="submit" class="btn btn-success">Cadastrar</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -127,6 +127,12 @@ public class UsuarioService {
         return fazendas;
     }
 
+    public Fazenda buscarFazendaPorId(String idUsuario,String idFazenda) {
+        Usuario usuario = buscarUsuarioObrigatorio(idUsuario);
+        Fazenda fazenda = usuario.getFazendaPorId(idFazenda);
+        return fazenda;
+    }
+
     // ================= HELPERS =================
 
     private Usuario buscarUsuarioObrigatorio(String usuarioId) {

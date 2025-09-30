@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout-publico :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Login</title>
+</head>
+<body>
+<section class="d-flex justify-content-center align-items-center" style="min-height: calc(85vh - 120px);">
+
+    <style>
+
+        .login-card {
+            display: flex;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            max-width: 900px;
+            width: 100%;
+            background-color: white;
+        }
+
+        .login-left {
+            flex: 1;
+            background: linear-gradient(180deg, #ff8000, #ff4d00);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-left h3 {
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .login-right {
+            flex: 1;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #004080 !important;
+            border-color: #004080 !important;
+        }
+        .btn-primary:hover {
+            background-color: #002d59 !important;
+            border-color: #002d59 !important;
+        }
+
+        .form-control, .btn {
+            border-radius: 6px;
+        }
+
+        @media (max-width: 768px) {
+            .login-card {
+                flex-direction: column;
+            }
+        }
+    </style>
+
+    <div class="login-card">
+        <!-- Balão Laranja -->
+        <div class="login-left">
+            <h3 style="font-size: 1.8rem; line-height: 1.5;">
+                Do controle à produtividade:<br>Tudo na palma da sua mão
+            </h3>
+            <p style="font-size: 1.1rem; line-height: 1.5;">
+                Apresentando a tecnologia que vai transformar o dia a dia da sua fazenda.
+                Mais <strong>controle</strong>, mais <strong>informação</strong> e
+                mais <strong>resultados</strong> para seu cultivo.
+            </p>
+            <div class="d-flex justify-content-center mt-4">
+                <img src="/images/logo.png" alt="AquaShrimp" style="max-width: 220px; width: 100%;">
+            </div>
+        </div>
+
+        <!-- Login -->
+        <div class="login-right">
+            <form method="post" action="/login">
+                <h3 class="mb-4">Acessar Conta</h3>
+                <div th:if="${erro}" class="alert alert-danger" role="alert">
+                    <p th:text="${erro}"></p>
+                </div>
+                <div th:if="${info}" class="alert alert-info" role="alert">
+                    <p th:text="${info}"></p>
+                </div>
+                <div class="mb-3">
+                    <input type="email" name="login" class="form-control" placeholder="Email" required>
+                </div>
+                <div class="mb-3">
+                    <input type="password" name="senha" class="form-control" placeholder="Senha" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                <div class="mt-3 text-center small">
+                    <a href="https://forms.gle/rK1HrZnEJ1FW4BTu5" target="_blank" >
+                        Adquirir Acesso
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>

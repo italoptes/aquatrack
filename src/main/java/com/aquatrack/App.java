@@ -1,5 +1,11 @@
 package com.aquatrack;
+import com.aquatrack.cicloViveiro.CicloViveiroService;
+import com.aquatrack.fazenda.FazendaController;
+import com.aquatrack.fazenda.FazendaService;
+import com.aquatrack.usuario.UsuarioController;
 import com.aquatrack.usuario.UsuarioService;
+import com.aquatrack.viveiro.ViveiroController;
+import com.aquatrack.viveiro.ViveiroService;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
 import io.javalin.http.staticfiles.Location;
@@ -8,22 +14,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-//import projeto.grupo04.biometria.BiometriaController;
-//import projeto.grupo04.biometria.BiometriaService;
-//import projeto.grupo04.cicloViveiro.CicloViveiroController;
-//import projeto.grupo04.cicloViveiro.CicloViveiroService;
-//import projeto.grupo04.fazenda.FazendaController;
-//import projeto.grupo04.fazenda.FazendaRepository;
-//import projeto.grupo04.fazenda.FazendaService;
-//import projeto.grupo04.qualidadeDeAgua.QualidadeAguaController;
-//import projeto.grupo04.qualidadeDeAgua.QualidadeDeAguaService;
-//import projeto.grupo04.racao.RacaoControler;
-//import projeto.grupo04.racao.RacaoService;
-//import projeto.grupo04.relatorio.RelatorioFinalController;
-//import projeto.grupo04.relatorio.RelatorioFinalService;
-//import projeto.grupo04.usuario.*;
-//import projeto.grupo04.viveiro.ViveiroController;
-//import projeto.grupo04.viveiro.ViveiroService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -123,5 +113,24 @@ public class App {
     private void configurarPaginasDeErro(Javalin app) {
         app.error(404, ctx -> ctx.render("erro_404.html"));
         app.error(500, ctx -> ctx.render("erro_500.html"));
+    }
+
+    public void configurarRotas(Javalin app) {
+        // ====== Repositórios ======
+        UsuarioRepository usuarioRepository = new UsuarioRepository();
+
+        // ====== Repositórios ======
+        UsuarioService usuarioService = new UsuarioService();
+        FazendaService fazendaService = new FazendaService();
+        ViveiroService viveiroService = new ViveiroService();
+        CicloViveiroService cicloViveiroService = new CicloViveiroService();
+
+        // ====== Controllers ======
+        LoginController loginController = new LoginController(usuarioService);
+        MasterController masterController = new MasterController(usuarioService);
+        UsuarioController usuarioController = new UsuarioController(usuarioService);
+        FazendaController fazendaController = new FazendaController(usuarioService, fazendaService);
+        ViveiroController viveiroController = new ViveiroController(usuarioService, viveiroService, fazendaService);
+
     }
 }

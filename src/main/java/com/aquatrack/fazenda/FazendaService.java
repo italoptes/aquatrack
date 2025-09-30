@@ -26,6 +26,10 @@ public class FazendaService {
         return fazenda.listarViveiros();
     }
 
+    public Viveiro  getViveiro(Fazenda fazenda, String viveiroId) {
+        return fazenda.getViveiros().get(viveiroId);
+    }
+
     // ===== Estoque de Ração =====
     public void adicionarRacao(Fazenda fazenda, TipoRacao tipo, double quantidadeKg) {
         if (fazenda == null) throw new IllegalArgumentException("Fazenda inválida.");

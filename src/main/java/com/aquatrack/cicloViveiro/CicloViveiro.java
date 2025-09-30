@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class CicloViveiro {
-    private String idCiclo;
-    private LocalDate dataPovoamento;
+    private LocalDate dataPovoamento; //Data povoamento é o id
     private int quantidadePovoada;
     private String laboratorio;
     private boolean ativo;     // true enquanto o ciclo está em andamento
@@ -25,7 +24,6 @@ public class CicloViveiro {
     private ConsumoRacaoViveiro consumoRacaoCiclo;
 
     public CicloViveiro(LocalDate dataPovoamento, int quantidadePovoada, String laboratorio) {
-        this.idCiclo = UUID.randomUUID().toString().substring(0, 8);
         this.dataPovoamento = dataPovoamento;
         this.quantidadePovoada = quantidadePovoada;
         this.laboratorio = laboratorio;
@@ -103,12 +101,6 @@ public class CicloViveiro {
 
 
     //Demais atribútos
-    public String getIdCiclo() {
-        return idCiclo;
-    }
-    public void setIdCiclo(String idCiclo) {
-        this.idCiclo = idCiclo;
-    }
 
     public boolean isAtivo() {
         return ativo;

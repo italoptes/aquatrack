@@ -3,10 +3,7 @@ package com.aquatrack.viveiro;
 
 import com.aquatrack.cicloViveiro.CicloViveiro;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Viveiro {
     private String id;
@@ -43,10 +40,10 @@ public class Viveiro {
     }
 
     public void addCiclo(CicloViveiro cicloViveiro){
-        ciclos.put(cicloViveiro.getIdCiclo(), cicloViveiro);
+        ciclos.put(cicloViveiro.getDataPovoamento().toString(), cicloViveiro);
     }
     public void encerrarCiclo(CicloViveiro cicloViveiro){
-        ciclos.get(cicloViveiro.getIdCiclo()).desativar(); //apenas desativa o ciclo
+        ciclos.get(cicloViveiro.getDataPovoamento().toString()).desativar(); //apenas desativa o ciclo
     }
     public List<CicloViveiro> getCiclos() { //exibe apenas os que não estao deletados
         List<CicloViveiro> listaCiclos = new ArrayList<>();
@@ -56,5 +53,11 @@ public class Viveiro {
             }
         }
         return listaCiclos;
+    }
+
+    public CicloViveiro ultimoCiclo() {
+        return ciclos.values().stream()
+                .max(Comparator.comparing(CicloViveiro::getDataPovoamento))
+                .orElse(null);
     }
 }

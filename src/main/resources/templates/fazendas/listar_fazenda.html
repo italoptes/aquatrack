@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Fazendas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+<section>
+    <br>
+
+    <h1 class="text-center mb-0">Fazendas</h1>
+    <p class="text-center mt-0 mb-3">Fazendas cadastradas no sistema</p>
+
+    <div class="d-flex justify-content-end">
+        <a href="/fazendas/nova" class="btn btn-primary mb-4">Cadastrar fazenda</a>
+    </div>
+
+    <!-- Aviso de nenhuma Fazenda -->
+    <div th:if="${#lists.isEmpty(fazendas)}" class="text-center my-5">
+        <h2 class="text-muted">Nenhuma fazenda cadastrada ainda</h2>
+        <p class="text-secondary">Clique em <strong>Cadastrar fazenda</strong> para adicionar a primeira.</p>
+    </div>
+
+    <!-- Listagem de fazendas -->
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <th:block th:each="fazenda : ${fazendas}">
+            <div class="col">
+                <div class="card h-100 shadow">
+                    <img src="/images/fazendacrop.png" class="card-img-top" alt="Imagem da fazenda">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${fazenda.nome}">Nome da Fazenda</h5>
+                        <p class="card-text">
+                            <span class="fs-7 text-muted bg-light p-1 rounded" th:text="${fazenda.id}"></span>
+                        </p>
+                        <p class="card-text mb-0">
+                            <span th:text="${fazenda.localizacao}"></span>
+                        </p>
+                        <p class="card-text mt-0">
+                            <span th:text="${fazenda.viveirosAtivos()}"></span>
+                            Viveiro(s)
+                        </p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a th:href="@{/fazenda/{id}(id=${fazenda.id})}" class="btn btn-info">
+                            Gerenciar Fazenda
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+
+    <!-- Card do contador de fazendas -->
+    <div th:if="${not #lists.isEmpty(fazendas)}" class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <div class="card bg-transparent">
+                    <div class="card-body text-center">
+                        <span class="text-dark rounded-pill">
+                            <span th:text="${fazendas.size()} + '/3'">1/3</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
