@@ -70,8 +70,8 @@ public class Fazenda {
     public boolean isDeletado() {
         return deletado;
     }
-    public void setDeletado(boolean deletado) {
-        this.deletado = deletado;
+    public void deletar() {
+        this.deletado = true;
     }
 
     public void adicionaQuantidade(TipoRacao tipo, double quantidadeKg) {

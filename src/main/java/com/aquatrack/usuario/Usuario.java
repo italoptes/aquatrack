@@ -12,7 +12,7 @@ public class Usuario {
     private String nome;
     private String senha;
     private List<Fazenda> fazendas = new ArrayList<>();
-    private boolean deletado = false;
+    private boolean deletado;
     private TipoUsuario tipo;
 
     public Usuario(String login, String nome, String senha, TipoUsuario tipoUsuario) {
@@ -31,6 +31,7 @@ public class Usuario {
 
     // Getters e Setters
     public String getId() {return id;}
+    public  void setId(String id) {this.id = id;}
 
     public String getLogin() {return login;}
     public void setLogin(String login) {this.login = login;}
@@ -42,11 +43,23 @@ public class Usuario {
 
     public void setSenha(String senha) {this.senha = senha;}
 
-    public List<Fazenda> getFazendas() {return fazendas;}
+    public Fazenda getFazendaPorId(String id) {
+        return fazendas.stream().filter(f -> f.getId().equals(id)).findFirst().orElse(null);
+    }
+    public List<Fazenda> getFazendas() {
+        ArrayList<Fazenda> fazendasAtivas = new ArrayList<>();
+        for (Fazenda fazenda : fazendas) {
+            if (!fazenda.isDeletado()) {
+                fazendaAtivas.add(fazenda);
+            }
+        }
+        return fazendasAtivas;
+    }
     public void addFazenda(Fazenda fazenda) {this.fazendas.add(fazenda);}
+    public void removerFazenda(String idFazenda) {getFazendaPorId(idFazenda).deletar();}
 
     public boolean isDeletado() {return deletado;}
-    public void deletar(boolean deletado) {this.deletado = deletado;}
+    public void deletar() {this.deletado = true;}
 
     public TipoUsuario getTipo() {return tipo;}
     public void setTipo(TipoUsuario tipo) {this.tipo = tipo;}
