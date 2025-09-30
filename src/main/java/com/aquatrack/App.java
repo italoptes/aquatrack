@@ -1,7 +1,14 @@
 package com.aquatrack;
+import com.aquatrack.biometria.BiometriaController;
+import com.aquatrack.cicloViveiro.CicloViveiroController;
 import com.aquatrack.cicloViveiro.CicloViveiroService;
 import com.aquatrack.fazenda.FazendaController;
 import com.aquatrack.fazenda.FazendaService;
+import com.aquatrack.qualidadeDeAgua.QualidadeAguaController;
+import com.aquatrack.racao.RacaoController;
+import com.aquatrack.relatorio.RelatorioFinalController;
+import com.aquatrack.usuario.TipoUsuario;
+import com.aquatrack.usuario.Usuario;
 import com.aquatrack.usuario.UsuarioController;
 import com.aquatrack.usuario.UsuarioService;
 import com.aquatrack.viveiro.ViveiroController;
@@ -130,7 +137,114 @@ public class App {
         MasterController masterController = new MasterController(usuarioService);
         UsuarioController usuarioController = new UsuarioController(usuarioService);
         FazendaController fazendaController = new FazendaController(usuarioService, fazendaService);
-        ViveiroController viveiroController = new ViveiroController(usuarioService, viveiroService, fazendaService);
+        ViveiroController viveiroController = new ViveiroController(usuarioService, fazendaService);
+        CicloViveiroController cicloViveiroController = new CicloViveiroController(usuarioService, fazendaService, viveiroService);
+        RacaoController racaoController = new RacaoController(usuarioService, fazendaService, cicloViveiroService);
+        BiometriaController biometriaController = new BiometriaController(fazendaService, usuarioService);
+        QualidadeAguaController qualidadeAguaController = new QualidadeAguaController(fazendaService, usuarioService);
+        RelatorioFinalController relatorioFinalController = new RelatorioFinalController(fazendaService, cicloViveiroService, usuarioService);
 
+        // ===== Cria Usuário Master ====
+        usuarioService.criaUsuarioMaster();
+
+        // ====== Rotas ======
+
+        //Middleware que vai verificar quais rotas não precisam de loggin
+        app.before(ctx -> {
+            String path = ctx.path();
+
+            //Aqui é definido quais rotas são públicas e não precisam de login
+            boolean rotaPublica =
+                    path.equals("/") || path.equals("/login")  || path.equals("/usuarios/novo") || path.equals("/logout") ||
+                            path.equals("/usuarios/cadastrar") || path.equals("/usuarios/signup") ||
+                            path.equals("/contato")|| path.startsWith("/images"); // <-Sem isso não aparece foto
+
+            // Se não for pública e o usuário não estiver na sessão, redireciona para /login
+            if (!rotaPublica && ctx.sessionAttribute("usuario") == null) {
+                ctx.redirect("/login");
+            }
+        });
+
+        //Middleware específico para master
+        app.before("/master/*", ctx ->{
+            Usuario usuario = ctx.sessionAttribute("usuario");
+
+            if (usuario == null || usuario.getTipo() != TipoUsuario.MASTER) {
+                ctx.status(403).result("Acesso negado - apenas usuário master");
+            }
+        });
+
+        // Login
+        app.get("/", ctx -> ctx.redirect("/login"));
+        app.get("/login", loginController::mostrarPaginaLogin);
+        app.post("/login", loginController::processarLogin);
+        app.get("/logout", loginController::logout);
+
+        //Usuaŕio Master
+        app.get("/master", masterController::mostrarPaginaMaster);
+        app.get("/master/cadastrar", masterController::mostrarFormulario_signup);
+        app.post("/master/cadastrar", masterController::cadastrarUsuario);
+        app.post("master/removerUsuario", masterController::removerUsuario);
+
+        // Fazendas
+        app.get("/fazendas", fazendaController::listarFazendas);
+        app.get("/fazendas/nova", fazendaController::mostrarFormularioFazenda);
+        app.post("/fazendas/criar", fazendaController::cadastrarFazenda);
+        app.post("/fazenda/{id}/remover", fazendaController::removerFazenda);
+        app.get("/fazenda/{id}", fazendaController::abrirFazenda);
+
+        // Viveiros
+        app.get("/fazenda/{id}/cadastrar-viveiro", viveiroController::mostrarFormularioViveiro);
+        app.post("/fazenda/{id}/cadastrar-viveiro", viveiroController::cadastrarViveiro);
+        app.post("/fazenda/{id}/viveiro/{idViveiro}/remover", viveiroController::removerViveiro);
+        app.get("/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro", viveiroController::abrirViveiro);
+
+        // Ração
+        app.get("/fazenda/{id}/abastecer-racao", racaoController::mostrarFormularioAdicionarRacao);
+        app.post("/fazenda/{id}/abastecer-racao", racaoController::adicionarRacao);
+        app.get("/fazenda/{id}/viveiro/{idViveiro}/consumir-racao", racaoController::mostrarFormularioConsumirRacao);
+        app.post("/fazenda/{id}/viveiro/{idViveiro}/consumir-racao", racaoController::consumirRacao);
+
+        // Ciclo do Viveiro
+        app.get("/fazendas/{id}/viveiro/{idViveiro}/formulario_ciclo_viveiro", cicloViveiroController::mostrarFormularioCicloViveiro);
+        app.post("/fazendas/{id}/viveiro/{idViveiro}/formulario_ciclo_viveiro", cicloViveiroController::iniciarCiclo);
+        app.get("/fazendas/{id}/viveiro/{idViveiro}/ciclo/finalizar", cicloViveiroController::finalizarCiclo);
+
+        // Relatório
+        app.post("/fazenda/{id}/viveiro/{idViveiro}/ciclo/finalizar", relatorioFinalController::fecharRelatorio);
+        app.get("/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro", relatorioFinalController::listarRelatorios);
+        app.get("/fazenda/{id}/viveiro/{idViveiro}/relatorios/{dataDaVenda}/pdf", relatorioFinalController::downloadPdf);
+
+        // Biometria
+        app.get("/fazendas/{id}/viveiro/{idViveiro}/formulario_biometria", biometriaController::mostrarFormularioBiometria);
+        app.post("/fazendas/{id}/viveiro/{idViveiro}/formulario_biometria", biometriaController::atualizaBiometria);
+        app.get("/fazendas/{id}/viveiro/{idViveiro}/historico_biometria", biometriaController::historicoBiometria);
+
+        // Qualidade de Água
+        app.get("/fazenda/{id}/viveiro/{idViveiro}/formulario_qualidade_de_agua", qualidadeAguaController::mostrarFormularioQualidadeAgua);
+        app.post("/fazenda/{id}/viveiro/{idViveiro}/formulario_qualidade_de_agua", qualidadeAguaController::atualizaQualidadeAgua);
+        app.get("/fazenda/{id}/viveiro/{idViveiro}/historico_agua", qualidadeAguaController::historicoQualidadeAgua);
+
+    }
+
+    public void iniciar() {
+        Javalin app = inicializarJavalin();
+        configurarPaginasDeErro(app);
+        configurarRotas(app);
+
+        // Lidando com exceções não tratadas
+        app.exception(Exception.class, (e, ctx) -> {
+            logger.error("Erro não tratado", e);
+            ctx.status(500);
+        });
+    }
+
+    public static void main(String[] args) {
+        try {
+            new App().iniciar();
+        } catch (Exception e) {
+            logger.error("Erro ao iniciar a aplicação", e);
+            System.exit(1);
+        }
     }
 }

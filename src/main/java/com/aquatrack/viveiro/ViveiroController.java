@@ -18,12 +18,10 @@ public class ViveiroController {
     private static final Logger logger = LogManager.getLogger(ViveiroController.class);
 
     private final UsuarioService usuarioService;
-    private final ViveiroService viveiroService;
     private final FazendaService fazendaService;
 
-    public ViveiroController(UsuarioService usuarioService, ViveiroService viveiroService, FazendaService fazendaService) {
+    public ViveiroController(UsuarioService usuarioService, FazendaService fazendaService) {
         this.usuarioService = usuarioService;
-        this.viveiroService = viveiroService;
         this.fazendaService = fazendaService;
     }
 

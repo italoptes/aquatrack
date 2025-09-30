@@ -1,6 +1,7 @@
 package com.aquatrack.cicloViveiro;
 
 import com.aquatrack.biometria.Biometria;
+import com.aquatrack.fazenda.Fazenda;
 import com.aquatrack.qualidadeDeAgua.QualidadeDeAgua;
 import com.aquatrack.racao.TipoRacao;
 import com.aquatrack.relatorio.RelatorioFinal;
@@ -9,7 +10,6 @@ import com.aquatrack.viveiro.ConsumoRacaoViveiro;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class CicloViveiro {
     private LocalDate dataPovoamento; //Data povoamento é o id
@@ -30,6 +30,7 @@ public class CicloViveiro {
         this.historicoBiometria = new ArrayList<Biometria>();
         this.historicoQualidadeAgua = new ArrayList<QualidadeDeAgua>();
         this.consumoRacaoCiclo = new ConsumoRacaoViveiro();
+        this.relatorioFinal = null;
         this.ativo = true;
         this.deletado = false;
     }
@@ -42,7 +43,6 @@ public class CicloViveiro {
     public RelatorioFinal getRelatorioFinal() {
         return relatorioFinal;
     }
-
 
     //Biometria
     public void addBiometria(Biometria biometria) {

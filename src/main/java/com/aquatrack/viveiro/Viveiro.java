@@ -2,6 +2,7 @@ package com.aquatrack.viveiro;
 
 
 import com.aquatrack.cicloViveiro.CicloViveiro;
+import com.aquatrack.relatorio.RelatorioFinal;
 
 import java.util.*;
 
@@ -54,10 +55,24 @@ public class Viveiro {
         }
         return listaCiclos;
     }
+    public CicloViveiro getCiclo(String cicloId){
+        return ciclos.get(cicloId);
+    }
 
     public CicloViveiro ultimoCiclo() {
         return ciclos.values().stream()
                 .max(Comparator.comparing(CicloViveiro::getDataPovoamento))
                 .orElse(null);
+    }
+
+    public List<RelatorioFinal> relatoriosFinais() {
+        List<RelatorioFinal> listaRelatorios = new ArrayList<>();
+        for (CicloViveiro ciclo : ciclos.values()) {
+            RelatorioFinal relatorioFinal = ciclo.getRelatorioFinal();
+            if (relatorioFinal != null) {
+                listaRelatorios.add(relatorioFinal);
+            }
+        }
+        return listaRelatorios; //É para listar somente os relatorios fechados
     }
 }

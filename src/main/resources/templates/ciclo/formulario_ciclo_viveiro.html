@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Gerenciar Ciclo do Viveiro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body class="bg-light">
+<section class="d-flex justify-content-center mt-5 mb-5">
+    <div class="card shadow-sm p-4 col-12 col-md-8 col-lg-6">
+        <h2 class="mb-3">Gerenciar Ciclo do Viveiro</h2>
+        <p class="text-muted">Aqui você pode iniciar ou finalizar o Ciclo do Viveiro</p>
+
+        <!-- Alerta de erro -->
+        <div th:if="${erro}" class="alert alert-danger" role="alert">
+            <p th:text="${erro}"></p>
+        </div>
+
+        <!-- Caso não tenha ciclo ativo -->
+        <div th:if="${!cicloAtivo}">
+            <form th:action="@{/fazendas/{id}/viveiro/{idViveiro}/formulario_ciclo_viveiro(id=${idFazenda}, idViveiro=${idViveiro})}"
+                  method="post" id="formIniciarCiclo">
+
+                <div class="mb-3">
+                    <label for="laboratorio" class="form-label">Laboratório</label>
+                    <input type="text" class="form-control" id="laboratorio" name="laboratorio"
+                           required minlength="3" maxlength="50">
+                    <label for="quantidadePopulacaoPovoada" class="form-label">
+                        Quantidade de indivíduos que será povoado
+                    </label>
+                    <input type="number" class="form-control" id="quantidadePopulacaoPovoada"
+                           name="quantidadePopulacaoPovoada" step="1" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="dia" class="form-label">Data do Povoamento</label>
+                    <div class="d-flex mb-3">
+                        <input type="number" class="form-control me-2" id="dia" name="dia"
+                               placeholder="dd" min="1" max="31" required style="width: 30%;">
+                        <input type="number" class="form-control me-2" id="mes" name="mes"
+                               placeholder="mm" min="1" max="12" required style="width: 30%;">
+                        <input type="number" class="form-control" id="ano" name="ano"
+                               placeholder="aaaa" min="1900" max="2100" required style="width: 30%;">
+                    </div>
+                </div>
+
+                <!-- Botões alinhados -->
+                <div class="d-flex justify-content-end gap-2">
+                    <a th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}"
+                       class="btn btn-danger">Cancelar</a>
+                    <button type="button" class="btn btn-info"
+                            data-bs-toggle="modal" data-bs-target="#confirmarCicloModal"
+                            onclick="atualizarMensagem()">
+                        Confirmar
+                    </button>
+                </div>
+
+                <!-- Modal de confirmação -->
+                <div class="modal fade" id="confirmarCicloModal" tabindex="-1"
+                     aria-labelledby="confirmarCicloModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-info text-white">
+                                <h5 class="modal-title" id="confirmarCicloModalLabel">Confirmar Início do Ciclo</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p id="mensagemConfirmacao">Você está prestes a iniciar um novo ciclo de criação, os dados serão resetados para acompanhar o novo ciclo.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-info">Sim, iniciar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Caso já tenha ciclo ativo -->
+        <div th:if="${cicloAtivo}">
+            <p><strong>Ciclo atual iniciado em:</strong> <span th:text="${dataPovoamento}"></span></p>
+            <p><strong>Laboratório:</strong> <span th:text="${laboratorio}"></span></p>
+            <p><strong>População povoada:</strong> <span th:text="${quantidadePopulacaoPovoada}"></span></p>
+
+            <form th:action="@{/fazendas/{id}/viveiro/{idViveiro}/finalizarCiclo(id=${idFazenda}, idViveiro=${idViveiro})}"
+                  method="post">
+                <div class="d-flex justify-content-end gap-2">
+                    <a th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}"
+                       class="btn btn-secondary">Voltar</a>
+                    <button type="submit" class="btn btn-warning">Finalizar Ciclo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+<script>
+    function atualizarMensagem() {
+        const inputQtd = document.getElementById("quantidadePopulacaoPovoada").value;
+        const msg = document.getElementById("mensagemConfirmacao");
+
+        if (inputQtd && inputQtd > 0) {
+            msg.textContent = `⚠️ Você está prestes a iniciar um ciclo no laboratório "${document.getElementById("laboratorio").value}" com ${inputQtd} indivíduos. Deseja continuar?`;
+        } else {
+            msg.textContent = "⚠️ Você está prestes a iniciar o ciclo.";
+        }
+    }
+    // Garante que ao abrir o modal a mensagem seja atualizada
+    document.getElementById("confirmarCicloModal")
+        .addEventListener("show.bs.modal", atualizarMensagem);
+</script>
+</body>
+</html>
