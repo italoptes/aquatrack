@@ -1,9 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectId" id="33PypSd4jbXaXe3V2AeFMrAd0aT" />
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ca1bea4b-38fe-405c-9b23-8b22eb0c6076" name="Changes" comment="">
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/Imagens/logos/comFundo/2.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/Imagens/logos/comFundo/3.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/Imagens/logos/comFundo/4.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/Imagens/logos/comFundo/5.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/Imagens/logos/comFundo/Beta/Design sem nome (2).png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/Imagens/logos/comFundo/Beta/Design sem nome.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/Imagens/logos/comFundo/Logo Corrigido com Borda e Fundo.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/Imagens/logos/semFundo/2.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/Imagens/logos/semFundo/2_cut.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/Imagens/logos/semFundo/3.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/Imagens/logos/semFundo/beta/Design sem nome (1) - Copia.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/Imagens/logos/semFundo/beta/Design sem nome (1).png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/Imagens/logos/semFundo/beta/Logo.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/README.md" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/src/main/resources/log4j2.properties" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/src/main/resources/public/images/404.gif" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/src/main/resources/public/images/505.gif" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/src/main/resources/public/images/backgroundWhite.jpg" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/src/main/resources/public/images/fazenda.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/src/main/resources/public/images/fazendacrop.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/src/main/resources/public/images/gato.gif" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/src/main/resources/public/images/ico.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/src/main/resources/public/images/logo.png" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/src/main/resources/public/images/travolta.gif" afterDir="false" />
+      <change afterPath="$USER_HOME$/IdeaProjects/AquaTrack/src/main/resources/public/index.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$USER_HOME$/IdeaProjects/AquaTrack" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$USER_HOME$/IdeaProjects/AquaTrack" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "italoptes"
   }
-}</component>
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/italoptes/aquatrack.git",
+    "accountId": "ef934d21-2b4e-4ea2-a901-6506928b1928"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 2
+}]]></component>
+  <component name="ProjectId" id="33PypSd4jbXaXe3V2AeFMrAd0aT" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "git-widget-placeholder": "dev",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/italo-pontes/IdeaProjects/AquaTrack",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "/home/italo-pontes/IdeaProjects/AquaTrack/src/main/java/com/aquatrack/Main.java",
+    "settings.editor.selected.configurable": "vcs.Git",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169" />
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-IU-252.26199.169" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ca1bea4b-38fe-405c-9b23-8b22eb0c6076" name="Changes" comment="" />
+      <created>1759233187738</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1759233187738</updated>
+      <workItem from="1759233189247" duration="473000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$USER_HOME$/IdeaProjects/AquaTrack/src/main/java/com/aquatrack/Main.java</url>
+          <line>13</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
 </project>
