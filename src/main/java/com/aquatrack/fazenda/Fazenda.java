@@ -1,10 +1,12 @@
 package com.aquatrack.fazenda;
 
+import com.aquatrack.UsuarioRepository;
 import com.aquatrack.racao.RacaoEstoque;
 import com.aquatrack.racao.TipoRacao;
 import com.aquatrack.viveiro.Viveiro;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Fazenda {
     private String id;

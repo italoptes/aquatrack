@@ -62,6 +62,9 @@ public class Biometria {
         return dataColeta.toString();
     }
 
+    public boolean isValida() {
+        return quantidadeAmostra > 0 && pesoTotalAmostra > 0 && dataColeta != null;
+    }
 }
 
 

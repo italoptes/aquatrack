@@ -50,7 +50,7 @@ public class Usuario {
         ArrayList<Fazenda> fazendasAtivas = new ArrayList<>();
         for (Fazenda fazenda : fazendas) {
             if (!fazenda.isDeletado()) {
-                fazendaAtivas.add(fazenda);
+                fazendasAtivas.add(fazenda);
             }
         }
         return fazendasAtivas;

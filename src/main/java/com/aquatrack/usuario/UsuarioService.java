@@ -7,6 +7,7 @@ import com.aquatrack.fazenda.Fazenda;
 import com.aquatrack.fazenda.FazendaService;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class UsuarioService {
@@ -105,8 +106,7 @@ public class UsuarioService {
 
     // ================= FAZENDAS DO USUÁRIO =================
 
-    public void adicionarFazendaAoUsuario(String usuarioId, Fazenda fazenda) {
-        Usuario usuario = buscarUsuarioObrigatorio(usuarioId);
+    public void adicionarFazendaAoUsuario(Usuario usuario, Fazenda fazenda) { //Fazenda é criada no Controller e passada para o service
         if (fazenda == null || isBlank(fazenda.getId())) {
             throw new IllegalArgumentException("Fazenda inválida.");
         }
