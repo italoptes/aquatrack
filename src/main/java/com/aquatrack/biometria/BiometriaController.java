@@ -1,11 +1,13 @@
 package com.aquatrack.biometria;
 
 import com.aquatrack.cicloViveiro.CicloViveiro;
+import com.aquatrack.cicloViveiro.CicloViveiroService;
 import com.aquatrack.fazenda.Fazenda;
 import com.aquatrack.fazenda.FazendaService;
 import com.aquatrack.usuario.Usuario;
 import com.aquatrack.usuario.UsuarioService;
 import com.aquatrack.viveiro.Viveiro;
+import com.aquatrack.viveiro.ViveiroService;
 import io.javalin.http.Context;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,12 +24,13 @@ public class BiometriaController {
 
     private final FazendaService fazendaService;
     private final UsuarioService usuarioService;
+    private final CicloViveiroService cicloViveiroService;
 
     public BiometriaController(FazendaService fazendaService,
-                               UsuarioService usuarioService) {
+                               UsuarioService usuarioService, CicloViveiroService ciclo) {
         this.usuarioService = usuarioService;
         this.fazendaService = fazendaService;
-
+        this.cicloViveiroService = ciclo;
     }
 
     public void mostrarFormularioBiometria(Context ctx) {
@@ -77,7 +80,7 @@ public class BiometriaController {
             Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
             Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
             CicloViveiro cicloViveiro = viveiro.ultimoCiclo();
-            cicloViveiro.addBiometria(new Biometria(quantidadeAmostra, pesoTotalAmostra, dataColeta));
+            cicloViveiroService.registrarBiometria(usuario,cicloViveiro,new Biometria(quantidadeAmostra, pesoTotalAmostra, dataColeta));
             logger.info("Biometria registrada com sucesso: fazenda={}, viveiro={}, qtd={}, peso={}",
                     idFazenda, idViveiro, quantidadeAmostra, pesoTotalAmostra);
             ctx.redirect("/fazenda/" + idFazenda + "/viveiro/" + idViveiro + "/abrirViveiro");

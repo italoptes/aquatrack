@@ -128,9 +128,9 @@ public class App {
 
         // ====== Repositórios ======
         UsuarioService usuarioService = new UsuarioService();
-        FazendaService fazendaService = new FazendaService();
-        ViveiroService viveiroService = new ViveiroService();
-        CicloViveiroService cicloViveiroService = new CicloViveiroService();
+        FazendaService fazendaService = new FazendaService(usuarioRepository);
+        ViveiroService viveiroService = new ViveiroService(usuarioRepository);
+        CicloViveiroService cicloViveiroService = new CicloViveiroService(usuarioRepository);
 
         // ====== Controllers ======
         LoginController loginController = new LoginController(usuarioService);
@@ -140,8 +140,8 @@ public class App {
         ViveiroController viveiroController = new ViveiroController(usuarioService, fazendaService);
         CicloViveiroController cicloViveiroController = new CicloViveiroController(usuarioService, fazendaService, viveiroService);
         RacaoController racaoController = new RacaoController(usuarioService, fazendaService, cicloViveiroService);
-        BiometriaController biometriaController = new BiometriaController(fazendaService, usuarioService);
-        QualidadeAguaController qualidadeAguaController = new QualidadeAguaController(fazendaService, usuarioService);
+        BiometriaController biometriaController = new BiometriaController(fazendaService, usuarioService, cicloViveiroService);
+        QualidadeAguaController qualidadeAguaController = new QualidadeAguaController(fazendaService, usuarioService, cicloViveiroService);
         RelatorioFinalController relatorioFinalController = new RelatorioFinalController(fazendaService, cicloViveiroService, usuarioService);
 
         // ===== Cria Usuário Master ====
@@ -169,7 +169,7 @@ public class App {
         app.before("/master/*", ctx ->{
             Usuario usuario = ctx.sessionAttribute("usuario");
 
-            if (usuario == null || usuario.getTipo() != TipoUsuario.MASTER) {
+            if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.MASTER) {
                 ctx.status(403).result("Acesso negado - apenas usuário master");
             }
         });

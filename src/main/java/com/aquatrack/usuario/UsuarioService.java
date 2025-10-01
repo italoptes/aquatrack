@@ -12,6 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class UsuarioService {
 
+    private final List<String> idExistentesFazendas = new ArrayList<>();
     private final UsuarioRepository usuarioRepository;
     private FazendaService fazendaService;
 
@@ -80,10 +81,6 @@ public class UsuarioService {
         return usuario.isDeletado();
     }
 
-    public int contaFazendasUsuarios(Usuario usuario) {
-        return usuario.getFazendas().size();
-    }
-
     // ================= AUTENTICAÇÃO =================
 
     public Usuario autenticar(String login, String senha) {
@@ -107,6 +104,7 @@ public class UsuarioService {
     // ================= FAZENDAS DO USUÁRIO =================
 
     public void adicionarFazendaAoUsuario(Usuario usuario, Fazenda fazenda) { //Fazenda é criada no Controller e passada para o service
+        gerarId(fazenda);
         if (fazenda == null || isBlank(fazenda.getId())) {
             throw new IllegalArgumentException("Fazenda inválida.");
         }
@@ -123,7 +121,7 @@ public class UsuarioService {
 
     public List<Fazenda> listarFazendasDoUsuario(String usuarioId) {
         Usuario usuario = buscarUsuarioObrigatorio(usuarioId);
-        List<Fazenda> fazendas = usuario.getFazendas();
+        List<Fazenda> fazendas = usuario.listarFazendasAtivas();
         return fazendas;
     }
 
@@ -133,6 +131,9 @@ public class UsuarioService {
         return fazenda;
     }
 
+    public int contaFazendasUsuarios(Usuario usuario) {
+        return usuario.contaFazendasUsuarios(usuario);
+    }
     // ================= HELPERS =================
 
     private Usuario buscarUsuarioObrigatorio(String usuarioId) {
@@ -146,4 +147,17 @@ public class UsuarioService {
     private static boolean isBlank(String s) {
         return s == null || s.trim().isEmpty();
     }
+
+    private void gerarId(Fazenda fazenda) {
+        while (true) {
+            int numero = ThreadLocalRandom.current().nextInt(100, 1000);
+            String id = String.format("F-%04d", numero);
+            if (!idExistentesFazendas.contains(id)) {
+                idExistentesFazendas.add(id);
+                fazenda.setId(id);
+                return;
+            }
+        }
+    }
+
 }

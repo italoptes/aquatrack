@@ -12,6 +12,11 @@ public class Viveiro {
     private Map<String, CicloViveiro> ciclos;
     private boolean deletado;
 
+    public Viveiro() {
+        this.ciclos = new HashMap<>();
+        this.deletado = false;
+    }
+
     public Viveiro(String id, double area) {
         this.id = id;
         this.area = area;

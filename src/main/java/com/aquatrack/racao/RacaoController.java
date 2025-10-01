@@ -74,7 +74,7 @@ public class RacaoController {
             double quantidade = Double.parseDouble(ctx.formParam("quantidade"));
             if (quantidade <= 0) throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
 
-            fazendaService.adicionarRacao(fazenda, tipoRacao, quantidade);
+            fazendaService.adicionarRacao(usuario, fazenda, tipoRacao, quantidade);
             logger.info("Ração adicionada com sucesso: fazenda={}, tipo={}, quantidade={}", idFazenda, tipoRacao, quantidade);
             ctx.redirect("/fazenda/" + idFazenda);
 
@@ -116,7 +116,7 @@ public class RacaoController {
             double quantidade = Double.parseDouble(ctx.formParam("quantidade"));
             if (quantidade <= 0) throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
 
-            cicloViveiroService.registrarConsumoRacao(cicloViveiro, tipoRacao, quantidade);
+            cicloViveiroService.registrarConsumoRacao(usuario, cicloViveiro, tipoRacao, quantidade);
             logger.info("Ração consumida com sucesso: fazenda={}, viveiro={}, tipo={}, quantidade={}", idFazenda, idViveiro, tipoRacao, quantidade);
             ctx.redirect("/fazenda/" + idFazenda + "/viveiro/" + idViveiro + "/abrirViveiro");
 

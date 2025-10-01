@@ -68,7 +68,7 @@ public class CicloViveiroController{
 
             Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
             Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
-            viveiroService.abrirCiclo(viveiro, dataPovoamento, quantPopulacao, laboratorio);
+            viveiroService.abrirCiclo(usuario, viveiro, dataPovoamento, quantPopulacao, laboratorio);
             logger.info("Ciclo de viveiro iniciado com sucesso: fazenda={}, viveiro={}, laboratorio={}, quantidade={}",
                     idFazenda, idViveiro, laboratorio, quantPopulacao);
             ctx.redirect("/fazenda/" + idFazenda + "/viveiro/" + idViveiro + "/abrirViveiro");

@@ -49,12 +49,10 @@ public class UsuarioRepository {
             List<Usuario> listaUsuario = gson.fromJson(reader, tipoListaUsuario);
             if (listaUsuario != null) {
                 for (Usuario usuario : listaUsuario) {
-                    if (usuario.getId() != null) {
-                        usuarios.put(usuario.getId(), usuario);
-                    }
+                    usuarios.put(usuario.getId(), usuario);
                 }
             } else {
-                // Arquivo vazio → lista nula, mantemos 'usuarios' vazio
+                usuarios.clear();
             }
         } catch (IOException e) {
             throw new RuntimeException("Erro ao ler arquivo de usuários.", e);
@@ -95,7 +93,7 @@ public class UsuarioRepository {
     public Usuario buscarUsuarioPorTipo(TipoUsuario tipoUsuario) {
         carregarUsuarios();
         return usuarios.values().stream()
-                .filter(u -> Objects.equals(tipoUsuario, u.getTipo()) && !u.isDeletado())
+                .filter(u -> Objects.equals(tipoUsuario, u.getTipoUsuario()) && !u.isDeletado())
                 .findFirst()
                 .orElse(null);
     }

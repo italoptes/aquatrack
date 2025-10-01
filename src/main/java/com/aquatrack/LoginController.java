@@ -35,7 +35,7 @@ public class LoginController {
             ctx.sessionAttribute("usuario", usuario);
             logger.info("Usuário '{}' autenticado com sucesso.", login);
 
-            if (usuario.getTipo() == TipoUsuario.MASTER) {
+            if (usuario.getTipoUsuario() == TipoUsuario.MASTER) {
                 ctx.redirect("/master");
             } else {
                 ctx.redirect("/fazendas");

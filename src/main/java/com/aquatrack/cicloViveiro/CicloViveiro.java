@@ -5,6 +5,7 @@ import com.aquatrack.fazenda.Fazenda;
 import com.aquatrack.qualidadeDeAgua.QualidadeDeAgua;
 import com.aquatrack.racao.TipoRacao;
 import com.aquatrack.relatorio.RelatorioFinal;
+import com.aquatrack.usuario.Usuario;
 import com.aquatrack.viveiro.ConsumoRacaoViveiro;
 
 import java.time.LocalDate;

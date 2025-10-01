@@ -45,7 +45,7 @@ public class ViveiroController {
             String idViveiro = ctx.formParam("idPersonalizado");
             Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
             Viveiro viveiro = new Viveiro("V-" + idViveiro, area);
-            fazendaService.adicionarViveiro(fazenda, viveiro);
+            fazendaService.adicionarViveiro(usuario,fazenda, viveiro);
             logger.info("Viveiro cadastrado: fazenda={}, area={}, id={}", idFazenda, area, idViveiro);
             ctx.redirect("/fazenda/" + idFazenda);
 
@@ -124,7 +124,7 @@ public class ViveiroController {
         String idViveiro = ctx.pathParam("idViveiro");
         Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
         try {
-            fazendaService.removerViveiro(fazenda, idViveiro);
+            fazendaService.removerViveiro(usuario,fazenda, idViveiro);
             logger.info("Viveiro removido com sucesso: fazenda={}, viveiro={}", idFazenda, idViveiro);
             ctx.sessionAttribute("info", "Viveiro removido com sucesso!");
             ctx.redirect("/fazenda/" + idFazenda);

@@ -89,7 +89,7 @@ public class RelatorioFinalController {
             // Usa o parseData para aceitar vários formatos
             LocalDate dataDaVenda = parseData(dataDaVendaStr);
 
-            cicloViveiroService.gerarRelatorioFinal(cicloViveiro,  biometriaFinal, biomassaFinal, dataDaVenda);
+            cicloViveiroService.gerarRelatorioFinal(usuario, cicloViveiro,  biometriaFinal, biomassaFinal, dataDaVenda);
             logger.info("Relatório gerado e ciclo finalizado: fazenda={}, viveiro={}, data={}", idFazenda, idViveiro, dataDaVenda);
             ctx.redirect("/fazenda/" + idFazenda + "/viveiro/" + idViveiro + "/abrirViveiro");
 
@@ -127,7 +127,6 @@ public class RelatorioFinalController {
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
         Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
-
         try {
             Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
             CicloViveiro cicloViveiro = viveiro.ultimoCiclo();
@@ -142,7 +141,7 @@ public class RelatorioFinalController {
             }
 
             // Gera o PDF com os dados do relatório já fechado
-            byte[] pdf = relatorioFinalPdfGenerator.gerarPdf(relatorioFinal, fazenda);
+            byte[] pdf = relatorioFinalPdfGenerator.gerarPdf(relatorioFinal, fazenda,viveiro);
 
             if (pdf == null) {
                 throw new IllegalStateException("Falha ao gerar PDF. Byte array retornou nulo.");

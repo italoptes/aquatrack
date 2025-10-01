@@ -11,7 +11,7 @@ public class Usuario {
     private String login;
     private String nome;
     private String senha;
-    private List<Fazenda> fazendas = new ArrayList<>();
+    private List<Fazenda> fazendas;
     private boolean deletado;
     private TipoUsuario tipo;
 
@@ -23,6 +23,14 @@ public class Usuario {
         this.deletado = false;
         this.tipo = tipoUsuario;
         this.fazendas = new ArrayList<>();
+    }
+
+    public List<Fazenda> getFazendas() {
+        return fazendas;
+    }
+
+    public void setFazendas(List<Fazenda> fazendas) {
+        this.fazendas = fazendas;
     }
 
     public Usuario() {
@@ -46,7 +54,10 @@ public class Usuario {
     public Fazenda getFazendaPorId(String id) {
         return fazendas.stream().filter(f -> f.getId().equals(id)).findFirst().orElse(null);
     }
-    public List<Fazenda> getFazendas() {
+    public int contaFazendasUsuarios(Usuario usuario) {
+        return usuario.listarFazendasAtivas().size();
+    }
+    public List<Fazenda> listarFazendasAtivas() {
         ArrayList<Fazenda> fazendasAtivas = new ArrayList<>();
         for (Fazenda fazenda : fazendas) {
             if (!fazenda.isDeletado()) {
@@ -61,8 +72,8 @@ public class Usuario {
     public boolean isDeletado() {return deletado;}
     public void deletar() {this.deletado = true;}
 
-    public TipoUsuario getTipo() {return tipo;}
-    public void setTipo(TipoUsuario tipo) {this.tipo = tipo;}
+    public TipoUsuario getTipoUsuario() {return tipo;}
+    public void setTipoUsuario(TipoUsuario tipo) {this.tipo = tipo;}
 
     public List<Fazenda> listarFazendas() {
         List<Fazenda> listaFazendas = new ArrayList<>();

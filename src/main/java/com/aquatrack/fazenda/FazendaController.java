@@ -39,7 +39,7 @@ public class FazendaController {
             if (nome == null || nome.trim().isEmpty()) throw new IllegalArgumentException("O nome da fazenda é obrigatório.");
             if (localizacao == null || localizacao.trim().isEmpty()) throw new IllegalArgumentException("A localização da fazenda é obrigatória.");
 
-            Fazenda fazenda = new Fazenda(nome.trim(), localizacao.trim());
+            Fazenda fazenda = new Fazenda(nome, localizacao);
             usuarioService.adicionarFazendaAoUsuario(usuario, fazenda);
 
             logger.info("Fazenda cadastrada: nome={}, localizacao={}", nome, localizacao);

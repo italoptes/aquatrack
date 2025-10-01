@@ -1,12 +1,12 @@
 package com.aquatrack.relatorio;
 
 import com.aquatrack.fazenda.Fazenda;
+import com.aquatrack.viveiro.Viveiro;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import org.jetbrains.annotations.NotNull;
-import projeto.grupo04.fazenda.Fazenda;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.io.IOException;
 public class RelatorioFinalPdfGenerator {
 
     //Gera o pdf
-    public byte[] gerarPdf(RelatorioFinal relatorio, Fazenda fazenda) {
+    public byte[] gerarPdf(RelatorioFinal relatorio, Fazenda fazenda, Viveiro viveiro) {
         try {
             // Cria documento A4 em memória
             Document document = new Document(PageSize.A4);
@@ -35,7 +35,7 @@ public class RelatorioFinalPdfGenerator {
             titulo(relatorio, fonte, document);
 
             // ---------- IDENTIFICAÇÃO ----------
-            identificacao("Fazenda: " + fazenda.getNome(), fonte.subtitleFont(), document, "Viveiro: " + relatorio.getViveiro().getId(), fonte);
+            identificacao("Fazenda: " + fazenda.getNome(), fonte.subtitleFont(), document, "Viveiro: " + viveiro.getId(), fonte);
 
             // ---------- TABELA 1 ----------
             tabela1(relatorio, fonte, document);
@@ -128,7 +128,7 @@ public class RelatorioFinalPdfGenerator {
     }
 
     private static void titulo(RelatorioFinal relatorio, Fontes fonte, Document document) {
-        identificacao("Relatório Final Ciclo Viveiro", fonte.titleFont(), document, "Data da Venda: " + relatorio.getDataDaVenda(), fonte);
+        identificacao("Relatório Final Ciclo Viveiro", fonte.titleFont(), document, "Data da Venda: " + relatorio.getDataVenda(), fonte);
     }
 
     @NotNull

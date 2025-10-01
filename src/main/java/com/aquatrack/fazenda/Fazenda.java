@@ -1,12 +1,10 @@
 package com.aquatrack.fazenda;
 
-import com.aquatrack.UsuarioRepository;
 import com.aquatrack.racao.RacaoEstoque;
 import com.aquatrack.racao.TipoRacao;
 import com.aquatrack.viveiro.Viveiro;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Fazenda {
     private String id;
@@ -62,13 +60,6 @@ public class Fazenda {
         this.racaoEstoque = racaoEstoque;
     }
 
-    public Map<String, Viveiro> getViveiros() {
-        return viveiros;
-    }
-    public void setViveiros(Map<String, Viveiro> viveiros) {
-        this.viveiros = viveiros;
-    }
-
     public boolean isDeletado() {
         return deletado;
     }
@@ -100,6 +91,19 @@ public class Fazenda {
             }
         }
         return listaViveiros;
+    }
+    public Map<String, Viveiro> getViveiros() {
+        return viveiros;
+    }
+    public int viveirosAtivos() { //Usado no front para exibir o Nº de viveiros da fazenda
+        int viveirosAtivos = 0;
+        for (Viveiro v : viveiros.values()) {
+            if (!v.isDeletado()) {viveirosAtivos++;}
+        }
+        return viveirosAtivos;
+    }
+    public void setViveiros(Map<String, Viveiro> viveiros) {
+        this.viveiros = viveiros;
     }
 
 }

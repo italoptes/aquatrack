@@ -2,6 +2,7 @@ package com.aquatrack.qualidadeDeAgua;
 
 import com.aquatrack.biometria.Biometria;
 import com.aquatrack.cicloViveiro.CicloViveiro;
+import com.aquatrack.cicloViveiro.CicloViveiroService;
 import com.aquatrack.fazenda.Fazenda;
 import com.aquatrack.fazenda.FazendaController;
 import com.aquatrack.fazenda.FazendaService;
@@ -21,10 +22,12 @@ public class QualidadeAguaController {
 
     private final FazendaService fazendaService;
     private UsuarioService usuarioService;
+    private CicloViveiroService cicloViveiroService;
 
-    public QualidadeAguaController(FazendaService fazendaService, UsuarioService usuarioService) {
+    public QualidadeAguaController(FazendaService fazendaService, UsuarioService usuarioService, CicloViveiroService cicloViveiroService) {
         this.fazendaService = fazendaService;
         this.usuarioService = usuarioService;
+        this.cicloViveiroService = cicloViveiroService;
     }
 
     public void mostrarFormularioQualidadeAgua(Context ctx) {
@@ -68,7 +71,7 @@ public class QualidadeAguaController {
             // Usa o parseData para aceitar vários formatos
             LocalDate dataColeta = parseData(dataColetaStr);
             QualidadeDeAgua qualidadeAgua = new QualidadeDeAgua(amonia, nitrito, ph, alcalinidade, salinidade, oxigenio, dataColeta);
-            cicloViveiro.addQualidadeDeAgua(qualidadeAgua);
+            cicloViveiroService.registrarQualidadeAgua(usuario, cicloViveiro, qualidadeAgua);
             logger.info("Qualidade de água registrada com sucesso: fazenda={}, viveiro={}", idFazenda, idViveiro);
             ctx.redirect("/fazenda/" + idFazenda + "/viveiro/" + idViveiro + "/abrirViveiro");
         } catch (NumberFormatException e) {

@@ -1,13 +1,21 @@
 package com.aquatrack.viveiro;
 
+import com.aquatrack.UsuarioRepository;
 import com.aquatrack.cicloViveiro.CicloViveiro;
+import com.aquatrack.usuario.Usuario;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class ViveiroService {
 
-    public CicloViveiro abrirCiclo(Viveiro viveiro, LocalDate dataPovoamento, int quantidade, String laboratorio) {
+    private UsuarioRepository usuarioRepository;
+
+    public ViveiroService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
+
+    public CicloViveiro abrirCiclo(Usuario usuario, Viveiro viveiro, LocalDate dataPovoamento, int quantidade, String laboratorio) {
         if (viveiro == null || viveiro.isDeletado()) {
             throw new IllegalArgumentException("Viveiro inválido.");
         }
@@ -20,13 +28,15 @@ public class ViveiroService {
 
         CicloViveiro ciclo = new CicloViveiro(dataPovoamento, quantidade, laboratorio);
         viveiro.addCiclo(ciclo);
+        usuarioRepository.salvarUsuario(usuario);
         return ciclo;
     }
 
-    public void encerrarCiclo(Viveiro viveiro, String cicloId) {
+    public void encerrarCiclo(Usuario usuario,Viveiro viveiro, String cicloId) {
         if (viveiro == null) throw new IllegalArgumentException("Viveiro inválido.");
         CicloViveiro cicloViveiro = viveiro.getCiclo(cicloId);
         viveiro.encerrarCiclo(cicloViveiro);
+        usuarioRepository.salvarUsuario(usuario);
     }
 
     public List<CicloViveiro> listarCiclos(Viveiro viveiro) {
