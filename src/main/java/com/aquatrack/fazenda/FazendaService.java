@@ -20,14 +20,20 @@ public class FazendaService {
         if (fazenda == null || viveiro == null) {
             throw new IllegalArgumentException("Fazenda ou Viveiro inválidos.");
         }
-        fazenda.addViveiro(viveiro);
+        verificaId(usuario, fazenda.getId(), viveiro.getId());
+        Fazenda fazendaUser = usuario.getFazendaPorId(fazenda.getId());
+        fazendaUser.addViveiro(viveiro);
         usuarioRepository.salvarUsuario(usuario);
     }
 
     public void removerViveiro(Usuario usuario, Fazenda fazenda, String viveiroId) {
         if (fazenda == null) throw new IllegalArgumentException("Fazenda inválida.");
-        Viveiro v = fazenda.getViveiros().get(viveiroId);
-        if (v != null) v.deleta();
+        Viveiro viveiro = fazenda.getViveiros().get(viveiroId);
+        if (viveiro == null) {
+            throw new IllegalArgumentException("Viveiro inválido: " + viveiroId);
+        }
+        Fazenda fazendaUser = usuario.getFazendaPorId(fazenda.getId());
+        fazendaUser.removerViveiro(viveiro);
         usuarioRepository.salvarUsuario(usuario);
     }
 
@@ -41,10 +47,20 @@ public class FazendaService {
         return fazenda.getViveiros().get(viveiroId);
     }
 
+    private void verificaId(Usuario usuario, String idFazenda, String idViveiro) {
+        Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);
+        if (fazendaUser.getViveiros().containsKey(idViveiro) ) {
+            if (!fazendaUser.getViveiros().get(idViveiro).isDeletado()){
+                throw new IllegalArgumentException("Já existe uma fazenda com o id "+idViveiro.trim());
+            }
+        }
+    }
+
     // ===== Estoque de Ração =====
     public void adicionarRacao(Usuario usuario, Fazenda fazenda, TipoRacao tipo, double quantidadeKg) {
         if (fazenda == null) throw new IllegalArgumentException("Fazenda inválida.");
-        fazenda.adicionaQuantidade(tipo, quantidadeKg);
+        Fazenda fazendaUser = usuario.getFazendaPorId(fazenda.getId());
+        fazendaUser.adicionaQuantidade(tipo, quantidadeKg);
         usuarioRepository.salvarUsuario(usuario);
     }
 

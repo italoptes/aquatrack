@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public final class GsonProvider {
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+            .enableComplexMapKeySerialization() // <- permite Map com chave complexa (enum, objeto)
             .setPrettyPrinting()
             .create();
 

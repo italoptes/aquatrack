@@ -80,4 +80,14 @@ public class Viveiro {
         }
         return listaRelatorios; //É para listar somente os relatorios fechados
     }
+
+    public boolean isCicloAtivo() { //Usado no front
+        CicloViveiro ultimo = ultimoCiclo();
+        if (ultimo == null) {
+            return false; // nenhum ciclo cadastrado
+        }
+        return ultimo.isAtivo(); // só retorna true se o último ciclo ainda estiver em andamento
+    }
+
+
 }

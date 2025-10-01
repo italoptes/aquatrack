@@ -92,9 +92,6 @@ public class Fazenda {
         }
         return listaViveiros;
     }
-    public Map<String, Viveiro> getViveiros() {
-        return viveiros;
-    }
     public int viveirosAtivos() { //Usado no front para exibir o Nº de viveiros da fazenda
         int viveirosAtivos = 0;
         for (Viveiro v : viveiros.values()) {
@@ -102,8 +99,13 @@ public class Fazenda {
         }
         return viveirosAtivos;
     }
+    public Map<String, Viveiro> getViveiros() {
+        return viveiros;
+    }
+
     public void setViveiros(Map<String, Viveiro> viveiros) {
         this.viveiros = viveiros;
     }
+
 
 }
