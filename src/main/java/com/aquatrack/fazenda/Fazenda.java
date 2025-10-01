@@ -68,10 +68,18 @@ public class Fazenda {
     }
 
     public void adicionaQuantidade(TipoRacao tipo, double quantidadeKg) {
+        if (quantidadeKg <= 0) {
+            throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+        }
         racaoEstoque.adicionar(tipo,  quantidadeKg);
     }
     public void removerQuantidade(TipoRacao tipo, double quantidadeKg) {
-        racaoEstoque.consumir(tipo,  quantidadeKg);
+        if (quantidadeKg > listarQuantidadePorTipo(tipo)) {
+            throw new IllegalArgumentException(
+                    String.format("Quantidade solicitada (%.2f Kg) é maior do que o estoque disponível (%.2f Kg).",
+                            quantidadeKg, listarQuantidadePorTipo(tipo))
+            );
+        }        racaoEstoque.consumir(tipo,  quantidadeKg);
     }
     public double listarQuantidadePorTipo(TipoRacao tipo) {
         return racaoEstoque.getQuantidadeRacaoPorTipo(tipo);

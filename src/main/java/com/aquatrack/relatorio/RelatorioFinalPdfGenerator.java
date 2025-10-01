@@ -128,7 +128,7 @@ public class RelatorioFinalPdfGenerator {
     }
 
     private static void titulo(RelatorioFinal relatorio, Fontes fonte, Document document) {
-        identificacao("Relatório Final Ciclo Viveiro", fonte.titleFont(), document, "Data da Venda: " + relatorio.getDataVenda(), fonte);
+        identificacao("Relatório Final Ciclo Viveiro", fonte.titleFont(), document, "Data da Venda: " + relatorio.getDataDaVenda(), fonte);
     }
 
     @NotNull

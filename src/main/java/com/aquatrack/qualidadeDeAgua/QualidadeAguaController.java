@@ -46,8 +46,8 @@ public class QualidadeAguaController {
         ctx.attribute("idViveiro", idViveiro);
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
-        Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
-        Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
+        Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);
+        Viveiro viveiro = fazendaService.getViveiro(fazendaUser, idViveiro);
         CicloViveiro cicloViveiro = viveiro.ultimoCiclo();
         try {
             double amonia       = Double.parseDouble(ctx.formParam("amonia"));

@@ -100,12 +100,12 @@ public class RacaoController {
         String idViveiro = ctx.pathParam("idViveiro");
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
-        Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
-        Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
+        Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);
+        Viveiro viveiro = fazendaService.getViveiro(fazendaUser, idViveiro);
         CicloViveiro cicloViveiro = viveiro.ultimoCiclo();
 
-        double estoqueEngorda = fazendaService.consultarEstoquePorTipo(fazenda, TipoRacao.ENGORDA);
-        double estoqueCrescimento = fazendaService.consultarEstoquePorTipo(fazenda, TipoRacao.CRESCIMENTO);
+        double estoqueEngorda = fazendaService.consultarEstoquePorTipo(fazendaUser, TipoRacao.ENGORDA);
+        double estoqueCrescimento = fazendaService.consultarEstoquePorTipo(fazendaUser, TipoRacao.CRESCIMENTO);
         ctx.attribute("estoqueEngorda", estoqueEngorda);
         ctx.attribute("estoqueCrescimento", estoqueCrescimento);
         ctx.attribute("idFazenda", idFazenda);
@@ -117,6 +117,7 @@ public class RacaoController {
             if (quantidade <= 0) throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
 
             cicloViveiroService.registrarConsumoRacao(usuario, cicloViveiro, tipoRacao, quantidade);
+            fazendaService.removerRacao(usuario, fazendaUser, tipoRacao, quantidade);
             logger.info("Ração consumida com sucesso: fazenda={}, viveiro={}, tipo={}, quantidade={}", idFazenda, idViveiro, tipoRacao, quantidade);
             ctx.redirect("/fazenda/" + idFazenda + "/viveiro/" + idViveiro + "/abrirViveiro");
 

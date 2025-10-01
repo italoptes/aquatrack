@@ -142,7 +142,7 @@ public class App {
         RacaoController racaoController = new RacaoController(usuarioService, fazendaService, cicloViveiroService);
         BiometriaController biometriaController = new BiometriaController(fazendaService, usuarioService, cicloViveiroService);
         QualidadeAguaController qualidadeAguaController = new QualidadeAguaController(fazendaService, usuarioService, cicloViveiroService);
-        RelatorioFinalController relatorioFinalController = new RelatorioFinalController(fazendaService, cicloViveiroService, usuarioService);
+        RelatorioFinalController relatorioFinalController = new RelatorioFinalController(fazendaService, cicloViveiroService, usuarioService, viveiroService);
 
         // ===== Cria Usuário Master ====
         usuarioService.criaUsuarioMaster();

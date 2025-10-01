@@ -8,7 +8,7 @@ import java.time.temporal.ChronoUnit;
 public class RelatorioFinal {
     private transient CicloViveiro ciclo;
 
-    private LocalDate dataVenda;
+    private LocalDate dataDaVenda;
     private LocalDate dataPovoamento;
     private double biometriaFinal;
     private double biomassaFinal;
@@ -22,7 +22,7 @@ public class RelatorioFinal {
 
     public RelatorioFinal(CicloViveiro ciclo, double biometriaFinal, double biomassaFinal, LocalDate dataVenda) {
         this.ciclo = ciclo;
-        this.dataVenda = dataVenda;
+        this.dataDaVenda = dataVenda;
         this.dataPovoamento = ciclo.getDataPovoamento();
         this.biometriaFinal = biometriaFinal;
         this.biomassaFinal = biomassaFinal;
@@ -56,12 +56,12 @@ public class RelatorioFinal {
         this.ciclo = ciclo;
     }
 
-    public LocalDate getDataVenda() {
-        return dataVenda;
+    public LocalDate getDataDaVenda() {
+        return dataDaVenda;
     }
 
-    public void setDataVenda(LocalDate dataVenda) {
-        this.dataVenda = dataVenda;
+    public void setDataDaVenda(LocalDate dataDaVenda) {
+        this.dataDaVenda = dataDaVenda;
     }
 
     public LocalDate getDataPovoamento() {

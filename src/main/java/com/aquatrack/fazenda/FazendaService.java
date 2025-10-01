@@ -21,8 +21,7 @@ public class FazendaService {
             throw new IllegalArgumentException("Fazenda ou Viveiro inválidos.");
         }
         verificaId(usuario, fazenda.getId(), viveiro.getId());
-        Fazenda fazendaUser = usuario.getFazendaPorId(fazenda.getId());
-        fazendaUser.addViveiro(viveiro);
+        fazenda.addViveiro(viveiro);
         usuarioRepository.salvarUsuario(usuario);
     }
 
@@ -32,8 +31,7 @@ public class FazendaService {
         if (viveiro == null) {
             throw new IllegalArgumentException("Viveiro inválido: " + viveiroId);
         }
-        Fazenda fazendaUser = usuario.getFazendaPorId(fazenda.getId());
-        fazendaUser.removerViveiro(viveiro);
+        fazenda.removerViveiro(viveiro);
         usuarioRepository.salvarUsuario(usuario);
     }
 
@@ -67,6 +65,13 @@ public class FazendaService {
     public double consultarEstoquePorTipo(Fazenda fazenda, TipoRacao tipo) {
         if (fazenda == null) throw new IllegalArgumentException("Fazenda inválida.");
         return fazenda.listarQuantidadePorTipo(tipo);
+    }
+
+    public void removerRacao(Usuario usuario, Fazenda fazenda, TipoRacao tipo, double quantidadeKg){
+        if (fazenda == null) throw new IllegalArgumentException("Fazenda inválida.");
+        Fazenda fazendaUser = usuario.getFazendaPorId(fazenda.getId());
+        fazendaUser.removerQuantidade(tipo, quantidadeKg);
+        usuarioRepository.salvarUsuario(usuario);
     }
 
     public boolean isFazendaDeletada(Fazenda fazenda) {

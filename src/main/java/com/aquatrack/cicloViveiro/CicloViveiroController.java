@@ -65,9 +65,8 @@ public class CicloViveiroController{
 
             int quantPopulacao = Integer.parseInt(quantidadeParam);
             if (quantPopulacao <= 0) throw new IllegalArgumentException("Quantidade deve ser um valor positivo.");
-
-            Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
-            Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
+            Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);
+            Viveiro viveiro = fazendaService.getViveiro(fazendaUser, idViveiro);
             viveiroService.abrirCiclo(usuario, viveiro, dataPovoamento, quantPopulacao, laboratorio);
             logger.info("Ciclo de viveiro iniciado com sucesso: fazenda={}, viveiro={}, laboratorio={}, quantidade={}",
                     idFazenda, idViveiro, laboratorio, quantPopulacao);
@@ -94,7 +93,7 @@ public class CicloViveiroController{
             ctx.attribute("idFazenda", idFazenda);
             ctx.attribute("idViveiro", idViveiro);
             logger.info("Preparando finalização de ciclo: fazenda={}, viveiro={}", idFazenda, idViveiro);
-            ctx.render("ciclo/formulario_relatorio.html");
+            ctx.render("relatorio/formulario_relatorio.html");
         } catch (Exception e) {
             logger.error("Erro ao preparar finalização do ciclo: fazenda={}, viveiro={}", idFazenda, idViveiro, e);
             ctx.attribute("erro", "Não foi possível abrir o formulário de relatório.");

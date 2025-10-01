@@ -43,9 +43,9 @@ public class ViveiroController {
             double area = Double.parseDouble(areaParam);
             if (area <= 0) throw new IllegalArgumentException("A área do viveiro deve ser maior que zero.");
             String idViveiro = ctx.formParam("idPersonalizado");
-            Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
+            Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);
             Viveiro viveiro = new Viveiro("V-" + idViveiro, area);
-            fazendaService.adicionarViveiro(usuario,fazenda, viveiro);
+            fazendaService.adicionarViveiro(usuario,fazendaUser, viveiro);
             logger.info("Viveiro cadastrado: fazenda={}, area={}, id={}", idFazenda, area, idViveiro);
             ctx.redirect("/fazenda/" + idFazenda);
 
@@ -122,9 +122,9 @@ public class ViveiroController {
         assert usuario != null;
         String idFazenda = ctx.pathParam("id");
         String idViveiro = ctx.pathParam("idViveiro");
-        Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
+        Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);
         try {
-            fazendaService.removerViveiro(usuario,fazenda, idViveiro);
+            fazendaService.removerViveiro(usuario,fazendaUser, idViveiro);
             logger.info("Viveiro removido com sucesso: fazenda={}, viveiro={}", idFazenda, idViveiro);
             ctx.sessionAttribute("info", "Viveiro removido com sucesso!");
             ctx.redirect("/fazenda/" + idFazenda);

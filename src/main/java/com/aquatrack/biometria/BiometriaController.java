@@ -77,8 +77,8 @@ public class BiometriaController {
                 throw new IllegalArgumentException("Quantidade e peso devem ser valores positivos.");
             }
 
-            Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
-            Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
+            Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);
+            Viveiro viveiro = fazendaService.getViveiro(fazendaUser, idViveiro);
             CicloViveiro cicloViveiro = viveiro.ultimoCiclo();
             cicloViveiroService.registrarBiometria(usuario,cicloViveiro,new Biometria(quantidadeAmostra, pesoTotalAmostra, dataColeta));
             logger.info("Biometria registrada com sucesso: fazenda={}, viveiro={}, qtd={}, peso={}",

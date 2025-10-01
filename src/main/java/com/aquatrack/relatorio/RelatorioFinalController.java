@@ -7,6 +7,7 @@ import com.aquatrack.fazenda.FazendaService;
 import com.aquatrack.usuario.Usuario;
 import com.aquatrack.usuario.UsuarioService;
 import com.aquatrack.viveiro.Viveiro;
+import com.aquatrack.viveiro.ViveiroService;
 import io.javalin.http.Context;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,18 +20,20 @@ public class RelatorioFinalController {
     private static final Logger logger = LogManager.getLogger(RelatorioFinalController.class);
 
     private final FazendaService fazendaService;
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
     private final CicloViveiroService cicloViveiroService;
     private final RelatorioFinalPdfGenerator relatorioFinalPdfGenerator;
+    private final ViveiroService viveiroService;
 
     // Construtor com injeção de dependências
 
 
-    public RelatorioFinalController(FazendaService fazendaService, CicloViveiroService cicloViveiroService, UsuarioService usuarioService) {
+    public RelatorioFinalController(FazendaService fazendaService, CicloViveiroService cicloViveiroService, UsuarioService usuarioService, ViveiroService viveiroService) {
         this.fazendaService = fazendaService;
         this.cicloViveiroService = cicloViveiroService;
         this.usuarioService = usuarioService;
         this.relatorioFinalPdfGenerator = new RelatorioFinalPdfGenerator();
+        this.viveiroService = viveiroService;
     }
 
     public void listarRelatorios(Context ctx) {
@@ -67,8 +70,8 @@ public class RelatorioFinalController {
         String idViveiro = ctx.pathParam("idViveiro");
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
-        Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
-        Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
+        Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);
+        Viveiro viveiro = fazendaService.getViveiro(fazendaUser, idViveiro);
         CicloViveiro cicloViveiro = viveiro.ultimoCiclo();
         try {
             double biometriaFinal = Double.parseDouble(ctx.formParam("biometriaFinal"));
@@ -90,6 +93,7 @@ public class RelatorioFinalController {
             LocalDate dataDaVenda = parseData(dataDaVendaStr);
 
             cicloViveiroService.gerarRelatorioFinal(usuario, cicloViveiro,  biometriaFinal, biomassaFinal, dataDaVenda);
+            viveiroService.encerrarCiclo(usuario,viveiro, cicloViveiro.getDataPovoamento().toString());
             logger.info("Relatório gerado e ciclo finalizado: fazenda={}, viveiro={}, data={}", idFazenda, idViveiro, dataDaVenda);
             ctx.redirect("/fazenda/" + idFazenda + "/viveiro/" + idViveiro + "/abrirViveiro");
 
