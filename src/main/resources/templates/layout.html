@@ -26,35 +26,31 @@
 
         <!-- Área do usuário -->
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item d-flex align-items-center me-4">
+            <ul class="navbar-nav ms-auto me-2 me-lg-5">
+                <li class="nav-item dropdown d-flex align-items-center me-4" th:if="${session.usuario != null}">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2"
+                       href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 
-                    <!-- Se usuário estiver logado -->
-                    <div th:if="${session.usuario != null}" class="d-flex align-items-center gap-3">
+                        <img th:src="${session.usuario != null && session.usuario.urlFoto != null
+                  ? session.usuario.urlFoto : '/images/default-user.png'}"
+                             alt="Foto de Perfil"
+                             class="rounded-circle"
+                             style="width:40px; height:40px; object-fit:cover;">
+
                         <span class="text-white fw-bold"
-                              th:text="'Olá, ' + ${session.usuario.nome} + '!'">
-                            Olá, Usuário!
-                        </span>
-
-                        <a th:href="@{/usuario}">
-                            <img th:src="${session.usuario != null && session.usuario.urlFoto != null
-              ? session.usuario.urlFoto
-              : '/images/default-user.png'}"
-                                 alt="Foto de Perfil"
-                                 class="rounded-circle"
-                                 style="width:40px; height:40px; object-fit:cover;">
-                        </a>
-                        <a th:href="@{/logout}" class="btn btn-outline-light btn-sm">Sair</a>
-                    </div>
-
-                    <!-- Se não estiver logado -->
-                    <div th:if="${session.usuario == null}">
-                        <a th:href="@{/login}" class="btn btn-light btn-sm">Entrar</a>
-                    </div>
-
+                              th:text="'Olá, ' + ${session.usuario.nome} + '!'">Olá, Usuário!</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                        <li><a class="dropdown-item" th:href="@{/fazendas}">> Fazendas</a></li>
+                        <li><a class="dropdown-item" th:href="@{/usuario}">> Perfil</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" th:href="@{/logout}">Sair</a></li>
+                    </ul>
                 </li>
+
             </ul>
         </div>
+
     </div>
 </nav>
 <!-- end top bar -->
