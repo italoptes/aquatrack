@@ -37,6 +37,7 @@ public class ViveiroController {
         ctx.attribute("idFazenda", idFazenda);
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         try {
             String areaParam = ctx.formParam("area");
             if (areaParam == null) throw new IllegalArgumentException("A área do viveiro deve ser informada.");
@@ -69,6 +70,7 @@ public class ViveiroController {
     public void listarViveiros(Context ctx) {
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         String idFazenda = ctx.pathParam("id");
         ctx.attribute("idFazenda", idFazenda);
         Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
@@ -80,6 +82,7 @@ public class ViveiroController {
     public void abrirViveiro(Context ctx) {
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         String id = ctx.pathParam("id");
         String idViveiro = ctx.pathParam("idViveiro");
         try {
@@ -120,6 +123,7 @@ public class ViveiroController {
     public void removerViveiro(Context ctx) {
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         String idFazenda = ctx.pathParam("id");
         String idViveiro = ctx.pathParam("idViveiro");
         Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);

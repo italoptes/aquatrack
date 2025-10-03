@@ -24,6 +24,9 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.function.Consumer;
 
@@ -32,9 +35,7 @@ public class App {
 
     private static final int PORTA_PADRAO = 8000;
 
-    //Propriedades do application.properties.exemplo:
     private static final String PROP_PORTA_SERVIDOR = "porta.servidor";
-
 
     private final Properties propriedades;
 
@@ -91,31 +92,41 @@ public class App {
     private void configureJavalin(JavalinConfig config) {
         TemplateEngine templateEngine = configurarThymeleaf();
 
-        config.events(event -> {
-            event.serverStarting(() -> {
-                logger.info("Servidor Javalin está iniciando...");
-                registrarServicos(config);
-            });
-            event.serverStopping(() -> {
-            });
-        });
+        // cria a pasta uploads se não existir
+        Path pastaUploads = Paths.get("uploads");
+        try {
+            if (!Files.exists(pastaUploads)) {
+                Files.createDirectories(pastaUploads);
+            }
+        } catch (IOException e) {
+            logger.error("Erro ao criar diretório de uploads", e);
+        }
+
+        // arquivos internos (resources/public)
         config.staticFiles.add(staticFileConfig -> {
             staticFileConfig.directory = "/public";
             staticFileConfig.location = Location.CLASSPATH;
         });
-        config.fileRenderer(new JavalinThymeleaf(templateEngine));
 
+        // arquivos externos (uploads/)
+        config.staticFiles.add(staticFiles -> {
+            staticFiles.hostedPath = "/uploads";
+            staticFiles.directory = "uploads";
+            staticFiles.location = Location.EXTERNAL;
+        });
+
+        config.fileRenderer(new JavalinThymeleaf(templateEngine));
     }
+
+
 
     private Javalin inicializarJavalin() {
         int porta = obterPortaServidor();
-
         logger.info("Iniciando aplicação na porta {}", porta);
-
         Consumer<JavalinConfig> configConsumer = this::configureJavalin;
-
         return Javalin.create(configConsumer).start(porta);
     }
+
 
     private void configurarPaginasDeErro(Javalin app) {
         app.error(404, ctx -> ctx.render("erro_404.html"));
@@ -123,16 +134,13 @@ public class App {
     }
 
     public void configurarRotas(Javalin app) {
-        // ====== Repositórios ======
         UsuarioRepository usuarioRepository = new UsuarioRepository();
 
-        // ====== Repositórios ======
         UsuarioService usuarioService = new UsuarioService();
         FazendaService fazendaService = new FazendaService(usuarioRepository);
         ViveiroService viveiroService = new ViveiroService(usuarioRepository);
         CicloViveiroService cicloViveiroService = new CicloViveiroService(usuarioRepository);
 
-        // ====== Controllers ======
         LoginController loginController = new LoginController(usuarioService);
         MasterController masterController = new MasterController(usuarioService);
         UsuarioController usuarioController = new UsuarioController(usuarioService);
@@ -144,95 +152,78 @@ public class App {
         QualidadeAguaController qualidadeAguaController = new QualidadeAguaController(fazendaService, usuarioService, cicloViveiroService);
         RelatorioFinalController relatorioFinalController = new RelatorioFinalController(fazendaService, cicloViveiroService, usuarioService, viveiroService);
 
-        // ===== Cria Usuário Master ====
         usuarioService.criaUsuarioMaster();
 
-        // ====== Rotas ======
-
-        //Middleware que vai verificar quais rotas não precisam de loggin
         app.before(ctx -> {
             String path = ctx.path();
-
-            //Aqui é definido quais rotas são públicas e não precisam de login
             boolean rotaPublica =
                     path.equals("/") || path.equals("/login")  || path.equals("/usuarios/novo") || path.equals("/logout") ||
                             path.equals("/usuarios/cadastrar") || path.equals("/usuarios/signup") ||
-                            path.equals("/contato")|| path.startsWith("/images"); // <-Sem isso não aparece foto
-
-            // Se não for pública e o usuário não estiver na sessão, redireciona para /login
+                            path.equals("/contato")|| path.startsWith("/images");
             if (!rotaPublica && ctx.sessionAttribute("usuario") == null) {
                 ctx.redirect("/login");
             }
         });
 
-        //Middleware específico para master
         app.before("/master/*", ctx ->{
             Usuario usuario = ctx.sessionAttribute("usuario");
-
             if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.MASTER) {
                 ctx.status(403).result("Acesso negado - apenas usuário master");
             }
         });
 
-        // Login
         app.get("/", ctx -> ctx.redirect("/login"));
         app.get("/login", loginController::mostrarPaginaLogin);
         app.post("/login", loginController::processarLogin);
         app.get("/logout", loginController::logout);
 
-        //Usuaŕio Master
+        app.get("/usuario", usuarioController::paginaUsuario);
+        app.post("/usuario/editar", usuarioController::editarUsuario);
+        app.post("/usuario/alterarSenha", usuarioController::editarSenha);
+        app.post("/usuario/editarFoto", usuarioController::editarFoto);
+
         app.get("/master", masterController::mostrarPaginaMaster);
         app.get("/master/cadastrar", masterController::mostrarFormulario_signup);
         app.post("/master/cadastrar", masterController::cadastrarUsuario);
         app.post("master/removerUsuario", masterController::removerUsuario);
 
-        // Fazendas
         app.get("/fazendas", fazendaController::listarFazendas);
         app.get("/fazendas/nova", fazendaController::mostrarFormularioFazenda);
         app.post("/fazendas/criar", fazendaController::cadastrarFazenda);
         app.post("/fazenda/{id}/remover", fazendaController::removerFazenda);
         app.get("/fazenda/{id}", fazendaController::abrirFazenda);
 
-        // Viveiros
         app.get("/fazenda/{id}/cadastrar-viveiro", viveiroController::mostrarFormularioViveiro);
         app.post("/fazenda/{id}/cadastrar-viveiro", viveiroController::cadastrarViveiro);
         app.post("/fazenda/{id}/viveiro/{idViveiro}/remover", viveiroController::removerViveiro);
         app.get("/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro", viveiroController::abrirViveiro);
 
-        // Ração
         app.get("/fazenda/{id}/abastecer-racao", racaoController::mostrarFormularioAdicionarRacao);
         app.post("/fazenda/{id}/abastecer-racao", racaoController::adicionarRacao);
         app.get("/fazenda/{id}/viveiro/{idViveiro}/consumir-racao", racaoController::mostrarFormularioConsumirRacao);
         app.post("/fazenda/{id}/viveiro/{idViveiro}/consumir-racao", racaoController::consumirRacao);
 
-        // Ciclo do Viveiro
         app.get("/fazendas/{id}/viveiro/{idViveiro}/formulario_ciclo_viveiro", cicloViveiroController::mostrarFormularioCicloViveiro);
         app.post("/fazendas/{id}/viveiro/{idViveiro}/formulario_ciclo_viveiro", cicloViveiroController::iniciarCiclo);
         app.get("/fazendas/{id}/viveiro/{idViveiro}/ciclo/finalizar", cicloViveiroController::finalizarCiclo);
 
-        // Relatório
         app.post("/fazenda/{id}/viveiro/{idViveiro}/ciclo/finalizar", relatorioFinalController::fecharRelatorio);
         app.get("/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro", relatorioFinalController::listarRelatorios);
         app.get("/fazenda/{id}/viveiro/{idViveiro}/relatorios/{dataDaVenda}/pdf", relatorioFinalController::downloadPdf);
 
-        // Biometria
         app.get("/fazendas/{id}/viveiro/{idViveiro}/formulario_biometria", biometriaController::mostrarFormularioBiometria);
         app.post("/fazendas/{id}/viveiro/{idViveiro}/formulario_biometria", biometriaController::atualizaBiometria);
         app.get("/fazendas/{id}/viveiro/{idViveiro}/historico_biometria", biometriaController::historicoBiometria);
 
-        // Qualidade de Água
         app.get("/fazenda/{id}/viveiro/{idViveiro}/formulario_qualidade_de_agua", qualidadeAguaController::mostrarFormularioQualidadeAgua);
         app.post("/fazenda/{id}/viveiro/{idViveiro}/formulario_qualidade_de_agua", qualidadeAguaController::atualizaQualidadeAgua);
         app.get("/fazenda/{id}/viveiro/{idViveiro}/historico_agua", qualidadeAguaController::historicoQualidadeAgua);
-
     }
 
     public void iniciar() {
         Javalin app = inicializarJavalin();
         configurarPaginasDeErro(app);
         configurarRotas(app);
-
-        // Lidando com exceções não tratadas
         app.exception(Exception.class, (e, ctx) -> {
             logger.error("Erro não tratado", e);
             ctx.status(500);

@@ -32,6 +32,11 @@ public class CicloViveiroController{
     public void mostrarFormularioCicloViveiro(Context ctx) {
         String idFazenda = ctx.pathParam("id");
         String idViveiro = ctx.pathParam("idViveiro");
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário inválido.");
+        }
+        ctx.attribute("usuario", usuario);
         ctx.attribute("idFazenda", idFazenda);
         ctx.attribute("idViveiro", idViveiro);
         logger.debug("Abrindo formulário de ciclo do viveiro: fazenda={}, viveiro={}", idFazenda, idViveiro);
@@ -43,6 +48,7 @@ public class CicloViveiroController{
         String idViveiro = ctx.pathParam("idViveiro");
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         try {
             String laboratorio = ctx.formParam("laboratorio");
             String quantidadeParam = ctx.formParam("quantidadePopulacaoPovoada");
@@ -89,6 +95,11 @@ public class CicloViveiroController{
     public void finalizarCiclo(Context ctx) {
         String idFazenda = ctx.pathParam("id");
         String idViveiro = ctx.pathParam("idViveiro");
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário inválido.");
+        }
+        ctx.attribute("usuario", usuario);
         try {
             ctx.attribute("idFazenda", idFazenda);
             ctx.attribute("idViveiro", idViveiro);
