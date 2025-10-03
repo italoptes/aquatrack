@@ -143,6 +143,24 @@ public class UsuarioController {
         }
     }
 
+    public void removerFoto(Context ctx) {
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        if (usuario == null) throw new IllegalArgumentException("Usuário inválido.");
+
+        try {
+            usuarioService.removerFoto(usuario);
+            // atualiza sessão para a view já cair na imagem padrão
+            ctx.sessionAttribute("usuario", usuario);
+            ctx.sessionAttribute("msg", "Foto removida.");
+            ctx.redirect("/usuario");
+        } catch (Exception e) {
+            logger.error("Erro ao remover foto", e);
+            ctx.attribute("erro", e.getMessage());
+            ctx.render("/usuario/pagina_usuario.html");
+        }
+    }
+
+
     public void editarSenha(Context ctx) {
         Usuario usuario = ctx.sessionAttribute("usuario");
         if (usuario == null) {

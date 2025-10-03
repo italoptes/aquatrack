@@ -152,22 +152,32 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalTrocarFotoLabel">Trocar Foto de Perfil</h5>
+                    <h5 class="modal-title" id="modalTrocarFotoLabel">Editar Foto de Perfil</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
 
-                <div class="modal-body text-center">
-                    <form th:action="@{/usuario/editarFoto}" method="post" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <input class="form-control" type="file" name="foto"
-                                   accept="image/png, image/jpeg, image/jpg" required
-                                   onchange="previewImagem(event)">
-                        </div>
-                        <img id="preview" class="rounded-circle img-thumbnail mb-3 d-none"
-                             style="width:120px; height:120px; object-fit:cover;">
-                        <button type="submit" class="btn btn-primary">Salvar nova foto</button>
+                <div class="modal-body">
+                    <!-- Form do upload (só o input) -->
+                    <form id="formUploadFoto" th:action="@{/usuario/editarFoto}" method="post" enctype="multipart/form-data" class="mb-0">
+                        <input class="form-control" type="file" name="foto"
+                               accept="image/png, image/jpeg, image/jpg" required
+                               onchange="previewImagem(event)">
                     </form>
+
+                    <!-- Botões de ação -->
+                    <div class="d-flex justify-content-end align-items-center gap-2 mt-3 w-100 text-end">
+                        <!-- Remover -->
+                        <form th:action="@{/usuario/removerFoto}" method="post" class="m-0"
+                              onsubmit="return confirm('Tem certeza que deseja remover sua foto de perfil?');">
+                            <button type="submit" class="btn btn-danger">Remover foto</button>
+                        </form>
+
+                        <!-- Salvar -->
+                        <button type="submit" class="btn btn-success" form="formUploadFoto">Salvar nova foto</button>
+                    </div>
                 </div>
+
+
 
             </div>
         </div>

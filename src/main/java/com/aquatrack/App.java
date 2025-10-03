@@ -168,7 +168,7 @@ public class App {
             boolean rotaPublica =
                     path.equals("/") || path.equals("/login")  || path.equals("/usuarios/novo") || path.equals("/logout") ||
                             path.equals("/usuarios/cadastrar") || path.equals("/usuarios/signup") ||
-                            path.equals("/contato")|| path.startsWith("/images");
+                            path.equals("/contato")|| path.startsWith("/images") || path.startsWith("/uploads");
             if (!rotaPublica && ctx.sessionAttribute("usuario") == null) {
                 ctx.redirect("/login");
             }
@@ -193,6 +193,8 @@ public class App {
         app.post("/usuario/editar", usuarioController::editarUsuario);
         app.post("/usuario/alterarSenha", usuarioController::editarSenha);
         app.post("/usuario/editarFoto", usuarioController::editarFoto);
+        app.post("/usuario/removerFoto", usuarioController::removerFoto);
+
 
         // Master
         app.get("/master", masterController::mostrarPaginaMaster);

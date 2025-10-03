@@ -19,10 +19,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 
 public class UsuarioService {
-
     private final List<String> idExistentesFazendas = new ArrayList<>();
     private final UsuarioRepository usuarioRepository;
     private FazendaService fazendaService;
+    private static final String DEFAULT_FOTO = "/images/default-user.png"; // Local da imagem defalt
+    private static final Path ROOT_UPLOADS = Path.of("uploads"); // pasta dos uploads configurada no App
+
 
     public UsuarioService() {
         this.usuarioRepository = new UsuarioRepository();
@@ -109,29 +111,53 @@ public class UsuarioService {
     }
 
     public void editarFoto(Usuario usuario, UploadedFile foto) throws IOException {
-        if (foto == null) {
-            throw new IllegalArgumentException("Nenhum arquivo enviado.");
+        if (foto == null) throw new IllegalArgumentException("Nenhum arquivo enviado.");
+
+        // apaga a foto anterior se for da área de uploads
+        String antiga = usuario.getUrlFoto();
+        if (antiga != null && antiga.startsWith("/uploads/")) {
+            String relativoAntigo = antiga.substring("/uploads/".length());
+            Files.deleteIfExists(ROOT_UPLOADS.resolve(relativoAntigo).normalize());
         }
 
-        // Caminho da pasta de uploads
-        Path pastaUploads = Paths.get("src/main/resources/public/uploads");
+        Path pastaUploads = ROOT_UPLOADS.resolve("users");
+        Files.createDirectories(pastaUploads);
 
-        // Cria a pasta se não existir
-        if (!Files.exists(pastaUploads)) {
-            Files.createDirectories(pastaUploads);
+        String tipoArquivo = switch (foto.contentType()) {
+            case "image/png" -> "png";
+            case "image/jpeg", "image/jpg" -> "jpg";
+            default -> throw new IllegalArgumentException("Tipo inválido");
+        };
+
+        String nome = UUID.randomUUID() + "." + tipoArquivo;
+
+        try (var in = foto.content()) {
+            Files.copy(in, pastaUploads.resolve(nome), StandardCopyOption.REPLACE_EXISTING);
         }
 
-
-        // salva o arquivo
-        String nomeArquivo = UUID.randomUUID() + "-" + foto.filename();
-        Path caminho = pastaUploads.resolve(nomeArquivo);
-        Files.copy(foto.content(), caminho, StandardCopyOption.REPLACE_EXISTING);
-
-        // seta a URL pública
-        usuario.setUrlFoto("/uploads/" + nomeArquivo);
-
+        usuario.setUrlFoto("/uploads/users/" + nome);
         usuarioRepository.salvarUsuario(usuario);
     }
+
+
+    public void removerFoto(Usuario usuario) throws IOException {
+        if (usuario == null) throw new IllegalArgumentException("Usuário inválido.");
+
+        String atual = usuario.getUrlFoto();
+
+        // Apaga do disco se a foto atual estiver na pasta /uploads
+        if (atual != null && atual.startsWith("/uploads/")) {
+            String relativo = atual.substring("/uploads/".length()); // ex: users/abcd.jpg
+            Path arquivo = ROOT_UPLOADS.resolve(relativo).normalize();
+            Files.deleteIfExists(arquivo);
+        }
+
+        // Volta para a imagem padrão
+        usuario.setUrlFoto(DEFAULT_FOTO);
+        usuarioRepository.salvarUsuario(usuario);
+    }
+
+
 
 
     public void editarSenha(Usuario usuario, String senha, String confirmarSenha) {
