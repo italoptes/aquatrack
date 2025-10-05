@@ -50,10 +50,11 @@
         </li>
     </ul>
 
-    <!-- Informações básicas -->
+    <!-- Linha: Informações Básicas + Instruções Recentes -->
     <div class="row mb-4">
-        <div class="col">
-            <div class="col d-flex justify-content-between align-items-center">
+        <!-- Informações Básicas -->
+        <div class="col-md-6">
+            <div class="d-flex justify-content-between align-items-center mb-3">
                 <h3>Informações Básicas</h3>
                 <a th:href="@{/fazenda/{id}(id=${idFazenda})}" class="btn btn-danger btn-sm">Voltar</a>
             </div>
@@ -68,6 +69,47 @@
                 </div>
             </form>
         </div>
+
+        <!-- Instruções Recentes -->
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <span>Instruções Recentes</span>
+                    <a th:href="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes(id=${idFazenda}, idViveiro=${idViveiro})}"
+                       class="btn btn-sm btn-light">Ver Todas</a>
+                </div>
+
+                <div class="card-body">
+                    <div th:if="${instrucoes != null and !instrucoes.isEmpty()}">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"
+                                th:each="instrucao : ${instrucoes}">
+                                <span th:text="${instrucao.status.name() == 'PENDENTE' ? '⚠️ Pendente:' : '✅ Concluída:'}"></span>
+                                <strong th:text="${instrucao.titulo}">Título</strong>
+                                <br>
+                                <small class="text-muted"
+                                       th:text="${#temporals.format(instrucao.dataCriacao, 'dd/MM/yyyy')}"></small>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div th:if="${instrucoes == null or instrucoes.isEmpty()}" class="text-center text-muted">
+                        Nenhuma instrução registrada ainda.
+                    </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-end mt-auto">
+                    <!-- Botão que abre modal de nova instrução -->
+                    <button class="btn btn-sm btn-success"
+                            th:attr="data-url=@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/nova(id=${idFazenda}, idViveiro=${idViveiro})}"
+                            onclick="abrirModal(this)">
+                        + Nova Instrução
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Container do modal (mesmo usado em outras páginas) -->
+        <div id="modal-container" class="modal fade" tabindex="-1"></div>
     </div>
 
     <!-- Linha: Ciclo + Consumo -->
@@ -249,6 +291,22 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function abrirModal(btn) {
+            const url = btn.getAttribute('data-url');
+            fetch(url)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('modal-container').innerHTML = html;
+                    const modal = new bootstrap.Modal(document.getElementById('modal-container'));
+                    modal.show();
+
+                    // recarrega o card após o fechamento do modal
+                    document.getElementById('modal-container')
+                        .addEventListener('hidden.bs.modal', () => window.location.reload());
+                });
+        }
+    </script>
 </section>
 </body>
 </html>

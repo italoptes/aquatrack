@@ -4,6 +4,7 @@ import com.aquatrack.cicloViveiro.CicloViveiroController;
 import com.aquatrack.cicloViveiro.CicloViveiroService;
 import com.aquatrack.fazenda.FazendaController;
 import com.aquatrack.fazenda.FazendaService;
+import com.aquatrack.instrucoes.InstrucaoController;
 import com.aquatrack.qualidadeDeAgua.QualidadeAguaController;
 import com.aquatrack.racao.RacaoController;
 import com.aquatrack.relatorio.RelatorioFinalController;
@@ -149,7 +150,8 @@ public class App {
         MasterController masterController = new MasterController(usuarioService);
         UsuarioController usuarioController = new UsuarioController(usuarioService);
         FazendaController fazendaController = new FazendaController(usuarioService, fazendaService);
-        ViveiroController viveiroController = new ViveiroController(usuarioService, fazendaService);
+        ViveiroController viveiroController = new ViveiroController(usuarioService, fazendaService, viveiroService);
+        InstrucaoController instrucaoController = new InstrucaoController(usuarioService, fazendaService, viveiroService);
         CicloViveiroController cicloViveiroController = new CicloViveiroController(usuarioService, fazendaService, viveiroService);
         RacaoController racaoController = new RacaoController(usuarioService, fazendaService, cicloViveiroService);
         BiometriaController biometriaController = new BiometriaController(fazendaService, usuarioService, cicloViveiroService);
@@ -214,6 +216,16 @@ public class App {
         app.post("/fazenda/{id}/cadastrar-viveiro", viveiroController::cadastrarViveiro);
         app.post("/fazenda/{id}/viveiro/{idViveiro}/remover", viveiroController::removerViveiro);
         app.get("/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro", viveiroController::abrirViveiro);
+
+        //Instruções
+        // Instruções
+        app.get("/fazendas/{id}/viveiros/{idViveiro}/instrucoes", instrucaoController::listarInstrucoes);
+        app.get("/fazendas/{id}/viveiros/{idViveiro}/instrucoes/nova", instrucaoController::abrirFormularioNovaInstrucao);
+        app.post("/fazendas/{id}/viveiros/{idViveiro}/instrucoes/nova", instrucaoController::criarInstrucao);
+        app.get("/fazendas/{id}/viveiros/{idViveiro}/instrucoes/{idInstrucao}", instrucaoController::visualizarInstrucao);
+        app.get("/fazendas/{id}/viveiros/{idViveiro}/instrucoes/{idInstrucao}/editar", instrucaoController::abrirFormularioEditarInstrucao);
+        app.post("/fazendas/{id}/viveiros/{idViveiro}/instrucoes/{idInstrucao}/editar", instrucaoController::editarInstrucao);
+        app.post("/fazendas/{id}/viveiros/{idViveiro}/instrucoes/{idInstrucao}/remover", instrucaoController::removerInstrucao);
 
         // Ração
         app.get("/fazenda/{id}/abastecer-racao", racaoController::mostrarFormularioAdicionarRacao);

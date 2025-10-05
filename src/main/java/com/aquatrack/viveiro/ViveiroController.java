@@ -5,6 +5,7 @@ import com.aquatrack.cicloViveiro.CicloViveiro;
 import com.aquatrack.fazenda.Fazenda;
 import com.aquatrack.fazenda.FazendaController;
 import com.aquatrack.fazenda.FazendaService;
+import com.aquatrack.instrucoes.Instrucao;
 import com.aquatrack.usuario.Usuario;
 import com.aquatrack.usuario.UsuarioService;
 import io.javalin.http.Context;
@@ -19,10 +20,12 @@ public class ViveiroController {
 
     private final UsuarioService usuarioService;
     private final FazendaService fazendaService;
+    private final ViveiroService viveiroService;
 
-    public ViveiroController(UsuarioService usuarioService, FazendaService fazendaService) {
+    public ViveiroController(UsuarioService usuarioService, FazendaService fazendaService, ViveiroService viveiroService) {
         this.usuarioService = usuarioService;
         this.fazendaService = fazendaService;
+        this.viveiroService = viveiroService;
     }
 
     public void mostrarFormularioViveiro(Context ctx) {
@@ -90,12 +93,14 @@ public class ViveiroController {
             Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
 
             if (viveiro != null && !viveiro.isDeletado()) {
+                List<Instrucao> instrucoesRecentes = viveiroService.listarInstrucoesRecentes(viveiro);
                 CicloViveiro cicloViveiro = viveiro.ultimoCiclo();
 
                 logger.info("Abrindo viveiro: fazenda={}, viveiro={}", id, idViveiro);
                 ctx.attribute("viveiro", viveiro);
                 ctx.attribute("idFazenda", id);
                 ctx.attribute("idViveiro", idViveiro);
+                ctx.attribute("instrucoes",instrucoesRecentes);
 
                 if (cicloViveiro != null) {
                     ctx.attribute("cicloViveiro", cicloViveiro);
