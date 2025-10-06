@@ -4,10 +4,19 @@ import java.util.List;
 
 public class ResumoFazendaDTO { //classe criada para facilitar a coleta desses dados em específico
                                 // pode ser útil caso queiremos adicionar mais informações no futuo
+    private String idFazenda;
     private String nomeFazenda;
     private int totalViveiros;
     private int ciclosAtivos;
     private List<String> viveirosAtivos; // lista dos IDs dos viveiros ativos
+
+    public String getIdFazenda() {
+        return idFazenda;
+    }
+
+    public void setIdFazenda(String idFazenda) {
+        this.idFazenda = idFazenda;
+    }
 
     public String getNome() {
         return nomeFazenda;

@@ -249,6 +249,7 @@ public class UsuarioService {
             dto.setTotalViveiros(totalViveiros);
             dto.setCiclosAtivos(ciclosAtivos);
             dto.setViveirosAtivos(ativos);
+            dto.setIdFazenda(fazenda.getId());
 
             resumo.add(dto);
         }
