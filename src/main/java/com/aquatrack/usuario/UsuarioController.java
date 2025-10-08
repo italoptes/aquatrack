@@ -89,6 +89,12 @@ public class UsuarioController {
             ctx.sessionAttribute("msg", null); // limpa da sessão depois de usar
         }
 
+        String erro = ctx.sessionAttribute("erro");
+        if (erro != null) {
+            ctx.attribute("erro", erro);
+            ctx.sessionAttribute("erro", null); // limpa da sessão depois de usar
+        }
+
         ctx.render("/usuario/pagina_usuario.html");
     }
 
@@ -102,21 +108,36 @@ public class UsuarioController {
         String email = ctx.formParam("email");
 
         try {
-            if (nome != null && !nome.isBlank()) {
+            boolean mudou = false;
+
+            if (nome != null && !nome.isBlank() && !nome.equals(usuario.getNome())) {
                 usuarioService.editarNome(usuario, nome);
+                mudou = true;
             }
 
-            if (email != null && !email.isBlank()) {
+            if (email != null && !email.isBlank() && !email.equals(usuario.getLogin())) {
                 usuarioService.editarEmail(usuario, email);
+                mudou = true;
+            }
+
+            if (!mudou) {
+                ctx.sessionAttribute("msg", "Os dados são os mesmos. Nenhuma alteração realizada.");
+                ctx.redirect("/usuario");
+                return;
             }
 
             ctx.sessionAttribute("usuario", usuario);
             ctx.sessionAttribute("msg", "Dados alterados com sucesso!");
             ctx.redirect("/usuario");
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
+            // ex.: "Já existe um usuário com esse email."
             logger.error("Erro ao editar usuário", e);
-            ctx.attribute("erro", e.getMessage());
-            ctx.render("/usuario/pagina_usuario.html");
+            ctx.sessionAttribute("erro", e.getMessage());
+            ctx.redirect("/usuario");
+        } catch (Exception e) {
+            logger.error("Erro inesperado ao editar usuário", e);
+            ctx.sessionAttribute("erro", "Não foi possível atualizar seus dados. Tente novamente.");
+            ctx.redirect("/usuario");
         }
     }
 
@@ -160,17 +181,28 @@ public class UsuarioController {
         }
     }
 
-
     public void editarSenha(Context ctx) {
         Usuario usuario = ctx.sessionAttribute("usuario");
-        if (usuario == null) {
-            throw new IllegalArgumentException("Usuário inválido.");
-        }
+        if (usuario == null) throw new IllegalArgumentException("Usuário inválido.");
 
+        String senhaAtual = ctx.formParam("senhaAtual");
         String senha = ctx.formParam("novaSenha");
         String confirmarSenha = ctx.formParam("confirmarSenha");
 
+
+
         try {
+            if (!BCrypt.checkpw(senhaAtual, usuario.getSenha())) {
+                ctx.sessionAttribute("erro", "Senha atual incorreta.");
+                ctx.redirect("/usuario");
+                return;
+            }
+            if (BCrypt.checkpw(senha, usuario.getSenha())) {
+                ctx.sessionAttribute("erro", "A nova senha não pode ser igual à senha atual.");
+                ctx.redirect("/usuario");
+                return;
+            }
+
             ctx.attribute("usuario", usuario);
             usuarioService.editarSenha(usuario, senha, confirmarSenha);
             ctx.sessionAttribute("msg", "Senha alterada com sucesso!");

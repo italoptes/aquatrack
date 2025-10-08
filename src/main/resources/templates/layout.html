@@ -41,7 +41,6 @@
                               th:text="'Olá, ' + ${session.usuario.nome} + '!'">Olá, Usuário!</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                        <li><a class="dropdown-item" th:href="@{/fazendas}">> Fazendas</a></li>
                         <li><a class="dropdown-item" th:href="@{/usuario}">> Perfil</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger" th:href="@{/logout}">Sair</a></li>

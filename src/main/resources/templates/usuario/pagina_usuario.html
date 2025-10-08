@@ -4,163 +4,174 @@
 <head>
     <title>Perfil do Usuário</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          crossorigin="anonymous">
+          rel="stylesheet" crossorigin="anonymous">
 </head>
 <body>
 <section class="container my-5">
 
-
-    <!-- Alertas de sucesso e erro -->
+    <!-- Alertas -->
     <div th:if="${msg}" class="alert alert-success alert-dismissible fade show" role="alert">
         <span th:text="${msg}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
-
     <div th:if="${erro}" class="alert alert-danger alert-dismissible fade show" role="alert">
         <span th:text="${erro}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
+    <!-- Faixa do título + botão -->
+    <div class="position-relative py-2 mb-3">
+        <h1 class="text-center m-0">Perfil do usuário</h1>
+
+        <!-- Botão à direita, alinhado verticalmente ao título -->
+        <a href="/fazendas"
+           class="btn btn-danger btn-sm position-absolute end-0 top-50 translate-middle-y me-2">
+            Início
+        </a>
+    </div>
+
+    <hr class="mt-2 mb-5">
+
+
+    </div>
 
     <div class="row mb-4">
-        <div class="col-md-4 text-center">
-
-            <!-- Foto como botão -->
-            <button type="button" class="btn p-0 border-0 bg-transparent position-relative" data-bs-toggle="modal" data-bs-target="#modalTrocarFoto" title="Editar foto">
-                <img th:src="${session.usuario != null && session.usuario.urlFoto != null ? session.usuario.urlFoto : '/images/default-user.png'}" alt="Foto do usuário" class="rounded-circle img-thumbnail mb-3" style="width:150px; height:150px; object-fit:cover;">
-
-                <!-- badge com emoji, só Bootstrap -->
-                <span class="position-absolute bottom-0 end-0 translate-middle bg-white rounded-circle border shadow-sm d-inline-flex align-items-center justify-content-center p-1">
-    <span class="fs-6">✏️</span>
-  </span>
-            </button>
-
-
-            <!-- Dados -->
-            <h4 th:text="${usuario.nome}">Nome</h4>
-            <p th:text="${usuario.login}">email@exemplo.com</p>
-            <span class="badge bg-primary" th:text="${usuario.tipoUsuario}">Tipo</span>
-
-            <!-- Botões -->
-            <div class="mt-3">
-                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                    Editar Perfil
+        <!-- Coluna ESQUERDA -->
+        <div class="col-md-4 text-center align-self-start">
+            <div class="position-sticky" style="top: 1rem;">
+                <!-- Foto -->
+                <button type="button" class="btn p-0 border-0 bg-transparent position-relative"
+                        data-bs-toggle="modal" data-bs-target="#modalTrocarFoto" title="Editar foto">
+                    <img th:src="${session.usuario != null && session.usuario.urlFoto != null ? session.usuario.urlFoto : '/images/default-user.png'}"
+                         alt="Foto do usuário" class="rounded-circle img-thumbnail mb-3"
+                         style="width:200px; height:200px; object-fit:cover;">
+                    <span class="position-absolute bottom-0 end-0 translate-middle bg-white rounded-circle border shadow-sm d-inline-flex align-items-center justify-content-center p-1">
+          <span class="fs-6">✏️</span>
+        </span>
                 </button>
-                <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#modalSenha">
-                    Alterar Senha
-                </button>
+
+                <!-- Dados de exibição -->
+                <h3  class="md-0" th:text="${usuario.nome}">Nome</h3>
+                <p class="mt-0" th:text="${usuario.login}">email@exemplo.com</p>
+                <span class="badge mt-1 bg-primary" th:text="${usuario.tipoUsuario}">Tipo</span>
             </div>
         </div>
 
-        <!-- Resumo Produtivo -->
+        <!-- Coluna DIREITA -->
         <div class="col-md-8">
-            <div class="card shadow-sm border-0 rounded-3">
-                <!-- título -->
-                <div class="card-header bg-primary text-white rounded-top">
-                    <strong>Resumo Produtivo</strong>
-                </div>
-                <!-- tabela -->
-                <div class="card-body p-3">
-                    <div class="table-responsive">
-                        <table class="table table-sm table-hover table-bordered align-middle mb-0">
-                            <thead class="table-light">
-                            <tr>
-                                <th class="text-center">Fazenda</th>
-                                <th class="text-center">Total viveiros</th>
-                                <th class="text-center">Ciclos ativos</th>
-                                <th class="text-center">Viveiros ativos</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="fazenda : ${resumo}">
-                                <td class="text-center" th:text="${fazenda.nome}"></td>
-                                <td class="text-center" th:text="${fazenda.totalViveiros}"></td>
-                                <td class="text-center" th:text="${fazenda.ciclosAtivos}"></td>
-                                <td class="text-center" th:text="${fazenda.viveirosAtivos}"></td>
-                            </tr>
-                            <tr th:if="${#lists.isEmpty(resumo)}">
-                                <td colspan="4" class="text-center text-muted py-4">Sem dados</td>
-                            </tr>
-                            </tbody>
-                        </table>
+            <div class="pe-1 pe-md-2">
+            <!-- Resumo Produtivo -->
+                <h3 class="mb-3">Dados do sistema</h3>
+                <div class="card shadow-sm border-0 rounded-3 mb-4">
+                    <div class="card-header bg-primary text-white rounded-top">
+                        <strong>Resumo Produtivo</strong>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover table-bordered align-middle mb-0">
+                                <thead class="table-light">
+                                <tr>
+                                    <th class="text-center">Fazenda</th>
+                                    <th class="text-center">Total viveiros</th>
+                                    <th class="text-center">Ciclos ativos</th>
+                                    <th class="text-center">Viveiros ativos</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="fazenda : ${resumo}">
+                                    <td class="text-center" th:text="${fazenda.nome}"></td>
+                                    <td class="text-center" th:text="${fazenda.totalViveiros}"></td>
+                                    <td class="text-center" th:text="${fazenda.ciclosAtivos}"></td>
+                                    <td class="text-center" th:text="${fazenda.viveirosAtivos}"></td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(resumo)}">
+                                    <td colspan="4" class="text-center text-muted py-4">Sem dados</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light rounded-bottom border-0 py-2 px-3">
+                        <div class="d-flex justify-content-end">
+                            <a th:href="@{/fazendas}" class="btn btn-primary btn-sm px-3">Gerenciar Fazendas</a>
+                        </div>
                     </div>
                 </div>
-                <!-- rodapé  -->
-                <div class="card-footer bg-light rounded-bottom border-0 py-2 px-3">
-                    <div class="d-flex justify-content-end">
-                        <a th:href="@{/fazendas}" class="btn btn-primary btn-sm px-3">
-                            Gerenciar Fazendas
-                        </a>
+
+                <hr class="my-4">
+
+                <!-- Perfil do usuário -->
+                <h3 class="mb-3">Informações do usuário</h3>
+
+                <div class="card shadow-sm border-0 rounded-3 mb-4">
+                    <div class="card-header bg-info text-white">
+                        <strong>Informações do Perfil</strong>
                     </div>
+
+                    <form th:action="@{/usuario/editar}" method="post">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Nome:</label>
+                                    <input type="text" name="nome" class="form-control"
+                                           th:placeholder="${usuario.nome}" required autocomplete="off"
+                                           minlength="3" maxlength="50">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Email:</label>
+                                    <input type="email" name="email" class="form-control"
+                                           th:placeholder="${usuario.login}" required autocomplete="off"
+                                           maxlength="100">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="card-footer d-flex justify-content-end">
+                            <button type="submit" class="btn btn-info text-white">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+
+
+                <!-- CARD: Alterar Senha -->
+                <div class="card shadow-sm border-0 rounded-3">
+                    <div class="card-header bg-info text-white">
+                        <strong>Alterar Senha</strong>
+                    </div>
+                    <form th:action="@{/usuario/alterarSenha}" method="post" onsubmit="return validarSenhaCard()">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Senha atual:</label>
+                                    <input type="password" name="senhaAtual" id="senhaAtual"
+                                           class="form-control" required minlength="3" maxlength="50" autocomplete="current-password" placeholder="********">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Nova senha:</label>
+                                    <input type="password" name="novaSenha" id="novaSenha"
+                                           class="form-control" required minlength="3" maxlength="50" autocomplete="new-password" placeholder="********">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Confirmar nova senha:</label>
+                                    <input type="password" name="confirmarSenha" id="confirmarSenha"
+                                           class="form-control" required minlength="3" maxlength="50" autocomplete="new-password" placeholder="********">
+                                    <div class="form-text text-danger d-none" id="erroSenha">As senhas não coincidem.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-end">
+                            <button type="submit" class="btn btn-info">Salvar</button>
+                        </div>
+                    </form>
                 </div>
 
             </div>
         </div>
-
     </div>
 
-    <!-- Modal Editar Perfil -->
-    <div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-warning">
-                    <h5 class="modal-title">Editar Dados</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <form th:action="@{/usuario/editar}" method="post" enctype="multipart/form-data">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Nome</label>
-                            <input type="text" name="nome" class="form-control"
-                                   th:value="${usuario.nome}" required minlength="3" maxlength="50">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control"
-                                   th:value="${usuario.login}" required maxlength="100">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">Salvar</button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
-    <!-- Modal Alterar Senha -->
-    <div class="modal fade" id="modalSenha" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-secondary text-white">
-                    <h5 class="modal-title">Alterar Senha</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <form th:action="@{/usuario/alterarSenha}" method="post" onsubmit="return validarSenha()">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Nova Senha</label>
-                            <input type="password" name="novaSenha" id="novaSenha"
-                                   class="form-control" required minlength="3" maxlength="50">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Confirmar Senha</label>
-                            <input type="password" name="confirmarSenha" id="confirmarSenha"
-                                   class="form-control" required minlength="3" maxlength="50">
-                            <div class="form-text text-danger d-none" id="erroSenha">As senhas não coincidem.</div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">Salvar</button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para trocar a foto -->
+    <!-- Modal: Trocar Foto (mantido) -->
     <div class="modal fade" id="modalTrocarFoto" tabindex="-1" aria-labelledby="modalTrocarFotoLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -171,50 +182,51 @@
                 </div>
 
                 <div class="modal-body">
-                    <!-- Form do upload (só o input) -->
                     <form id="formUploadFoto" th:action="@{/usuario/editarFoto}" method="post" enctype="multipart/form-data" class="mb-0">
                         <input class="form-control" type="file" name="foto"
                                accept="image/png, image/jpeg, image/jpg" required
                                onchange="previewImagem(event)">
                     </form>
 
-                    <!-- Botões de ação -->
                     <div class="d-flex justify-content-end align-items-center gap-2 mt-3 w-100 text-end">
-                        <!-- Remover -->
                         <form th:action="@{/usuario/removerFoto}" method="post" class="m-0"
                               onsubmit="return confirm('Tem certeza que deseja remover sua foto de perfil?');">
                             <button type="submit" class="btn btn-danger">Remover foto</button>
                         </form>
 
-                        <!-- Salvar -->
                         <button type="submit" class="btn btn-success" form="formUploadFoto">Salvar nova foto</button>
                     </div>
+
+                    <img id="preview" class="img-fluid rounded mt-3 d-none" alt="Pré-visualização"/>
                 </div>
             </div>
         </div>
     </div>
-
 </section>
 
 <script>
-    // Validação senha
-    function validarSenha() {
-        const senha = document.getElementById("novaSenha").value;
-        const confirmar = document.getElementById("confirmarSenha").value;
+    // Validação do card de senha
+    function validarSenhaCard() {
+        const atual = document.getElementById("senhaAtual").value.trim();
+        const nova = document.getElementById("novaSenha").value.trim();
+        const confirmar = document.getElementById("confirmarSenha").value.trim();
         const erro = document.getElementById("erroSenha");
 
-        if (senha !== confirmar) {
+        if (!atual || !nova || !confirmar) {
+            erro.textContent = "Preencha todos os campos de senha.";
             erro.classList.remove("d-none");
             return false;
         }
-        if (senha == null || confirmar == null){
+        if (nova !== confirmar) {
+            erro.textContent = "As senhas não coincidem.";
+            erro.classList.remove("d-none");
             return false;
         }
         erro.classList.add("d-none");
         return true;
     }
 
-    // Preview da imagem
+    // Preview da imagem (modal de foto)
     function previewImagem(event) {
         const file = event.target.files[0];
         if (file) {
