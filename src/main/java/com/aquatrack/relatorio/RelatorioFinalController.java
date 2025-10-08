@@ -41,6 +41,7 @@ public class RelatorioFinalController {
         String idViveiro = ctx.pathParam("idViveiro");
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
         Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
         try {
@@ -70,6 +71,7 @@ public class RelatorioFinalController {
         String idViveiro = ctx.pathParam("idViveiro");
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);
         Viveiro viveiro = fazendaService.getViveiro(fazendaUser, idViveiro);
         CicloViveiro cicloViveiro = viveiro.ultimoCiclo();
@@ -130,6 +132,7 @@ public class RelatorioFinalController {
         String dataDaVendaStr = ctx.pathParam("dataDaVenda");
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
         try {
             Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);

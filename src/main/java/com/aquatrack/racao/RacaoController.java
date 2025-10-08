@@ -31,6 +31,7 @@ public class RacaoController {
         ctx.attribute("idFazenda", idFazenda);
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
 
         double estoqueEngorda = fazendaService.consultarEstoquePorTipo(fazenda, TipoRacao.ENGORDA);
@@ -48,7 +49,7 @@ public class RacaoController {
         String idViveiro = ctx.pathParam("idViveiro");
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
-
+        ctx.attribute("usuario", usuario);
         ctx.attribute("idFazenda", idFazenda);
         ctx.attribute("idViveiro", idViveiro);
 
@@ -68,6 +69,7 @@ public class RacaoController {
         ctx.attribute("idFazenda", idFazenda);
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
         try {
             TipoRacao tipoRacao = TipoRacao.valueOf(ctx.formParam("tipoRacao").toUpperCase());
@@ -100,6 +102,7 @@ public class RacaoController {
         String idViveiro = ctx.pathParam("idViveiro");
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);
         Viveiro viveiro = fazendaService.getViveiro(fazendaUser, idViveiro);
         CicloViveiro cicloViveiro = viveiro.ultimoCiclo();

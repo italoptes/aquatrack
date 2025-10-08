@@ -38,6 +38,9 @@ public class BiometriaController {
         String idViveiro = ctx.pathParam("idViveiro");
         ctx.attribute("idFazenda", idFazenda);
         ctx.attribute("idViveiro", idViveiro);
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        assert usuario != null;
+        ctx.attribute("usuario", usuario);
         logger.debug("Abrindo formulário de biometria: fazenda={}, viveiro={}", idFazenda, idViveiro);
         ctx.render("biometria/formulario_biometria.html");
     }
@@ -49,6 +52,7 @@ public class BiometriaController {
         ctx.attribute("idViveiro", idViveiro);
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         try {
             String diaVenda = ctx.formParam("dia");
             String mesVenda = ctx.formParam("mes");
@@ -107,6 +111,7 @@ public class BiometriaController {
         String idViveiro = ctx.pathParam("idViveiro");
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
         Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
         if (viveiro == null) {
