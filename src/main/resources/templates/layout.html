@@ -32,10 +32,11 @@
                        href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 
                         <img th:src="${session.usuario != null && session.usuario.urlFoto != null
-                  ? session.usuario.urlFoto : '/images/default-user.png'}"
+                             ? session.usuario.urlFoto : '/images/default-user.png'}"
                              alt="Foto de Perfil"
                              class="rounded-circle"
-                             style="width:40px; height:40px; object-fit:cover;">
+                             style="width:40px; height:40px; object-fit:cover; box-shadow:0 0 0 2px rgba(255,255,255,.95);">
+
 
                         <span class="text-white fw-bold"
                               th:text="'Olá, ' + ${session.usuario.nome} + '!'">Olá, Usuário!</span>
