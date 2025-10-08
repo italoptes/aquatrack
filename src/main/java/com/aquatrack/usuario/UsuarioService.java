@@ -233,7 +233,7 @@ public class UsuarioService {
         List<ResumoFazendaDTO> resumo = new ArrayList<>();
 
         for (Fazenda fazenda : usuario.listarFazendasAtivas()) {
-            int totalViveiros = fazenda.getViveiros().size();
+            int totalViveiros = fazenda.listarViveiros().size();
             int ciclosAtivos = 0;
             List<String> ativos = new ArrayList<>();
 

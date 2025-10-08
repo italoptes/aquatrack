@@ -73,20 +73,29 @@
                                     <th class="text-center">Fazenda</th>
                                     <th class="text-center">Total viveiros</th>
                                     <th class="text-center">Ciclos ativos</th>
-                                    <th class="text-center">Viveiros ativos</th>
+                                    <th class="text-center">Ações</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="fazenda : ${resumo}">
+                                <tr th:each="fazenda, iter : ${resumo}">
                                     <td class="text-center" th:text="${fazenda.nome}"></td>
                                     <td class="text-center" th:text="${fazenda.totalViveiros}"></td>
                                     <td class="text-center" th:text="${fazenda.ciclosAtivos}"></td>
-                                    <td class="text-center" th:text="${fazenda.viveirosAtivos}"></td>
+                                    <td class="text-center">
+                                        <button type="button"
+                                                class="btn btn-outline-primary btn-sm"
+                                                data-bs-toggle="modal"
+                                                th:attr="data-bs-target=${'#modalViveiros-' + iter.index}">
+                                            Ver viveiros
+                                        </button>
+                                    </td>
                                 </tr>
+
                                 <tr th:if="${#lists.isEmpty(resumo)}">
                                     <td colspan="4" class="text-center text-muted py-4">Sem dados</td>
                                 </tr>
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
@@ -169,6 +178,73 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Modais de Viveiros Ativos -->
+    <div th:each="fazenda, iter : ${resumo}">
+        <div class="modal fade" th:id="${'modalViveiros-' + iter.index}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-content border-0 shadow-lg">
+
+                    <!-- Cabeçalho -->
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">
+                            <i class="bi bi-water me-2"></i>
+                            Viveiros com ciclo ativo — <span th:text="${fazenda.nome}">Fazenda</span>
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Corpo -->
+                    <div class="modal-body">
+
+                        <div th:if="${fazenda.viveirosAtivos == null || #lists.isEmpty(fazenda.viveirosAtivos)}"
+                             class="text-center text-muted py-4">
+                            <i class="bi bi-info-circle me-2"></i> Nenhum viveiro ativo.
+                        </div>
+
+                        <div class="table-responsive"
+                             th:if="${fazenda.viveirosAtivos != null && !#lists.isEmpty(fazenda.viveirosAtivos)}">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                <tr class="text-center">
+                                    <th style="width: 10%;">#</th>
+                                    <th class="text-center">ID do Viveiro</th>  <!-- 👈 -->
+                                    <th style="width: 20%;">Ação</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="idViveiro, idx : ${fazenda.viveirosAtivos}">
+                                    <td class="text-center" th:text="${idx.index + 1}"></td>
+                                    <td class="text-center">  <!-- 👈 -->
+                                        <code class="text-primary fw-semibold" th:text="${idViveiro}">VIV001</code>
+                                    </td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-outline-primary"
+                                           th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${fazenda.idFazenda}, idViveiro=${idViveiro})}">
+                                            <i class="bi bi-box-arrow-up-right me-1"></i> Abrir
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <!-- Rodapé -->
+                    <div class="modal-footer bg-light">
+                        <button class="btn btn-outline-danger" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle me-1"></i> Fechar
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 
     <!-- Modal: Trocar Foto (mantido) -->
