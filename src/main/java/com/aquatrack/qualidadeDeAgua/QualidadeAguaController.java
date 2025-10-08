@@ -35,6 +35,9 @@ public class QualidadeAguaController {
         String idViveiro = ctx.pathParam("idViveiro");
         ctx.attribute("idFazenda", idFazenda);
         ctx.attribute("idViveiro", idViveiro);
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        assert usuario != null;
+        ctx.attribute("usuario", usuario);
         logger.debug("Abrindo formulário de qualidade de água: fazenda={}, viveiro={}", idFazenda, idViveiro);
         ctx.render("qualidadeDeAgua/formulario_qualidade_agua.html");
     }
@@ -46,6 +49,7 @@ public class QualidadeAguaController {
         ctx.attribute("idViveiro", idViveiro);
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);
         Viveiro viveiro = fazendaService.getViveiro(fazendaUser, idViveiro);
         CicloViveiro cicloViveiro = viveiro.ultimoCiclo();
@@ -94,6 +98,7 @@ public class QualidadeAguaController {
         String idViveiro = ctx.pathParam("idViveiro");
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
         Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
         CicloViveiro cicloViveiro = viveiro.ultimoCiclo();

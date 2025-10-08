@@ -21,6 +21,11 @@ public class FazendaController {
     }
 
     public void mostrarFormularioFazenda(Context ctx) {
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário inválido.");
+        }
+        ctx.attribute("usuario", usuario);
         ctx.render("/fazendas/formulario_fazendas.html");
     }
 
@@ -28,7 +33,7 @@ public class FazendaController {
         try {
             Usuario usuario = ctx.sessionAttribute("usuario");
             assert usuario != null;
-
+            ctx.attribute("usuario", usuario);
             if (usuarioService.contaFazendasUsuarios(usuario) >= 3) {
                 throw new LimiteDeFazendasException("Você atingiu seu limite de 3 fazendas. Para adicionar uma nova, será necessário liberar espaço.");
             }
@@ -64,6 +69,7 @@ public class FazendaController {
         String idFazenda = ctx.pathParam("id");
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         try {
             usuarioService.removerFazendaDoUsuario(usuario.getId(), idFazenda);
             logger.info("Fazenda com id={} removida com sucesso.", idFazenda);
@@ -79,6 +85,7 @@ public class FazendaController {
     public void listarFazendas(Context ctx) {
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+        ctx.attribute("usuario", usuario);
         logger.debug("Listando fazendas, total={}", usuarioService.listarFazendasDoUsuario(usuario.getId()).size());
         ctx.attribute("fazendas", usuarioService.listarFazendasDoUsuario(usuario.getId()));
         ctx.attribute("existemFazendas", usuarioService.contaFazendasUsuarios(usuario));
@@ -88,7 +95,9 @@ public class FazendaController {
     public void abrirFazenda(Context ctx) {
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
+
         String idFazenda = ctx.pathParam("id");
+        ctx.attribute("usuario", usuario);
         try {
             Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(),idFazenda);
             if (fazenda != null && !fazenda.isDeletado()) {

@@ -1,0 +1,40 @@
+<div class="modal-dialog">
+    <div class="modal-content shadow">
+        <div class="modal-header bg-warning text-dark">
+            <h5 class="modal-title">✏️ Editar Instrução</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <form th:action="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/{idInstrucao}/editar(id=${idFazenda}, idViveiro=${idViveiro}, idInstrucao=${instrucao.id})}" method="post">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="titulo" class="form-label fw-bold">Título</label>
+                    <input type="text" id="titulo" name="titulo" class="form-control"
+                           th:value="${instrucao.titulo}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="descricao" class="form-label fw-bold">Descrição</label>
+                    <textarea id="descricao" name="descricao" class="form-control" rows="4" required
+                              th:text="${instrucao.descricao}"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="status" class="form-label fw-bold">Status</label>
+                    <select id="status" name="status" class="form-select" required>
+                        <option value="PENDENTE" th:selected="${instrucao.status.name() == 'PENDENTE'}">
+                            Pendente
+                        </option>
+                        <option value="CONCLUIDA" th:selected="${instrucao.status.name() == 'CONCLUIDA'}">
+                            Concluída
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-warning text-dark fw-bold">Atualizar</button>
+            </div>
+        </form>
+    </div>
+</div>

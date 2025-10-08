@@ -11,6 +11,7 @@ public class Usuario {
     private String login;
     private String nome;
     private String senha;
+    private String urlFoto;
     private List<Fazenda> fazendas;
     private boolean deletado;
     private TipoUsuario tipo;
@@ -23,6 +24,7 @@ public class Usuario {
         this.deletado = false;
         this.tipo = tipoUsuario;
         this.fazendas = new ArrayList<>();
+        this.urlFoto = "/images/default-user.png";
     }
 
     public List<Fazenda> getFazendas() {
@@ -57,7 +59,7 @@ public class Usuario {
     public int contaFazendasUsuarios(Usuario usuario) {
         return usuario.listarFazendasAtivas().size();
     }
-    public List<Fazenda> listarFazendasAtivas() {
+    public ArrayList<Fazenda> listarFazendasAtivas() {
         ArrayList<Fazenda> fazendasAtivas = new ArrayList<>();
         for (Fazenda fazenda : fazendas) {
             if (!fazenda.isDeletado()) {
@@ -74,6 +76,14 @@ public class Usuario {
 
     public TipoUsuario getTipoUsuario() {return tipo;}
     public void setTipoUsuario(TipoUsuario tipo) {this.tipo = tipo;}
+
+    public String getUrlFoto() {
+        return urlFoto;
+    }
+
+    public void setUrlFoto(String urlFoto) {
+        this.urlFoto = urlFoto;
+    }
 
     public List<Fazenda> listarFazendas() {
         List<Fazenda> listaFazendas = new ArrayList<>();

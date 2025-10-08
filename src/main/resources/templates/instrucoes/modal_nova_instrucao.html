@@ -1,0 +1,26 @@
+<div class="modal-dialog">
+    <div class="modal-content shadow">
+        <div class="modal-header bg-success text-white">
+            <h5 class="modal-title">+ Nova Instrução</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <form th:action="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/nova(id=${idFazenda}, idViveiro=${idViveiro})}" method="post">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="titulo" class="form-label fw-bold">Título</label>
+                    <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Ex: Aplicar calagem" required>
+                </div>
+                <div class="mb-3">
+                    <label for="descricao" class="form-label fw-bold">Descrição</label>
+                    <textarea id="descricao" name="descricao" class="form-control" rows="4" placeholder="Descreva a instrução..." required></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-success">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>

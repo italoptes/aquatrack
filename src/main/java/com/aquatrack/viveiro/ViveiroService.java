@@ -2,6 +2,8 @@ package com.aquatrack.viveiro;
 
 import com.aquatrack.UsuarioRepository;
 import com.aquatrack.cicloViveiro.CicloViveiro;
+import com.aquatrack.instrucoes.Instrucao;
+import com.aquatrack.instrucoes.Status;
 import com.aquatrack.usuario.Usuario;
 
 import java.time.LocalDate;
@@ -42,5 +44,37 @@ public class ViveiroService {
     public List<CicloViveiro> listarCiclos(Viveiro viveiro) {
         if (viveiro == null) throw new IllegalArgumentException("Viveiro inválido.");
         return viveiro.getCiclos(); // já ignora deletados
+    }
+
+    //Instruções
+    public void criarInstrucao(Usuario usuario,Viveiro viveiro,Instrucao instrucao) {
+        if (viveiro == null) throw new IllegalArgumentException("Viveiro não encontrado.");
+
+        viveiro.adicionarInstrucao(instrucao);
+        usuarioRepository.salvarUsuario(usuario);
+    }
+
+    public void editarInstrucao(Usuario usuario,Viveiro viveiro, String idInstrucao, String novoTitulo, String novaDescricao, Status novoStatus) {
+        Instrucao instrucao = viveiro.buscarInstrucao(idInstrucao);
+        if (viveiro != null && instrucao != null) {
+            viveiro.atualizarInstrucao(idInstrucao, novoTitulo, novaDescricao, novoStatus);
+            usuarioRepository.salvarUsuario(usuario);
+        }
+    }
+
+    public void removerInstrucao(Usuario usuario,Viveiro viveiro, String idInstrucao) {
+        Instrucao instrucao = viveiro.buscarInstrucao(idInstrucao);
+        if (viveiro != null && instrucao != null){
+            viveiro.removerInstrucao(idInstrucao);
+            usuarioRepository.salvarUsuario(usuario);
+        }
+    }
+
+    public List<Instrucao> listarInstrucoes(Viveiro viveiro) {
+        return viveiro != null ? viveiro.getInstrucoes() : List.of();
+    }
+
+    public List<Instrucao> listarInstrucoesRecentes(Viveiro viveiro) {
+        return viveiro != null ? viveiro.getInstrucoesRecentes() : List.of();
     }
 }

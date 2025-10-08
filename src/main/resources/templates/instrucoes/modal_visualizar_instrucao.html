@@ -1,0 +1,25 @@
+<div class="modal-dialog">
+    <div class="modal-content shadow">
+        <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">👁️ Detalhes da Instrução</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+            <p><strong>Título:</strong> <span th:text="${instrucao.titulo}"></span></p>
+            <p><strong>Status:</strong>
+                <span th:text="${instrucao != null && instrucao.status != null && instrucao.status.name() == 'PENDENTE' ? '⚠️ Pendente:' : '✅ Concluída:'}"></span>
+            </p>
+            <p><strong>Autor:</strong> <span th:text="${instrucao.autor}"></span></p>
+            <p><strong>Data de Criação:</strong>
+                <span th:text="${#temporals.format(instrucao.dataCriacao, 'dd/MM/yyyy')}"></span></p>
+
+            <p><strong>Descrição:</strong></p>
+            <div class="border rounded p-3 bg-light" th:text="${instrucao.descricao}"></div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+    </div>
+</div>

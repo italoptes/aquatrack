@@ -17,16 +17,31 @@ public class MasterController {
     }
 
     public void mostrarPaginaMaster(Context ctx) {
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário inválido.");
+        }
+        ctx.attribute("usuario", usuario);
         ctx.attribute("usuarios", usuarioService.listarUsuarios());
         ctx.render("master/pagina_master.html");
     }
 
     public void mostrarFormulario_signup(Context ctx) {
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário inválido.");
+        }
+        ctx.attribute("usuario", usuario);
         logger.debug("Abrindo formulário de cadastrar usuário");
         ctx.render("master/formulario_usuario_novo.html");
     }
 
     public void cadastrarUsuario(Context ctx) {
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário inválido.");
+        }
+        ctx.attribute("usuario", usuario);
         String nome = ctx.formParam("nome");
         String email = ctx.formParam("login");
         String senha = ctx.formParam("senha");
@@ -65,6 +80,11 @@ public class MasterController {
     }
 
     public void removerUsuario(Context ctx) {
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário inválido.");
+        }
+        ctx.attribute("usuario", usuario);
         String id = ctx.formParam("id");
         try {
             usuarioService.removerUsuario(id);

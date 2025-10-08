@@ -1,20 +1,30 @@
 package com.aquatrack.usuario;
 
 import com.aquatrack.UsuarioRepository;
+import com.aquatrack.fazenda.ResumoFazendaDTO;
+import com.aquatrack.viveiro.Viveiro;
+import io.javalin.http.UploadedFile;
 import org.mindrot.jbcrypt.BCrypt;
 import com.aquatrack.exceptions.EntidadeExcluidaException;
 import com.aquatrack.fazenda.Fazenda;
 import com.aquatrack.fazenda.FazendaService;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 
 public class UsuarioService {
-
     private final List<String> idExistentesFazendas = new ArrayList<>();
     private final UsuarioRepository usuarioRepository;
     private FazendaService fazendaService;
+    private static final String DEFAULT_FOTO = "/images/default-user.png"; // Local da imagem defalt
+    private static final Path ROOT_UPLOADS = Path.of("uploads"); // pasta dos uploads configurada no App
+
 
     public UsuarioService() {
         this.usuarioRepository = new UsuarioRepository();
@@ -81,6 +91,89 @@ public class UsuarioService {
         return usuario.isDeletado();
     }
 
+    public void editarNome(Usuario usuario, String nome) {
+        if (nome == null || nome.isBlank()) {
+            throw new IllegalArgumentException("Nome não pode ser vazio.");
+        }
+        usuario.setNome(nome);
+        usuarioRepository.salvarUsuario(usuario);
+    }
+
+    public void editarEmail(Usuario usuario, String email) {
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email não pode ser vazio.");
+        }
+        if (buscarUsuarioPorLogin(email) != null) {
+            throw new IllegalArgumentException("Já existe um usuário com esse email.");
+        }
+        usuario.setLogin(email);
+        usuarioRepository.salvarUsuario(usuario);
+    }
+
+    public void editarFoto(Usuario usuario, UploadedFile foto) throws IOException {
+        if (foto == null) throw new IllegalArgumentException("Nenhum arquivo enviado.");
+
+        // apaga a foto anterior se for da área de uploads
+        String antiga = usuario.getUrlFoto();
+        if (antiga != null && antiga.startsWith("/uploads/")) {
+            String relativoAntigo = antiga.substring("/uploads/".length());
+            Files.deleteIfExists(ROOT_UPLOADS.resolve(relativoAntigo).normalize());
+        }
+
+        Path pastaUploads = ROOT_UPLOADS.resolve("users");
+        Files.createDirectories(pastaUploads);
+
+        String tipoArquivo = switch (foto.contentType()) {
+            case "image/png" -> "png";
+            case "image/jpeg", "image/jpg" -> "jpg";
+            default -> throw new IllegalArgumentException("Tipo inválido");
+        };
+
+        String nome = UUID.randomUUID() + "." + tipoArquivo;
+
+        try (var in = foto.content()) {
+            Files.copy(in, pastaUploads.resolve(nome), StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        usuario.setUrlFoto("/uploads/users/" + nome);
+        usuarioRepository.salvarUsuario(usuario);
+    }
+
+
+    public void removerFoto(Usuario usuario) throws IOException {
+        if (usuario == null) throw new IllegalArgumentException("Usuário inválido.");
+
+        String atual = usuario.getUrlFoto();
+
+        // Apaga do disco se a foto atual estiver na pasta /uploads
+        if (atual != null && atual.startsWith("/uploads/")) {
+            String relativo = atual.substring("/uploads/".length()); // ex: users/abcd.jpg
+            Path arquivo = ROOT_UPLOADS.resolve(relativo).normalize();
+            Files.deleteIfExists(arquivo);
+        }
+
+        // Volta para a imagem padrão
+        usuario.setUrlFoto(DEFAULT_FOTO);
+        usuarioRepository.salvarUsuario(usuario);
+    }
+
+
+
+
+    public void editarSenha(Usuario usuario, String senha, String confirmarSenha) {
+        if (senha == null || senha.isBlank() || confirmarSenha == null) {
+            throw new IllegalArgumentException("Senha e confirmação não podem ser vazias.");
+        }
+        if (!senha.equals(confirmarSenha)) {
+            throw new IllegalArgumentException("As senhas não coincidem.");
+        }
+
+        String senhaHash = BCrypt.hashpw(senha, BCrypt.gensalt());
+        usuario.setSenha(senhaHash);
+        usuarioRepository.salvarUsuario(usuario);
+    }
+
+
     // ================= AUTENTICAÇÃO =================
 
     public Usuario autenticar(String login, String senha) {
@@ -119,9 +212,9 @@ public class UsuarioService {
         usuarioRepository.salvarUsuario(usuario);
     }
 
-    public List<Fazenda> listarFazendasDoUsuario(String usuarioId) {
+    public ArrayList<Fazenda> listarFazendasDoUsuario(String usuarioId) {
         Usuario usuario = buscarUsuarioObrigatorio(usuarioId);
-        List<Fazenda> fazendas = usuario.listarFazendasAtivas();
+        ArrayList<Fazenda> fazendas = usuario.listarFazendasAtivas();
         return fazendas;
     }
 
@@ -134,6 +227,36 @@ public class UsuarioService {
     public int contaFazendasUsuarios(Usuario usuario) {
         return usuario.contaFazendasUsuarios(usuario);
     }
+
+    // ================= RESUMO =================
+    public List<ResumoFazendaDTO> gerarResumoFazendas(Usuario usuario) {
+        List<ResumoFazendaDTO> resumo = new ArrayList<>();
+
+        for (Fazenda fazenda : usuario.listarFazendasAtivas()) {
+            int totalViveiros = fazenda.listarViveiros().size();
+            int ciclosAtivos = 0;
+            List<String> ativos = new ArrayList<>();
+
+            for (Viveiro viveiro : fazenda.listarViveiros()) {
+                if (!viveiro.isDeletado() && viveiro.isCicloAtivo()) {
+                    ciclosAtivos++;
+                    ativos.add(viveiro.getId());
+                }
+            }
+
+            ResumoFazendaDTO dto = new ResumoFazendaDTO();
+            dto.setNome(fazenda.getNome());
+            dto.setTotalViveiros(totalViveiros);
+            dto.setCiclosAtivos(ciclosAtivos);
+            dto.setViveirosAtivos(ativos);
+            dto.setIdFazenda(fazenda.getId());
+
+            resumo.add(dto);
+        }
+
+        return resumo;
+    }
+
     // ================= HELPERS =================
 
     private Usuario buscarUsuarioObrigatorio(String usuarioId) {

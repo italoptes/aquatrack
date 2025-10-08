@@ -1,9 +1,13 @@
 package com.aquatrack.usuario;
 
+import com.aquatrack.fazenda.ResumoFazendaDTO;
 import io.javalin.http.Context;
+import io.javalin.http.UploadedFile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
+
+import java.util.List;
 
 public class UsuarioController {
 
@@ -66,6 +70,147 @@ public class UsuarioController {
             logger.error("Erro inesperado ao cadastrar usuário: {}", email, e);
             ctx.attribute("erro", "Ocorreu um erro ao cadastrar o usuário. Tente novamente.");
             ctx.render(signup ? formSignup : formCadastro);
+        }
+    }
+
+    public void paginaUsuario(Context ctx) {
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário inválido.");
+        }
+        ctx.attribute("usuario", usuario);
+
+        List<ResumoFazendaDTO> resumoFazendaDTOS = usuarioService.gerarResumoFazendas(usuario);
+        ctx.attribute("resumo", resumoFazendaDTOS);
+
+        String msg = ctx.sessionAttribute("msg");
+        if (msg != null) {
+            ctx.attribute("msg", msg);
+            ctx.sessionAttribute("msg", null); // limpa da sessão depois de usar
+        }
+
+        String erro = ctx.sessionAttribute("erro");
+        if (erro != null) {
+            ctx.attribute("erro", erro);
+            ctx.sessionAttribute("erro", null); // limpa da sessão depois de usar
+        }
+
+        ctx.render("/usuario/pagina_usuario.html");
+    }
+
+    public void editarUsuario(Context ctx) {
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário inválido.");
+        }
+
+        String nome = ctx.formParam("nome");
+        String email = ctx.formParam("email");
+
+        try {
+            boolean mudou = false;
+
+            if (nome != null && !nome.isBlank() && !nome.equals(usuario.getNome())) {
+                usuarioService.editarNome(usuario, nome);
+                mudou = true;
+            }
+
+            if (email != null && !email.isBlank() && !email.equals(usuario.getLogin())) {
+                usuarioService.editarEmail(usuario, email);
+                mudou = true;
+            }
+
+            if (!mudou) {
+                ctx.sessionAttribute("msg", "Os dados são os mesmos. Nenhuma alteração realizada.");
+                ctx.redirect("/usuario");
+                return;
+            }
+
+            ctx.sessionAttribute("usuario", usuario);
+            ctx.sessionAttribute("msg", "Dados alterados com sucesso!");
+            ctx.redirect("/usuario");
+        } catch (IllegalArgumentException e) {
+            // ex.: "Já existe um usuário com esse email."
+            logger.error("Erro ao editar usuário", e);
+            ctx.sessionAttribute("erro", e.getMessage());
+            ctx.redirect("/usuario");
+        } catch (Exception e) {
+            logger.error("Erro inesperado ao editar usuário", e);
+            ctx.sessionAttribute("erro", "Não foi possível atualizar seus dados. Tente novamente.");
+            ctx.redirect("/usuario");
+        }
+    }
+
+    public void editarFoto(Context ctx){
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário inválido.");
+        }
+
+        UploadedFile foto = ctx.uploadedFile("foto");
+
+        try {
+            if (foto != null) {
+                usuarioService.editarFoto(usuario, foto);
+            }
+
+            ctx.sessionAttribute("usuario", usuario);
+            ctx.sessionAttribute("msg", "Foto alterada com sucesso!");
+            ctx.redirect("/usuario");
+        } catch (Exception e) {
+            logger.error("Erro ao editar usuário", e);
+            ctx.attribute("erro", e.getMessage());
+            ctx.render("/usuario/pagina_usuario.html");
+        }
+    }
+
+    public void removerFoto(Context ctx) {
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        if (usuario == null) throw new IllegalArgumentException("Usuário inválido.");
+
+        try {
+            usuarioService.removerFoto(usuario);
+            // atualiza sessão para a view já cair na imagem padrão
+            ctx.sessionAttribute("usuario", usuario);
+            ctx.sessionAttribute("msg", "Foto removida.");
+            ctx.redirect("/usuario");
+        } catch (Exception e) {
+            logger.error("Erro ao remover foto", e);
+            ctx.attribute("erro", e.getMessage());
+            ctx.render("/usuario/pagina_usuario.html");
+        }
+    }
+
+    public void editarSenha(Context ctx) {
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        if (usuario == null) throw new IllegalArgumentException("Usuário inválido.");
+
+        String senhaAtual = ctx.formParam("senhaAtual");
+        String senha = ctx.formParam("novaSenha");
+        String confirmarSenha = ctx.formParam("confirmarSenha");
+
+
+
+        try {
+            if (!BCrypt.checkpw(senhaAtual, usuario.getSenha())) {
+                ctx.sessionAttribute("erro", "Senha atual incorreta.");
+                ctx.redirect("/usuario");
+                return;
+            }
+            if (BCrypt.checkpw(senha, usuario.getSenha())) {
+                ctx.sessionAttribute("erro", "A nova senha não pode ser igual à senha atual.");
+                ctx.redirect("/usuario");
+                return;
+            }
+
+            ctx.attribute("usuario", usuario);
+            usuarioService.editarSenha(usuario, senha, confirmarSenha);
+            ctx.sessionAttribute("msg", "Senha alterada com sucesso!");
+            ctx.redirect("/usuario");
+        } catch (Exception e) {
+            logger.error("Erro ao editar senha", e);
+            ctx.attribute("erro", e.getMessage());
+            ctx.render("/usuario/pagina_usuario.html");
         }
     }
 
