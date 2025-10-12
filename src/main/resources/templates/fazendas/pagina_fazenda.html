@@ -149,13 +149,13 @@
                 <div class="modal-body">
                     Tem certeza que deseja remover a fazenda
                     <strong th:text="${fazenda.nome}"></strong> (ID: <span th:text="${fazenda.id}"></span>)?
-                    <br><small class="text-muted">Esta ação não poderá ser desfeita.</small>
+                    <br><small class="text-muted">Esta ação não poderá ser revertida.</small>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <form th:action="@{/fazenda/{id}/remover(id=${fazenda.id})}" method="post">
-                        <button type="submit" class="btn btn-success">Confirmar</button>
+                        <button type="submit" class="btn btn-danger">Remover</button>
                     </form>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -172,14 +172,15 @@
                     </div>
                     <div class="modal-body">
                         Tem certeza que deseja remover o viveiro
-                        <strong th:text="${viveiro.id}"></strong> desta fazenda?
+                        <strong th:text="${viveiro.id}"></strong> desta fazenda? <br>
+                        Esta ação não poderá ser revertida.
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <form th:action="@{/fazenda/{id}/viveiro/{idViveiro}/remover(id=${fazenda.id}, idViveiro=${viveiro.id})}"
                               method="post">
-                            <button type="submit" class="btn btn-success">Confirmar</button>
+                            <button type="submit" class="btn btn-danger">Remover</button>
                         </form>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
             </div>
