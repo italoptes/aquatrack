@@ -63,14 +63,15 @@
                         <div class="d-flex justify-content-center gap-2">
                             <button class="btn btn-sm btn-info" title="Visualizar detalhes"
                                     th:attr="data-url=@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/{idInstrucao}(id=${idFazenda},idViveiro=${idViveiro},idInstrucao=${instrucao.id})}"
-                                    onclick="abrirModal(this)">Abrir
+                                    onclick="abrirModal(this)">Ver
                             </button>
 
-                            <form th:action="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/{idInstrucao}/remover(id=${idFazenda},idViveiro=${idViveiro},idInstrucao=${instrucao.id})}"
-                                  method="post" style="display:inline;">
-                                <button class="btn btn-sm btn-danger" title="Excluir instrução" type="submit">Excluir
-                                </button>
-                            </form>
+                            <!-- abrir modal de confirmação -->
+                            <button class="btn btn-sm btn-danger" title="Excluir instrução"
+                                    data-bs-toggle="modal"
+                                    th:attr="data-bs-target='#modalRemoverInstrucao__' + ${instrucao.id}">
+                                Excluir
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -88,6 +89,35 @@
 
     <!-- container de modal -->
     <div id="modal-container" class="modal fade" tabindex="-1"></div>
+
+    <!-- Modais Remover Instrução -->
+    <th:block th:each="instrucao : ${instrucoes}">
+        <div class="modal fade" th:id="'modalRemoverInstrucao__' + ${instrucao.id}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">Confirmar Remoção</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        Tem certeza que deseja excluir a instrução
+                        <strong th:text="${instrucao.titulo}">—</strong>? <br>
+                        Está ação não poderá ser desfeita.
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <form th:action="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/{idInstrucao}/remover(id=${idFazenda}, idViveiro=${idViveiro}, idInstrucao=${instrucao.id})}"
+                              method="post">
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+
 
     <script>
         function abrirModal(btn) {
