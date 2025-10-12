@@ -111,6 +111,7 @@ public class ViveiroController {
                     ctx.attribute("qtdeQualidade", cicloViveiro.getHistoricoQualidade().size());
                 } else {
                     ctx.attribute("cicloViveiro", null);
+                    ctx.attribute("info", "O viveiro não tem um ciclo ativo, inicie um para gerencia-lo.");
                 }
 
                 ctx.render("viveiros/pagina_viveiro.html");
