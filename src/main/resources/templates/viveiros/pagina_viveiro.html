@@ -12,23 +12,14 @@
     <!-- Cabeçalho -->
     <div class="row my-5">
         <div class="col">
-            <h1 class="text-center">Perfil do Viveiro</h1>
+            <h1 class="text-center mb-0">Perfil do Viveiro</h1>
+            <p class="text-center mt-0">Aqui você pode gerenciar todos os dados e informações do viveiro.</p>
         </div>
     </div>
 
     <!-- Alertas -->
-    <!-- ALTERADO: mostrar o texto certo no info -->
     <div th:if="${info}" class="alert alert-info alert-dismissible fade show" role="alert">
         <span th:text="${info}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-
-    <div th:if="${msg}" class="alert alert-success alert-dismissible fade show" role="alert">
-        <span th:text="${msg}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    <div th:if="${erro}" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <span th:text="${erro}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
