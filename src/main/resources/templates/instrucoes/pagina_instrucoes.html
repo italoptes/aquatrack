@@ -6,9 +6,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<section class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Instruções do Viveiro</h2>
+<section class="container mt-5 pb-5"><!-- pb-5: respiro até o rodapé -->
+
+    <!-- Cabeçalho centralizado -->
+    <div class="row my-5">
+        <div class="col text-center">
+            <h1 class="mb-0">Instruções do Viveiro</h1>
+            <p class="mt-0">Aqui você pode gerenciar as anotações do viveiro.</p>
+        </div>
+    </div>
+
+    <!-- Botão alinhado à direita entre título e tabela -->
+    <div class="mb-3 d-flex justify-content-end">
         <button class="btn btn-success"
                 th:attr="data-url=@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/nova(id=${idFazenda}, idViveiro=${idViveiro})}"
                 onclick="abrirModal(this)">
@@ -16,14 +25,15 @@
         </button>
     </div>
 
-    <table class="table table-hover align-middle">
+    <!-- Tabela igual, apenas com margem inferior extra -->
+    <table class="table table-hover align-middle mb-5"><!-- mb-5: mais espaço após a tabela -->
         <thead>
         <tr>
             <th>Título</th>
             <th>Status</th>
             <th>Autor</th>
             <th>Data</th>
-            <th>Ações</th>
+            <th class="text-center">Ações</th>
         </tr>
         </thead>
         <tbody>
@@ -55,7 +65,6 @@
                 </div>
                 <small class="text-muted d-block mt-1">👁️ Ver &nbsp;&nbsp; ✏️ Editar &nbsp;&nbsp; 🗑️ Excluir</small>
             </td>
-
         </tr>
         </tbody>
     </table>
@@ -72,14 +81,11 @@
                     document.getElementById('modal-container').innerHTML = html;
                     const modal = new bootstrap.Modal(document.getElementById('modal-container'));
                     modal.show();
-
-                    // recarrega após fechamento
                     document.getElementById('modal-container')
                         .addEventListener('hidden.bs.modal', () => window.location.reload());
                 });
         }
     </script>
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </section>
 </body>
