@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:width="http://www.w3.org/1999/xhtml"
+<html xmlns:th="http://www.thymeleaf.org"
       th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <head>
     <title>Dados do Viveiro</title>
@@ -59,6 +59,12 @@
                     Detalhes do Viveiro
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                   th:href="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes(id=${idFazenda}, idViveiro=${idViveiro})}">
+                    Instruções
+                </a>
+            </li>
 
             <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
                 <a class="nav-link"
@@ -80,6 +86,7 @@
                     Relatórios gerados
                 </a>
             </li>
+
         </ul>
 
         <a th:href="@{/fazenda/{id}(id=${idFazenda})}"
@@ -343,7 +350,6 @@
     </div>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function abrirModal(btn) {
             const url = btn.getAttribute('data-url');
