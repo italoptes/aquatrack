@@ -108,6 +108,7 @@ public class FazendaController {
                 ctx.attribute("estoqueCrescimento", estoqueCrescimento);
                 ctx.attribute("fazenda", fazenda);
                 ctx.attribute("viveiros", fazendaService.listarViveiros(fazenda));
+                ctx.attribute("funcionarios", fazendaService.listarFuncionarios(usuario, fazenda));
 
                 logger.info("Abrindo fazenda: id={}, nome={}", idFazenda, fazenda.getNome());
                 ctx.render("/fazendas/pagina_fazenda.html");

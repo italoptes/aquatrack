@@ -1,5 +1,7 @@
 package com.aquatrack.fazenda;
 
+import com.aquatrack.Funcao;
+import com.aquatrack.funcionario.FuncionarioFazenda;
 import com.aquatrack.racao.RacaoEstoque;
 import com.aquatrack.racao.TipoRacao;
 import com.aquatrack.viveiro.Viveiro;
@@ -12,6 +14,7 @@ public class Fazenda {
     private String localizacao;
     private RacaoEstoque racaoEstoque;
     private Map<String, Viveiro> viveiros;
+    private List<FuncionarioFazenda> funcionarios;
     private boolean deletado;
 
     public Fazenda() {
@@ -20,6 +23,7 @@ public class Fazenda {
         this.localizacao = "";
         this.viveiros = new HashMap<>();
         this.racaoEstoque = new RacaoEstoque();
+        this.funcionarios = new ArrayList<>();
         this.deletado = false;
     }
 
@@ -29,6 +33,7 @@ public class Fazenda {
         this.localizacao = localizacao;
         this.viveiros = new HashMap<>();
         this.racaoEstoque = new RacaoEstoque();
+        this.funcionarios = new ArrayList<>();
         this.deletado = false;
     }
 
@@ -115,5 +120,32 @@ public class Fazenda {
         this.viveiros = viveiros;
     }
 
+    public void addFuncionario(FuncionarioFazenda funcionario) {
+        funcionarios.add(funcionario);
+    }
 
+    public void removerFuncionario(FuncionarioFazenda funcionario) {
+        funcionario.deleta();
+    }
+
+    public List<FuncionarioFazenda> listarFuncionariosAtivos() {
+        return funcionarios.stream().
+                filter(f -> !f.isDeletado()). //pega apenas os ativos
+                toList(); //cria a lista
+    }
+
+    public FuncionarioFazenda getFuncionario(String login) {
+        return funcionarios.stream()
+                .filter(f -> !f.isDeletado()) // filtra apenas os ativos
+                .filter(f -> f.getUsuario().getLogin().equals(login)) // filtra pelo login
+                .findFirst() // pega o primeiro (ou único)
+                .orElse(null); // retorna null se não encontrar
+    }
+
+    public void addFuncaoFuncionario(FuncionarioFazenda funcionario, Funcao funcao) {
+        funcionario.addFuncao(funcao);
+    }
+    public void removerFuncaoFuncionario(FuncionarioFazenda funcionario, Funcao funcao) {
+        funcionario.removeFuncao(funcao);
+    }
 }

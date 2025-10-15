@@ -2,56 +2,52 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:width="http://www.w3.org/1999/xhtml"
       th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <head>
-    <title>Dados da fazenda</title>
+    <title>Perfil da Fazenda</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
+
 <body>
 <section>
-    <div class="container-fluid">
-        <!-- Título da página -->
-        <div class="row mt-5 mb-2">
-            <div class="col">
-                <h1 class="text-center">Perfil da Fazenda</h1>
-                <p class="text-center">Aqui você pode gerenciar todos os dados e informações da fazenda.</p>
-            </div>
-        </div>
-        <div class="text-end mb-4 me-2 mt-0">
-            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#modalRemoverFazenda">
-                Remover Fazenda
-            </button>
-            <a href="/fazendas" class="btn btn-secondary btn-sm">Voltar</a>
-            <!-- Botão Remover Fazenda -->
+    <div class="container-fluid mt-5">
+        <!-- Cabeçalho -->
+        <div class="row mb-4 text-center">
+            <h1 class="fw-bold">Perfil da Fazenda</h1>
+            <p class="text-muted">Aqui você pode gerenciar todos os dados e informações da fazenda.</p>
         </div>
 
-        <!-- Dados da Fazenda -->
+        <!-- Botões de ação -->
+        <div class="text-end mb-4 me-2">
+            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#modalRemoverFazenda">Remover Fazenda</button>
+            <a href="/fazendas" class="btn btn-secondary btn-sm">Voltar</a>
+        </div>
+
+        <!-- Layout principal dividido em 2 colunas -->
         <div class="row">
-            <div class="col-md-6">
-                <h3><strong>Informações Básicas</strong></h3>
-                <form>
+            <!-- ========================= COLUNA ESQUERDA ========================= -->
+            <div class="col-lg-7 col-md-12">
+                <!-- Informações básicas -->
+                <h3 class="fw-bold mb-3">Informações Básicas</h3>
+                <form class="mb-4">
                     <div class="mb-3">
-                        <label for="nomeFazenda" class="form-label">Nome da Fazenda:</label>
-                        <input type="text" class="form-control" id="nomeFazenda" th:value="${fazenda.nome}" readonly>
+                        <label class="form-label">Nome da Fazenda:</label>
+                        <input type="text" class="form-control" th:value="${fazenda.nome}" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="localizacao" class="form-label">Localização:</label>
-                        <input type="text" class="form-control" id="localizacao" th:value="${fazenda.localizacao}" readonly>
+                        <label class="form-label">Localização:</label>
+                        <input type="text" class="form-control" th:value="${fazenda.localizacao}" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="quantidade-viveiros" class="form-label">Viveiros cadastrados:</label>
-                        <input type="text" class="form-control" id="quantidade-viveiros"
-                               th:value="${fazenda.viveirosAtivos()}" readonly>
+                        <label class="form-label">Viveiros cadastrados:</label>
+                        <input type="text" class="form-control" th:value="${fazenda.viveirosAtivos()}" readonly>
                     </div>
                 </form>
-            </div>
-            <div class="col-md-6">
-                <div class="col d-flex justify-content-between align-items-center">
-                    <h3><strong>Estoque de Ração</strong></h3>
-                </div>
-                <br>
-                <table class="table table-bordered">
-                    <thead>
+
+                <!-- Estoque de ração -->
+                <h3 class="fw-bold mb-3">Estoque de Ração</h3>
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light">
                     <tr>
                         <th>Tipo de Ração</th>
                         <th>Quantidade</th>
@@ -68,44 +64,32 @@
                     </tr>
                     </tbody>
                 </table>
-
-                <!-- Botão Gerenciar -->
-                <div class="text-end">
-                    <a th:href="@{/fazenda/{id}/abastecer-racao(id=${fazenda.id})}" class="btn btn-success">
-                        Abastecer
-                    </a>
+                <div class="text-end mb-4">
+                    <a th:href="@{/fazenda/{id}/abastecer-racao(id=${fazenda.id})}" class="btn btn-success">Abastecer</a>
                 </div>
-            </div>
 
-            <!-- Viveiros -->
-            <div>
-                <br>
-                <div class="d-flex justify-content-between align-items-center">
-                    <h3><strong>Viveiros da fazenda</strong></h3>
-                    <a th:href="@{/fazenda/{id}/cadastrar-viveiro(id=${fazenda.id})}" class="btn btn-success">
-                        Adicionar viveiro
-                    </a>
+                <!-- Viveiros -->
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h3 class="fw-bold">Viveiros da Fazenda</h3>
+                    <a th:href="@{/fazenda/{id}/cadastrar-viveiro(id=${fazenda.id})}" class="btn btn-success">Adicionar Viveiro</a>
                 </div>
+
                 <table class="table table-striped table-bordered">
-                    <thead class="bg-light">
+                    <thead class="table-light">
                     <tr>
-                        <th style="width: 150px;" class="text-center">ID</th>
-                        <th style="width: 150px;" class="text-center">Área <span class="text-muted" style="font-size: 0.9em;">(m²)</span></th>
-                        <th style="width: 150px;" class="text-center">Ciclo ativo</th>
-                        <th style="width: 250px;" class="text-center">Ação</th>
+                        <th class="text-center">ID</th>
+                        <th class="text-center">Área (m²)</th>
+                        <th class="text-center">Ciclo ativo</th>
+                        <th class="text-center">Ações</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- Verifica se não há nenhum viveiro cadastrado -->
                     <th:block th:if="${#lists.isEmpty(viveiros)}">
                         <tr>
-                            <td colspan="4" class="text-center" style="padding: 40px 0; font-size: 18px;">
-                                Nenhum viveiro cadastrado ainda
-                            </td>
+                            <td colspan="4" class="text-center py-4 text-muted">Nenhum viveiro cadastrado ainda</td>
                         </tr>
                     </th:block>
 
-                    <!-- Caso existam viveiros cadastrados, exibe as informações dos viveiros -->
                     <th:block th:each="viveiro : ${viveiros}">
                         <tr>
                             <td th:text="${viveiro.id}" class="text-center align-middle"></td>
@@ -116,10 +100,7 @@
                             </td>
                             <td class="text-center align-middle">
                                 <a th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${fazenda.id}, idViveiro=${viveiro.id})}"
-                                   class="btn btn-outline-success btn-sm rounded-3">
-                                    Gerenciar
-                                </a>
-                                <!-- Botão abre modal de remoção -->
+                                   class="btn btn-outline-success btn-sm rounded-3">Gerenciar</a>
                                 <button type="button"
                                         class="btn btn-outline-danger btn-sm"
                                         data-bs-toggle="modal"
@@ -130,14 +111,60 @@
                         </tr>
                     </th:block>
                     </tbody>
+                </table>
+            </div>
 
+            <!-- ========================= COLUNA DIREITA (FUNCIONÁRIOS) ========================= -->
+            <div class="col-lg-5 col-md-12 mt-4 mt-lg-0">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="fw-bold">Funcionários da Fazenda</h3>
+                    <a th:href="@{/fazenda/{id}/cadastrar-funcionario(id=${fazenda.id})}" class="btn btn-primary">
+                        Adicionar Funcionário
+                    </a>
+                </div>
 
+                <table class="table table-striped table-bordered">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Funções</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:if="${#lists.isEmpty(funcionarios)}">
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">
+                                Nenhum funcionário cadastrado ainda
+                            </td>
+                        </tr>
+                    </th:block>
 
+                    <th:block th:each="func : ${funcionarios}">
+                        <tr>
+                            <td th:text="${func.usuario.nome}"></td>
+                            <td th:text="${func.usuario.login}"></td>
+                            <td>
+                                <ul class="mb-0">
+                                    <li th:each="f : ${func.funcoes}" th:text="${f}"></li>
+                                </ul>
+                            </td>
+                            <td class="text-center">
+                                <a th:href="@{/fazenda/{id}/editar-funcionario/{login}(id=${fazenda.id}, login=${func.usuario.login})}"
+                                   class="btn btn-outline-primary btn-sm">Editar</a>
+                                <a th:href="@{/fazenda/{id}/remover-funcionario/{login}(id=${fazenda.id}, login=${func.usuario.login})}"
+                                   class="btn btn-outline-danger btn-sm">Remover</a>
+                            </td>
+                        </tr>
+                    </th:block>
+                    </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <!-- ========================= MODAIS ========================= -->
     <!-- Modal Remover Fazenda -->
     <div class="modal fade" id="modalRemoverFazenda" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -147,8 +174,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
-                    Tem certeza que deseja remover a fazenda
-                    <strong th:text="${fazenda.nome}"></strong> (ID: <span th:text="${fazenda.id}"></span>)?
+                    Tem certeza que deseja remover a fazenda <strong th:text="${fazenda.nome}"></strong>?
                     <br><small class="text-muted">Esta ação não poderá ser revertida.</small>
                 </div>
                 <div class="modal-footer">
@@ -171,9 +197,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <div class="modal-body">
-                        Tem certeza que deseja remover o viveiro
-                        <strong th:text="${viveiro.id}"></strong> desta fazenda? <br>
-                        Esta ação não poderá ser revertida.
+                        Tem certeza que deseja remover o viveiro <strong th:text="${viveiro.id}"></strong>?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -186,7 +210,6 @@
             </div>
         </div>
     </th:block>
-
 </section>
 
 <!-- Scripts do Bootstrap -->

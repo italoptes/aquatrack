@@ -1,5 +1,5 @@
 package com.aquatrack.usuario;
 
 public enum TipoUsuario {
-    MASTER, DONO;
+    MASTER, DONO, FUNCIONARIO;
 }

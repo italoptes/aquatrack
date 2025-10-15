@@ -4,6 +4,7 @@ import com.aquatrack.cicloViveiro.CicloViveiroController;
 import com.aquatrack.cicloViveiro.CicloViveiroService;
 import com.aquatrack.fazenda.FazendaController;
 import com.aquatrack.fazenda.FazendaService;
+import com.aquatrack.funcionario.FuncionarioFazendaController;
 import com.aquatrack.instrucoes.InstrucaoController;
 import com.aquatrack.qualidadeDeAgua.QualidadeAguaController;
 import com.aquatrack.racao.RacaoController;
@@ -150,6 +151,7 @@ public class App {
         MasterController masterController = new MasterController(usuarioService);
         UsuarioController usuarioController = new UsuarioController(usuarioService);
         FazendaController fazendaController = new FazendaController(usuarioService, fazendaService);
+        FuncionarioFazendaController funcionarioFazendaController = new FuncionarioFazendaController(usuarioService, fazendaService);
         ViveiroController viveiroController = new ViveiroController(usuarioService, fazendaService, viveiroService);
         InstrucaoController instrucaoController = new InstrucaoController(usuarioService, fazendaService, viveiroService);
         CicloViveiroController cicloViveiroController = new CicloViveiroController(usuarioService, fazendaService, viveiroService);
@@ -212,6 +214,10 @@ public class App {
         app.post("/fazendas/criar", fazendaController::cadastrarFazenda);
         app.post("/fazenda/{id}/remover", fazendaController::removerFazenda);
         app.get("/fazenda/{id}", fazendaController::abrirFazenda);
+
+        //Funcionario
+        app.get("/fazenda/{id}/cadastrar-funcionario", funcionarioFazendaController::mostrarFormularioFuncionario);
+        app.post("/fazenda/{id}/cadastrar-funcionario", funcionarioFazendaController::cadastrarFuncionario);
 
         // Viveiro
         app.get("/fazenda/{id}/cadastrar-viveiro", viveiroController::mostrarFormularioViveiro);
