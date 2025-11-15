@@ -1,5 +1,6 @@
 package com.aquatrack.usuario;
 
+import com.aquatrack.LoginController;
 import com.aquatrack.fazenda.ResumoFazendaDTO;
 import io.javalin.http.Context;
 import io.javalin.http.UploadedFile;
@@ -213,5 +214,6 @@ public class UsuarioController {
             ctx.render("/usuario/pagina_usuario.html");
         }
     }
+
 
 }

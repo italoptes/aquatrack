@@ -171,7 +171,7 @@ public class InstrucaoController {
             viveiroService.editarInstrucao(usuario, viveiro, idInstrucao, novoTitulo, novaDescricao, novoStatus);
 
             logger.info("Instrução {} editada com sucesso.", idInstrucao);
-            ctx.redirect("/fazenda/" + idFazenda + "/viveiros/" + idViveiro);
+            ctx.redirect("/fazendas/" + idFazenda + "/viveiros/" + idViveiro+ "/instrucoes");
         } catch (Exception e) {
             logger.error("Erro ao editar instrução {}", idInstrucao, e);
             ctx.status(500).result("Erro ao editar instrução.");

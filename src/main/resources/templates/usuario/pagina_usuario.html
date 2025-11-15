@@ -9,6 +9,17 @@
 <body>
 <section class="container my-5">
 
+    <!-- Faixa do título + botão -->
+    <div class="position-relative py-2 mb-3">
+        <h1 class="text-center m-0">Perfil do usuário</h1>
+
+        <!-- Botão à direita, alinhado verticalmente ao título -->
+        <a href="/fazendas"
+        class="btn btn-danger btn-sm position-absolute end-0 top-50 translate-middle-y me-2">
+            Início
+        </a>
+    </div>
+
     <!-- Alertas -->
     <div th:if="${msg}" class="alert alert-success alert-dismissible fade show" role="alert">
         <span th:text="${msg}"></span>
@@ -18,21 +29,7 @@
         <span th:text="${erro}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
-    <!-- Faixa do título + botão -->
-    <div class="position-relative py-2 mb-3">
-        <h1 class="text-center m-0">Perfil do usuário</h1>
-
-        <!-- Botão à direita, alinhado verticalmente ao título -->
-        <a href="/fazendas"
-           class="btn btn-danger btn-sm position-absolute end-0 top-50 translate-middle-y me-2">
-            Início
-        </a>
-    </div>
-
     <hr class="mt-2 mb-5">
-
-
-    </div>
 
     <div class="row mb-4">
         <!-- Coluna ESQUERDA -->

@@ -15,6 +15,7 @@ public class Usuario {
     private List<Fazenda> fazendas;
     private boolean deletado;
     private TipoUsuario tipo;
+    private boolean primeiroLogin;
 
     public Usuario(String login, String nome, String senha, TipoUsuario tipoUsuario) {
         this.id = java.util.UUID.randomUUID().toString();
@@ -24,6 +25,7 @@ public class Usuario {
         this.deletado = false;
         this.tipo = tipoUsuario;
         this.fazendas = new ArrayList<>();
+        this.primeiroLogin = true;
         this.urlFoto = "/images/default-user.png";
     }
 
@@ -73,6 +75,14 @@ public class Usuario {
 
     public boolean isDeletado() {return deletado;}
     public void deletar() {this.deletado = true;}
+
+    public Boolean isPrimeiroLogin() {
+        return primeiroLogin;
+    }
+
+    public void setPrimeiroLogin(Boolean primeiroLogin) {
+        this.primeiroLogin = primeiroLogin;
+    }
 
     public TipoUsuario getTipoUsuario() {return tipo;}
     public void setTipoUsuario(TipoUsuario tipo) {this.tipo = tipo;}
