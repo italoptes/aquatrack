@@ -189,6 +189,8 @@ public class App {
         app.get("/login", loginController::mostrarPaginaLogin);
         app.post("/login", loginController::processarLogin);
         app.get("/logout", loginController::logout);
+        app.get("/primeiro-login", loginController::mostrarPaginaPrimeiroLogin);
+        app.post("primeiro-login", loginController::setPrimeiraSenha);
 
         // Usuário
         app.get("/usuario", usuarioController::paginaUsuario);
@@ -217,7 +219,6 @@ public class App {
         app.post("/fazenda/{id}/viveiro/{idViveiro}/remover", viveiroController::removerViveiro);
         app.get("/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro", viveiroController::abrirViveiro);
 
-        //Instruções
         // Instruções
         app.get("/fazendas/{id}/viveiros/{idViveiro}/instrucoes", instrucaoController::listarInstrucoes);
         app.get("/fazendas/{id}/viveiros/{idViveiro}/instrucoes/nova", instrucaoController::abrirFormularioNovaInstrucao);

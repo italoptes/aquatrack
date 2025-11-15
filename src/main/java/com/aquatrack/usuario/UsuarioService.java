@@ -53,6 +53,7 @@ public class UsuarioService {
             usuario.setId(UUID.randomUUID().toString());
         }
 
+        usuario.setPrimeiroLogin(true);
         usuarioRepository.salvarUsuario(usuario);
         return usuario;
     }
@@ -158,6 +159,23 @@ public class UsuarioService {
     }
 
 
+    public void setSenhaPrimeiroLogin(Usuario usuario, String novaSenha, String confirmar) {
+        if (isBlank(novaSenha) || isBlank(confirmar)) {
+            throw new IllegalArgumentException("Senha e confirmação são obrigatórias.");
+        }
+        if (!novaSenha.equals(confirmar)) {
+            throw new IllegalArgumentException("As senhas não coincidem.");
+        }
+
+        String senhaHash = BCrypt.hashpw(novaSenha, BCrypt.gensalt());
+        usuario.setSenha(senhaHash);
+        usuario.setPrimeiroLogin(false);
+        usuarioRepository.salvarUsuario(usuario);
+    }
+
+    public boolean verificaPrimeiroLogin(Usuario usuario) {
+        return usuario.isPrimeiroLogin();
+    }
 
 
     public void editarSenha(Usuario usuario, String senha, String confirmarSenha) {

@@ -25,6 +25,14 @@ public class LoginController {
         ctx.render("/login/login.html");
     }
 
+    public void mostrarPaginaPrimeiroLogin(Context ctx) {
+        String teste = ctx.queryParam("teste");
+        if (teste != null) {
+            throw new RuntimeException("Erro de teste a partir do /login?teste=1");
+        }
+        ctx.render("/login/pagina_primeiro_login.html");
+    }
+
     public void processarLogin(Context ctx) {
         String login = ctx.formParam("login");
         String senha = ctx.formParam("senha");
@@ -35,15 +43,55 @@ public class LoginController {
             ctx.sessionAttribute("usuario", usuario);
             logger.info("Usuário '{}' autenticado com sucesso.", login);
 
-            if (usuario.getTipoUsuario() == TipoUsuario.MASTER) {
-                ctx.redirect("/master");
+            if (usuario.isPrimeiroLogin()) {
+                ctx.redirect("/primeiro-login");
             } else {
-                ctx.redirect("/fazendas");
+                if (usuario.getTipoUsuario() == TipoUsuario.MASTER) {
+                    ctx.redirect("/master");
+                } else {
+                    ctx.redirect("/fazendas");
+                }
             }
         } else {
             logger.warn("Tentativa de login falhou para o usuário: {}", login);
             ctx.attribute("erro", "Usuário ou senha inválidos");
             ctx.render("/login/login.html");
+        }
+    }
+
+    public void setPrimeiraSenha (Context ctx){
+        Usuario usuario = ctx.sessionAttribute("usuario");
+        if (usuario == null) throw new IllegalArgumentException("Usuário inválido.");
+
+        String nova = ctx.formParam("senha");
+        String confirmar = ctx.formParam("confirmarSenha");
+
+        try {
+            if (!usuario.isPrimeiroLogin()) {
+                ctx.redirect("/login");
+                return;
+            }
+
+            usuarioService.setSenhaPrimeiroLogin(usuario, nova, confirmar);
+
+            // reaproveitar o método do LoginController (ou duplicar aqui)
+            ctx.sessionAttribute("usuario", usuario);
+
+            logger.info("Primeiro login finalizado e senha alterada por '{}'", usuario.getLogin());
+
+            logger.info("Usuário '{}' deslogado para fazer login com a nova senha", usuario.getLogin());
+            ctx.sessionAttribute("usuario", null);
+
+            ctx.attribute("info", "Senha definitiva definida com sucesso! Faça login para confirmar");
+            ctx.render("/login/login.html");
+
+        } catch (IllegalArgumentException e) {
+            ctx.attribute("erro", e.getMessage());
+            ctx.render("/login/primeiro_login.html");
+        } catch (Exception e) {
+            logger.error("Erro ao definir senha no primeiro login", e);
+            ctx.attribute("erro", "Não foi possível definir sua senha. Tente novamente.");
+            ctx.render("/login/primeiro_login.html");
         }
     }
 
