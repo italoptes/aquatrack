@@ -85,7 +85,7 @@ mvn exec:java
 
 4. **Acessar no navegador**
 ```
-http://localhost:7000
+http://localhost:8000
 ```
 
 ---

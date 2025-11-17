@@ -13,7 +13,7 @@ RUN mvn -q dependency:go-offline
 COPY src ./src
 
 # Porta usada pelo Javalin
-EXPOSE 7000
+EXPOSE 8000
 
 # Comando para rodar a aplicação
 # -> usando a sua classe main: com.aquatrack.App
