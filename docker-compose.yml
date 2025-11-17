@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+aquatrack:
+  # O Ponto (.) diz ao Docker para procurar o Dockerfile no diretório atual (o seu aquatrack/)
+  build: .
+  # Nome amigável para o seu contêiner dentro do Portainer
+  container_name: aquatrack_server
+  
+  # Mapeamento de portas: HOST:CONTAINER (a porta que o seu Javalin usa)
+  # Isso significa que você acessará a aplicação pela porta 8000 do seu servidor Umbrel
+  ports:
+    - "8000:8000"
+    
+  # Garante que o servidor reinicie automaticamente se houver falhas ou ao reiniciar o Umbrel
+  restart: always
