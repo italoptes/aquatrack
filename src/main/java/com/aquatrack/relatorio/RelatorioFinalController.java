@@ -44,6 +44,7 @@ public class RelatorioFinalController {
         ctx.attribute("usuario", usuario);
         Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
         Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
+        CicloViveiro cicloViveiro = viveiro.ultimoCiclo();
         try {
 
             if (viveiro == null) {
@@ -58,6 +59,7 @@ public class RelatorioFinalController {
             ctx.attribute("idFazenda", idFazenda);
             ctx.attribute("idViveiro", idViveiro);
             ctx.attribute("viveiro", viveiro);
+            ctx.attribute("cicloViveiro", cicloViveiro);
 
             ctx.render("relatorio/relatorios_viveiro.html");
 

@@ -20,7 +20,7 @@
     <div class="position-relative mb-3">
         <ul class="nav nav-tabs justify-content-center">
             <li class="nav-item">
-                <a class="nav-link "
+                <a class="nav-link"
                    th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
                     Detalhes do Viveiro
                 </a>
@@ -32,14 +32,14 @@
                 </a>
             </li>
 
-            <li class="nav-item" >
+            <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
                 <a class="nav-link"
                    th:href="@{/fazendas/{id}/viveiro/{idViveiro}/historico_biometria(id=${idFazenda}, idViveiro=${idViveiro})}">
                     Histórico de Biometria
                 </a>
             </li>
 
-            <li class="nav-item" >
+            <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
                 <a class="nav-link"
                    th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_agua(id=${idFazenda}, idViveiro=${idViveiro})}">
                     Histórico de Qualidade de Água

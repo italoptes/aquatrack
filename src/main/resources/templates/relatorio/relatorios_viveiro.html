@@ -37,14 +37,14 @@
                 </a>
             </li>
 
-            <li class="nav-item" >
+            <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
                 <a class="nav-link"
                    th:href="@{/fazendas/{id}/viveiro/{idViveiro}/historico_biometria(id=${idFazenda}, idViveiro=${idViveiro})}">
                     Histórico de Biometria
                 </a>
             </li>
 
-            <li class="nav-item" >
+            <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
                 <a class="nav-link"
                    th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_agua(id=${idFazenda}, idViveiro=${idViveiro})}">
                     Histórico de Qualidade de Água

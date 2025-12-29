@@ -1,5 +1,6 @@
 package com.aquatrack.instrucoes;
 
+import com.aquatrack.cicloViveiro.CicloViveiro;
 import com.aquatrack.fazenda.Fazenda;
 import com.aquatrack.fazenda.FazendaService;
 import com.aquatrack.usuario.Usuario;
@@ -38,6 +39,7 @@ public class InstrucaoController {
         try {
             Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
             Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
+            CicloViveiro cicloViveiro = viveiro.ultimoCiclo();
 
             if (viveiro != null && !viveiro.isDeletado()) {
                 List<Instrucao> instrucoes = viveiroService.listarInstrucoes(viveiro);
@@ -46,6 +48,7 @@ public class InstrucaoController {
                 ctx.attribute("idFazenda", idFazenda);
                 ctx.attribute("idViveiro", idViveiro);
                 ctx.attribute("instrucoes", instrucoes);
+                ctx.attribute("cicloViveiro", cicloViveiro);
 
                 logger.info("Listando instruções: fazenda={}, viveiro={}, total={}", idFazenda, idViveiro, instrucoes.size());
                 ctx.render("instrucoes/pagina_instrucoes.html");
