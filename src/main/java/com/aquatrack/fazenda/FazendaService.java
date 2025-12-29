@@ -5,6 +5,7 @@ import com.aquatrack.usuario.Usuario;
 import com.aquatrack.viveiro.Viveiro;
 import com.aquatrack.racao.TipoRacao;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class FazendaService {
@@ -38,7 +39,12 @@ public class FazendaService {
     public List<Viveiro> listarViveiros(Fazenda fazenda) {
         if (fazenda == null) throw new IllegalArgumentException("Fazenda inválida.");
 
-        return fazenda.listarViveiros();
+        return fazenda.listarViveiros()
+                .stream()
+                .sorted(Comparator.comparingInt(v ->
+                        Integer.parseInt(v.getId().replace("V-", ""))
+                ))
+                .toList();
     }
 
     public Viveiro getViveiro(Fazenda fazenda, String viveiroId) {
