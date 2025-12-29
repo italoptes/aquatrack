@@ -1,25 +1,61 @@
-<div class="modal-dialog">
+<div class="modal-dialog modal-lg">
     <div class="modal-content shadow">
-        <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title">👁️ Detalhes da Instrução</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <!-- Cabeçalho azul -->
+        <div class="modal-header bg-info text-white">
+            <h5 class="modal-title">Detalhes da Instrução</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
         </div>
 
         <div class="modal-body">
-            <p><strong>Título:</strong> <span th:text="${instrucao.titulo}"></span></p>
-            <p><strong>Status:</strong>
-                <span th:text="${instrucao != null && instrucao.status != null && instrucao.status.name() == 'PENDENTE' ? '⚠️ Pendente:' : '✅ Concluída:'}"></span>
-            </p>
-            <p><strong>Autor:</strong> <span th:text="${instrucao.autor}"></span></p>
-            <p><strong>Data de Criação:</strong>
-                <span th:text="${#temporals.format(instrucao.dataCriacao, 'dd/MM/yyyy')}"></span></p>
+            <!-- Título -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold mb-1">Título:</label>
+                <input type="text" class="form-control" th:value="${instrucao.titulo}" readonly>
+            </div>
 
-            <p><strong>Descrição:</strong></p>
-            <div class="border rounded p-3 bg-light" th:text="${instrucao.descricao}"></div>
+            <!-- Status: label central + “tag” retangular com cantos arredondados -->
+            <div class="text-center fw-semibold mb-0">Status:</div>
+            <div class="row justify-content-center mt-0 mb-2">
+                <div class="col-12 col-md-6">
+          <span class="badge d-block rounded-2 py-2"
+                th:classappend="${
+                  instrucao.status != null && instrucao.status.name() == 'CONCLUIDA' ? 'bg-success text-white' :
+                  (instrucao.status != null && instrucao.status.name() == 'PENDENTE'  ? 'bg-warning text-white' : 'bg-secondary text-white')
+                }"
+                th:text="${instrucao.status != null && instrucao.status.name() == 'CONCLUIDA' ? 'CONCLUÍDA' : 'PENDENTE'}">
+            STATUS
+          </span>
+                </div>
+            </div>
+
+            <!-- Autor -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold mb-1">Autor:</label>
+                <input type="text" class="form-control" th:value="${instrucao.autor}" readonly>
+            </div>
+
+            <!-- Data de criação -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold mb-1">Data de Criação:</label>
+                <input type="text" class="form-control"
+                       th:value="${#temporals.format(instrucao.dataCriacao, 'dd/MM/yyyy')}" readonly>
+            </div>
+
+            <!-- Descrição -->
+            <div>
+                <label class="form-label fw-semibold mb-1">Descrição:</label>
+                <textarea class="form-control bg-light" rows="4" readonly
+                          th:text="${instrucao.descricao}">—</textarea>
+            </div>
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="button" class="btn btn-success"
+                    th:attr="data-url=@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/{idInstrucao}/editar(id=${idFazenda},idViveiro=${idViveiro},idInstrucao=${instrucao.id})}"
+                    onclick="abrirModal(this)">
+                Editar
+            </button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
         </div>
     </div>
 </div>

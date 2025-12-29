@@ -102,6 +102,10 @@ public class ViveiroController {
                 ctx.attribute("idViveiro", idViveiro);
                 ctx.attribute("instrucoes",instrucoesRecentes);
 
+                if (!viveiro.isCicloAtivo()) {
+                    ctx.attribute("info", "O viveiro não tem um ciclo ativo, inicie um para gerencia-lo.");
+                }
+
                 if (cicloViveiro != null) {
                     ctx.attribute("cicloViveiro", cicloViveiro);
                     ctx.attribute("ultimaBiometria", cicloViveiro.getUltimaBiometria());

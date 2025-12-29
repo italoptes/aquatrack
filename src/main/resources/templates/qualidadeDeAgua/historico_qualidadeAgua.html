@@ -12,38 +12,56 @@
     <!-- Cabeçalho -->
     <div class="row my-5">
         <div class="col">
-            <h1 class="text-center">Perfil do Viveiro</h1>
-            <p class="text-center">Aqui você pode gerenciar todos os dados e informações do viveiro.</p>
+            <h1 class="text-center mb-0">Histórico Qualidade de Água</h1>
+            <p class="text-center mt-0">Aqui você pode gerenciar todas as análises de Água.</p>
         </div>
     </div>
 
-    <!-- Menu de Navegação -->
-    <ul class="nav nav-tabs justify-content-center mb-4">
-        <li class="nav-item">
-            <a class="nav-link"
-               th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
-                Detalhes do Viveiro
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link"
-               th:href="@{/fazendas/{id}/viveiro/{idViveiro}/historico_biometria(id=${idFazenda}, idViveiro=${idViveiro})}">
-                Histórico de Biometria
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active"
-               th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_agua(id=${idFazenda}, idViveiro=${idViveiro})}">
-                Histórico de Qualidade de Água
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link"
-               th:href="@{/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
-                Relatórios Passados
-            </a>
-        </li>
-    </ul>
+    <!-- Abas + botão Voltar -->
+    <div class="position-relative mb-3">
+        <ul class="nav nav-tabs justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link "
+                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
+                    Detalhes do Viveiro
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                   th:href="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes(id=${idFazenda}, idViveiro=${idViveiro})}">
+                    Instruções
+                </a>
+            </li>
+
+            <li class="nav-item" >
+                <a class="nav-link"
+                   th:href="@{/fazendas/{id}/viveiro/{idViveiro}/historico_biometria(id=${idFazenda}, idViveiro=${idViveiro})}">
+                    Histórico de Biometria
+                </a>
+            </li>
+
+            <li class="nav-item" >
+                <a class="nav-link active"
+                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_agua(id=${idFazenda}, idViveiro=${idViveiro})}">
+                    Histórico de Qualidade de Água
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link"
+                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
+                    Relatórios gerados
+                </a>
+            </li>
+
+        </ul>
+
+        <a th:href="@{/fazenda/{id}(id=${idFazenda})}"
+           class="btn btn-danger btn-sm position-absolute end-0 me-2"
+           style="top:-0.4rem; z-index:2;">
+            Voltar
+        </a>
+    </div>
 
     <div class="card shadow-sm p-4">
         <h2 class="mb-3">Histórico de Qualidade da Água</h2>

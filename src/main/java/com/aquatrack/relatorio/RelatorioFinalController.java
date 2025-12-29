@@ -49,6 +49,9 @@ public class RelatorioFinalController {
             if (viveiro == null) {
                 throw new IllegalArgumentException("Viveiro não encontrado para o ID: " + idViveiro);
             }
+            if (!viveiro.isCicloAtivo()) {
+                ctx.attribute("info", "O viveiro não tem um ciclo ativo, inicie um para gerencia-lo.");
+            }
 
             // Pega apenas os relatórios ativos
             ctx.attribute("relatorios", viveiro.relatoriosFinais());
