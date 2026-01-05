@@ -83,6 +83,7 @@ public class RelatorioFinalController {
         try {
             double biometriaFinal = Double.parseDouble(ctx.formParam("biometriaFinal"));
             double biomassaFinal = Double.parseDouble(ctx.formParam("biomassaFinal"));
+            double precoVenda = Double.parseDouble(ctx.formParam("precoVenda"));
 
             String diaVenda = ctx.formParam("dia");
             String mesVenda = ctx.formParam("mes");
@@ -99,7 +100,7 @@ public class RelatorioFinalController {
             // Usa o parseData para aceitar vários formatos
             LocalDate dataDaVenda = parseData(dataDaVendaStr);
 
-            cicloViveiroService.gerarRelatorioFinal(usuario, cicloViveiro,  biometriaFinal, biomassaFinal, dataDaVenda);
+            cicloViveiroService.gerarRelatorioFinal(usuario, cicloViveiro,  biometriaFinal, biomassaFinal, dataDaVenda, precoVenda);
             viveiroService.encerrarCiclo(usuario,viveiro, cicloViveiro.getDataPovoamento().toString());
             logger.info("Relatório gerado e ciclo finalizado: fazenda={}, viveiro={}, data={}", idFazenda, idViveiro, dataDaVenda);
             ctx.redirect("/fazenda/" + idFazenda + "/viveiro/" + idViveiro + "/abrirViveiro");

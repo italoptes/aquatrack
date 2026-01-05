@@ -41,8 +41,8 @@ public class CicloViveiro {
     }
 
     //Relatorio
-    public void gerarRelatorioFinal(double biometriaFinal, double biomassaFinal, LocalDate dataVenda) {
-        this.relatorioFinal = new RelatorioFinal(this, biometriaFinal, biomassaFinal, dataVenda);
+    public void gerarRelatorioFinal(double biometriaFinal, double biomassaFinal, LocalDate dataVenda, double precoVenda) {
+        this.relatorioFinal = new RelatorioFinal(this, biometriaFinal, biomassaFinal, dataVenda, precoVenda);
         this.ativo = false; // quando gera relatório, ciclo automaticamente é encerrado
     }
     public RelatorioFinal getRelatorioFinal() {

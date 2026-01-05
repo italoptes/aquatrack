@@ -76,9 +76,9 @@ public class CicloViveiroService {
     }
 
     // ===== Relatório Final =====
-    public RelatorioFinal gerarRelatorioFinal(Usuario usuario, CicloViveiro ciclo, double biometriaFinal, double biomassaFinal, LocalDate dataVenda) {
+    public RelatorioFinal gerarRelatorioFinal(Usuario usuario, CicloViveiro ciclo, double biometriaFinal, double biomassaFinal, LocalDate dataVenda, double precoVenda) {
         if (ciclo == null || ciclo.isDeletado()) throw new IllegalArgumentException("Ciclo inválido.");
-        ciclo.gerarRelatorioFinal(biometriaFinal, biomassaFinal, dataVenda);
+        ciclo.gerarRelatorioFinal(biometriaFinal, biomassaFinal, dataVenda, precoVenda);
         usuarioRepository.salvarUsuario(usuario);
         return ciclo.getRelatorioFinal();
     }

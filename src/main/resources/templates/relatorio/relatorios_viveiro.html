@@ -51,7 +51,7 @@
                 </a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
                 <a class="nav-link"
                    th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_custos(id=${idFazenda}, idViveiro=${idViveiro})}">
                     Histórico de Custos
@@ -67,7 +67,7 @@
 
         </ul>
 
-        <a th:href="@{/fazenda/{id}(id=${idFazenda})}"
+        <a th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}"
            class="btn btn-danger btn-sm position-absolute end-0 me-2"
            style="top:-0.4rem; z-index:2;">
             Voltar
@@ -137,6 +137,9 @@
                         <p><strong>Sobrevivência:</strong> <span th:text="${r.sobrevivenciaCultivo != null ? #numbers.formatDecimal(r.sobrevivenciaCultivo, 1, 2) + ' %' : '-'}"></span></p>
                         <p><strong>FCA:</strong> <span th:text="${r.fca != null ? #numbers.formatDecimal(r.fca, 1, 2) + ' (kg ração/kg biomassa)' : '-'}"></span></p>
                         <p><strong>Consumo Total de Ração:</strong> <span th:text="${r.consumoTotalRacao != null ? #numbers.formatDecimal(r.consumoTotalRacao, 1, 2) : '-'}"></span> kg</p>
+                        <p><strong>Venda Total:</strong>R$<span th:text="${r.precoVenda != null ? #numbers.formatDecimal(r.precoVenda, 1, 'POINT', 2, 'COMMA') : '-'}"></span></p>
+                        <p><strong>Despesa Total:</strong>R$<span th:text="${r.custoTotal != null ? #numbers.formatDecimal(r.custoTotal, 1, 'POINT', 2, 'COMMA') : '-'}"></span></p>
+                        <p><strong>Lucro Final:</strong>R$<span th:text="${r.lucro != null ? #numbers.formatDecimal(r.lucro, 1, 'POINT', 2, 'COMMA') : '-'}" th:classappend="${r.lucro != null && r.lucro >= 0 ? ' text-success fw-bold' : ' text-danger fw-bold'}"></span></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>

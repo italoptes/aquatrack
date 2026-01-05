@@ -13,6 +13,9 @@ public class RelatorioFinal {
     private double biometriaFinal;
     private double biomassaFinal;
     private double consumoTotalRacao;
+    private double precoVenda;
+    private double custoTotal;
+    private double lucro;
     private int quantidadePovoada;
     private Long diasDeCultivo;
     private Double sobrevivenciaCultivo;
@@ -20,13 +23,16 @@ public class RelatorioFinal {
     private String laboratorio;
     private boolean deletado;
 
-    public RelatorioFinal(CicloViveiro ciclo, double biometriaFinal, double biomassaFinal, LocalDate dataVenda) {
+    public RelatorioFinal(CicloViveiro ciclo, double biometriaFinal, double biomassaFinal, LocalDate dataVenda, double precoVenda) {
         this.ciclo = ciclo;
         this.dataDaVenda = dataVenda;
         this.dataPovoamento = ciclo.getDataPovoamento();
         this.biometriaFinal = biometriaFinal;
         this.biomassaFinal = biomassaFinal;
         this.consumoTotalRacao = ciclo.consumoTotalRacao();
+        this.precoVenda = precoVenda;
+        this.custoTotal = ciclo.getTotalCustos();
+        this.lucro = this.precoVenda - this.custoTotal;
         this.quantidadePovoada = ciclo.getQuantidadePovoada();
         this.laboratorio = ciclo.getLaboratorio();
         this.deletado = false;
@@ -142,6 +148,30 @@ public class RelatorioFinal {
 
     public void setDeletado(boolean deletado) {
         this.deletado = deletado;
+    }
+
+    public double getPrecoVenda() {
+        return precoVenda;
+    }
+
+    public void setPrecoVenda(double precoVenda) {
+        this.precoVenda = precoVenda;
+    }
+
+    public double getCustoTotal() {
+        return custoTotal;
+    }
+
+    public void setCustoTotal(double custoTotal) {
+        this.custoTotal = custoTotal;
+    }
+
+    public double getLucro() {
+        return lucro;
+    }
+
+    public void setLucro(double lucro) {
+        this.lucro = lucro;
     }
 }
 

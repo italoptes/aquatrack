@@ -80,7 +80,7 @@
                 </a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
                 <a class="nav-link"
                    th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_custos(id=${idFazenda}, idViveiro=${idViveiro})}">
                     Histórico de Custos
@@ -178,7 +178,7 @@
 
 
         <!-- Custos -->
-        <div class="col d-flex">
+        <div class="col d-flex" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
             <div class="card h-100 w-100 d-flex flex-column shadow-sm">
                 <div class="card-header bg-primary text-white">Custos do Ciclo</div>
 
