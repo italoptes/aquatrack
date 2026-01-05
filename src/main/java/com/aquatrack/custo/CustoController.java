@@ -97,36 +97,6 @@ public class CustoController {
         }
     }
 
-    // ================= EDITAR =================
-
-    public void editarCusto(Context ctx) {
-        String idFazenda = ctx.pathParam("id");
-        String idViveiro = ctx.pathParam("idViveiro");
-        String idCusto   = ctx.pathParam("idCusto");
-
-        Usuario usuario = ctx.sessionAttribute("usuario");
-        assert usuario != null;
-
-        try {
-            Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);
-            Viveiro viveiro = fazendaService.getViveiro(fazendaUser, idViveiro);
-            CicloViveiro ciclo = viveiro.ultimoCiclo();
-
-            String nome = ctx.formParam("nome");
-            double valor = Double.parseDouble(ctx.formParam("valor"));
-
-            cicloViveiroService.editarCusto(usuario, ciclo, idCusto, nome, valor);
-
-            logger.info("Custo editado: id={}, fazenda={}, viveiro={}", idCusto, idFazenda, idViveiro);
-
-            ctx.redirect("/fazenda/" + idFazenda + "/viveiro/" + idViveiro + "/abrirViveiro");
-
-        } catch (Exception e) {
-            logger.error("Erro ao editar custo", e);
-            ctx.attribute("erro", "Erro ao editar custo.");
-            ctx.render("custo/formulario_custo.html");
-        }
-    }
 
     // ================= REMOVER =================
 

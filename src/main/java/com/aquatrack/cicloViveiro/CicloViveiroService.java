@@ -102,21 +102,6 @@ public class CicloViveiroService {
         usuarioRepository.salvarUsuario(usuario);
     }
 
-    public void editarCusto(Usuario usuario, CicloViveiro ciclo, String idCusto, String nome, double valor) {
-        if (ciclo == null || !ciclo.isAtivo()) {
-            throw new IllegalStateException("Ciclo inativo.");
-        }
-        if (idCusto == null || idCusto.isBlank()) {
-            throw new IllegalArgumentException("Custo inválido.");
-        }
-        if (valor <= 0) {
-            throw new IllegalArgumentException("Valor do custo deve ser maior que zero.");
-        }
-
-        ciclo.editarCusto(idCusto, nome, valor);
-        usuarioRepository.salvarUsuario(usuario);
-    }
-
     public void removerCusto(Usuario usuario, CicloViveiro ciclo, String idCusto) {
         if (ciclo == null || !ciclo.isAtivo()) {
             throw new IllegalStateException("Ciclo inativo.");

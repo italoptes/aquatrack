@@ -116,15 +116,6 @@ public class CicloViveiro {
         custos.add(new CustoCiclo(nome, valor, data));
     }
 
-    public void editarCusto(String id, String nome, double valor) {
-        for (CustoCiclo custo : custos) {
-            if (custo.getId().equals(id)) {
-                custo.setNome(nome);
-                custo.setValor(valor);
-                return;
-            }
-        }
-    }
 
     public void removerCusto(String id){
         for (CustoCiclo custo : custos) {
@@ -135,7 +126,17 @@ public class CicloViveiro {
     }
 
     public List<CustoCiclo> getCustos() {
-        return custos == null ? new ArrayList<>() : new ArrayList<>(custos);
+        if (custos == null) {
+            return new ArrayList<>();
+        }
+
+        List<CustoCiclo> ativos = new ArrayList<>();
+        for (CustoCiclo custo : custos) {
+            if (custo.isAtivo()) {
+                ativos.add(custo);
+            }
+        }
+        return ativos;
     }
 
     public double getTotalCustos() {

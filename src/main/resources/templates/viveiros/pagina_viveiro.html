@@ -125,56 +125,47 @@
 
         <!-- Instruções -->
         <div class="col d-flex">
-            <div class="card h-100 shadow-sm">
+            <div class="card h-100 w-100 d-flex flex-column shadow-sm">
 
-                <!-- Cabeçalho -->
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <span>Instruções Recentes</span>
-                </div>
+                <div class="card-header bg-info text-white">Custos do Ciclo</div>
 
-                <div class="card-body p-0">
-                    <div th:if="${instrucoes != null and !instrucoes.isEmpty()}">
-                        <ul class="list-group list-group-flush">
-
-                            <li class="list-group-item compacto" th:each="instrucao : ${instrucoes}">
-                                <div class="d-flex justify-content-between align-items-start gap-2">
-                                    <div class="flex-grow-1">
-                                        <div class="instrucao-titulo" th:text="${instrucao.titulo}">Título</div>
-                                        <div class="text-muted small instrucao-desc line-clamp-1"
-                                             th:text="${instrucao.descricao}">descrição…</div>
-                                    </div>
-
-                                    <div class="text-end instrucao-meta">
-                                    <span class="badge badge-sm rounded-pill d-inline-block"
-                                          th:classappend="${
-                                            instrucao.status != null && instrucao.status.name() == 'CONCLUIDA' ? ' bg-success text-white' :
-                                            (instrucao.status != null && instrucao.status.name() == 'PENDENTE'  ? ' bg-warning text-white' : ' bg-secondary text-white')
-                                          }"
-                                          th:text="${instrucao.status != null ? instrucao.status.name() : '---'}">
-                                        STATUS
-                                    </span>
-                                        <div class="text-muted meta-data"
-                                             th:text="${#temporals.format(instrucao.dataCriacao, 'dd/MM/yyyy')}">
-                                            00/00/0000
+                <div class="card-body flex-grow-1 p-0">
+                    <div class="flex-grow-1">
+                        <div th:if="${instrucoes != null and !instrucoes.isEmpty()}">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item compacto" th:each="instrucao : ${instrucoes}">
+                                    <div class="d-flex justify-content-between align-items-start gap-2">
+                                        <div class="flex-grow-1">
+                                            <div class="instrucao-titulo" th:text="${instrucao.titulo}">Título</div>
+                                            <div class="text-muted small instrucao-desc line-clamp-1"
+                                                 th:text="${instrucao.descricao}">descrição…</div>
+                                        </div>
+                                        <div class="text-end instrucao-meta">
+                            <span class="badge badge-sm rounded-pill"
+                                  th:classappend="${
+                                    instrucao.status != null && instrucao.status.name() == 'CONCLUIDA' ? ' bg-success' :
+                                    (instrucao.status != null && instrucao.status.name() == 'PENDENTE' ? ' bg-warning' : ' bg-secondary')
+                                  }"
+                                  th:text="${instrucao.status}">
+                            </span>
+                                            <div class="text-muted meta-data"
+                                                 th:text="${#temporals.format(instrucao.dataCriacao, 'dd/MM/yyyy')}">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
-
-                        </ul>
-                    </div>
-
-                    <div th:if="${instrucoes == null or instrucoes.isEmpty()}"
-                         class="p-4 text-center text-muted">
-                        Nenhuma instrução registrada ainda.
+                                </li>
+                            </ul>
+                        </div>
+                        <div th:if="${instrucoes == null or instrucoes.isEmpty()}"
+                             class="p-4 text-center text-muted">
+                            Nenhuma instrução registrada ainda.
+                        </div>
                     </div>
                 </div>
 
                 <div class="card-footer d-flex justify-content-end gap-2">
                     <a th:href="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes(id=${idFazenda}, idViveiro=${idViveiro})}"
-                       class="btn btn-dark">
-                        Ver Todas
-                    </a>
+                       class="btn btn-dark">Ver Todas</a>
 
                     <button class="btn btn-primary"
                             th:attr="data-url=@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/nova(id=${idFazenda}, idViveiro=${idViveiro})}"
@@ -185,45 +176,42 @@
             </div>
         </div>
 
+
         <!-- Custos -->
         <div class="col d-flex">
-            <div class="card h-100 w-100 shadow-sm">
+            <div class="card h-100 w-100 d-flex flex-column shadow-sm">
+                <div class="card-header bg-primary text-white">Custos do Ciclo</div>
 
-                <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
-                    <span>Custos</span>
-                </div>
-
-                <div class="card-body d-flex flex-column justify-content-center text-center">
-                    <h6 class="text-muted mb-2">Total do ciclo</h6>
-
-                    <h2 class="fw-bold text-danger">
-                        R$
-                        <span th:text="${#numbers.formatDecimal(totalCustos, 1, 'POINT', 2, 'COMMA')}">
-                        0,00
-                    </span>
+                <div class="card-body flex-grow-1 d-flex flex-column justify-content-center text-center">
+                    <h6 class="text-muted">Custo Total</h6>
+                    <h2 class="fw-bold text-primary">
+                        R$<span th:text="${#numbers.formatDecimal(totalCustos, 1, 'POINT', 2, 'COMMA')}">0,00</span>
                     </h2>
                 </div>
 
-                <div class="card-footer d-flex justify-content-end gap-2 mt-auto">
-                    <a th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_custos(id=${idFazenda}, idViveiro=${idViveiro})}"
-                       class="btn btn-dark btn-sm">
-                        Ver
+                <div class="card-footer padrao d-flex justify-content-end gap-2 mt-auto">
+                    <a class="btn btn-dark"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_custos(id=${idFazenda},idViveiro=${idViveiro})}">
+                        Ver todos
                     </a>
-
-                    <a th:href="@{/fazenda/{id}/viveiro/{idViveiro}/formulario_custo(id=${idFazenda}, idViveiro=${idViveiro})}"
-                       class="btn btn-danger btn-sm">
-                        Adicionar
+                    <a class="btn btn-primary text-white"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/formulario_custo(id=${idFazenda},idViveiro=${idViveiro})}">
+                        Adicionar Custo
                     </a>
                 </div>
-
             </div>
         </div>
 
     </div>
-
     <div id="modal-container" class="modal fade" tabindex="-1"></div>
 
-    <!-- Linha 1: Ciclo | Consumo -->
+    <!-- Dados do viveiro -->
+    <div class="mb-3">
+        <h3>Dados do viveiro</h3>
+        <hr>
+    </div>
+
+    <!-- Linha 2: Ciclo | Consumo -->
     <div th:class="|row g-4 mb-2 ${cicloViveiro != null and cicloViveiro.ativo ? 'row-cols-1 row-cols-md-2' : 'row-cols-1'}|">
         <!-- Ciclo do Viveiro -->
         <div class="col d-flex">
@@ -289,7 +277,7 @@
         </div>
     </div>
 
-    <!-- Linha 2: Qualidade | Biometria -->
+    <!-- Linha 3: Qualidade | Biometria -->
     <div class="row row-cols-1 row-cols-md-2 g-4" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
         <!-- Qualidade da Água -->
         <div class="col d-flex">

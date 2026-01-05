@@ -245,6 +245,7 @@ public class App {
         app.get("fazenda/{id}/viveiro/{idViveiro}/formulario_custo", custoController::mostrarFormularioCusto);
         app.post("fazenda/{id}/viveiro/{idViveiro}/custos", custoController::adicionarCusto);
         app.get("fazenda/{id}/viveiro/{idViveiro}/historico_custos", custoController::listarCustos);
+        app.post("fazenda/{id}/viveiro/{idViveiro}/custos/{idCusto}/remover", custoController::removerCusto);
 
         // Relatório
         app.post("/fazenda/{id}/viveiro/{idViveiro}/ciclo/finalizar", relatorioFinalController::fecharRelatorio);

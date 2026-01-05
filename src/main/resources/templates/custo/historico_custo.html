@@ -85,8 +85,9 @@
                 <thead>
                 <tr>
                     <th>Data</th>
-                    <th>Descrição</th>
+                    <th>Ca</th>
                     <th>Valor (R$)</th>
+                    <th>Ações</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -97,13 +98,27 @@
                     <td th:text="${#numbers.formatDecimal(c.valor, 1, 'POINT', 2, 'COMMA')}">
                         --
                     </td>
+
+                    <!-- Ações -->
+                    <td class="text-center">
+                        <div class="d-flex justify-content-center gap-2">
+
+                            <button class="btn btn-sm btn-danger"
+                                    data-bs-toggle="modal"
+                                    th:attr="data-bs-target='#modalRemoverCusto__' + ${c.id}">
+                                Excluir
+                            </button>
+
+                        </div>
+                    </td>
                 </tr>
 
                 <tr th:if="${custos.isEmpty()}">
-                    <td colspan="3">Nenhum custo registrado</td>
+                    <td colspan="4">Nenhum custo registrado</td>
                 </tr>
 
                 </tbody>
+
             </table>
         </div>
 
@@ -118,6 +133,39 @@
         </div>
 
     </div>
+
+    <!-- Modais Remover Custo -->
+    <th:block th:each="custo : ${custos}">
+        <div class="modal fade" th:id="'modalRemoverCusto__' + ${custo.id}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">Confirmar Remoção</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        Tem certeza que deseja excluir o custo
+                        <strong th:text="${custo.nome}">—</strong>? <br>
+                        Esta ação não poderá ser desfeita.
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <form th:action="@{/fazenda/{id}/viveiro/{idViveiro}/custos/{idCusto}/remover(
+                            id=${idFazenda},
+                            idViveiro=${idViveiro},
+                            idCusto=${custo.id}
+                        )}"
+                              method="post">
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+
 </section>
 
 </body>
