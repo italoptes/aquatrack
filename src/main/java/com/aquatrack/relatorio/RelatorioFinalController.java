@@ -139,9 +139,9 @@ public class RelatorioFinalController {
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
         ctx.attribute("usuario", usuario);
-        Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
+        Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);
         try {
-            Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
+            Viveiro viveiro = fazendaService.getViveiro(fazendaUser, idViveiro);
             CicloViveiro cicloViveiro = viveiro.ultimoCiclo();
             if (viveiro == null) {
                 throw new IllegalArgumentException("Viveiro não encontrado para o ID: " + idViveiro);
@@ -154,7 +154,7 @@ public class RelatorioFinalController {
             }
 
             // Gera o PDF com os dados do relatório já fechado
-            byte[] pdf = relatorioFinalPdfGenerator.gerarPdf(relatorioFinal, fazenda,viveiro);
+            byte[] pdf = relatorioFinalPdfGenerator.gerarPdf(relatorioFinal, fazendaUser,viveiro);
 
             if (pdf == null) {
                 throw new IllegalStateException("Falha ao gerar PDF. Byte array retornou nulo.");

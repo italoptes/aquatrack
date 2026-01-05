@@ -74,8 +74,14 @@ public class Viveiro {
 
     public CicloViveiro ultimoCiclo() {
         return ciclos.values().stream()
-                .max(Comparator.comparing(CicloViveiro::getDataPovoamento))
-                .orElse(null);
+                .filter(c -> c.isAtivo() && !c.isDeletado())
+                .findFirst()
+                .orElse(
+                        ciclos.values().stream()
+                                .filter(c -> !c.isDeletado())
+                                .max(Comparator.comparing(CicloViveiro::getDataPovoamento))
+                                .orElse(null)
+                );
     }
 
     public List<RelatorioFinal> relatoriosFinais() {
