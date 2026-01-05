@@ -2,6 +2,7 @@ package com.aquatrack.cicloViveiro;
 
 import com.aquatrack.UsuarioRepository;
 import com.aquatrack.biometria.Biometria;
+import com.aquatrack.custo.CustoCiclo;
 import com.aquatrack.qualidadeDeAgua.QualidadeDeAgua;
 import com.aquatrack.racao.TipoRacao;
 import com.aquatrack.relatorio.RelatorioFinal;
@@ -81,4 +82,65 @@ public class CicloViveiroService {
         usuarioRepository.salvarUsuario(usuario);
         return ciclo.getRelatorioFinal();
     }
+
+    // ===== Custos Ciclo =====
+    public void adicionarCusto(Usuario usuario, CicloViveiro ciclo, String nome, double valor, LocalDate data) {
+        if (ciclo == null || !ciclo.isAtivo()) {
+            throw new IllegalStateException("Ciclo inativo.");
+        }
+        if (nome == null || nome.isBlank()) {
+            throw new IllegalArgumentException("Nome do custo inválido.");
+        }
+        if (valor <= 0) {
+            throw new IllegalArgumentException("Valor do custo deve ser maior que zero.");
+        }
+        if (data == null) {
+            throw new IllegalArgumentException("Data do custo deve ser informada.");
+        }
+
+        ciclo.addCusto(nome, valor, data);
+        usuarioRepository.salvarUsuario(usuario);
+    }
+
+    public void editarCusto(Usuario usuario, CicloViveiro ciclo, String idCusto, String nome, double valor) {
+        if (ciclo == null || !ciclo.isAtivo()) {
+            throw new IllegalStateException("Ciclo inativo.");
+        }
+        if (idCusto == null || idCusto.isBlank()) {
+            throw new IllegalArgumentException("Custo inválido.");
+        }
+        if (valor <= 0) {
+            throw new IllegalArgumentException("Valor do custo deve ser maior que zero.");
+        }
+
+        ciclo.editarCusto(idCusto, nome, valor);
+        usuarioRepository.salvarUsuario(usuario);
+    }
+
+    public void removerCusto(Usuario usuario, CicloViveiro ciclo, String idCusto) {
+        if (ciclo == null || !ciclo.isAtivo()) {
+            throw new IllegalStateException("Ciclo inativo.");
+        }
+        if (idCusto == null || idCusto.isBlank()) {
+            throw new IllegalArgumentException("Custo inválido.");
+        }
+
+        ciclo.removerCusto(idCusto);
+        usuarioRepository.salvarUsuario(usuario);
+    }
+
+    public List<CustoCiclo> listarCustos(CicloViveiro ciclo) {
+        if (ciclo == null) {
+            throw new IllegalArgumentException("Ciclo inválido.");
+        }
+        return ciclo.getCustos();
+    }
+
+    public double getTotalCustos(CicloViveiro ciclo) {
+        if (ciclo == null) {
+            throw new IllegalArgumentException("Ciclo inválido.");
+        }
+        return ciclo.getTotalCustos();
+    }
+
 }

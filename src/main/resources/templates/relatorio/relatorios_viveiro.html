@@ -52,6 +52,13 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link"
+                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_custos(id=${idFazenda}, idViveiro=${idViveiro})}">
+                    Histórico de Custos
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link active"
                    th:href="@{/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
                     Relatórios gerados

@@ -1,6 +1,7 @@
 package com.aquatrack.cicloViveiro;
 
 import com.aquatrack.biometria.Biometria;
+import com.aquatrack.custo.CustoCiclo;
 import com.aquatrack.fazenda.Fazenda;
 import com.aquatrack.qualidadeDeAgua.QualidadeDeAgua;
 import com.aquatrack.racao.TipoRacao;
@@ -23,6 +24,8 @@ public class CicloViveiro {
     private List<Biometria> historicoBiometria;
     private List<QualidadeDeAgua> historicoQualidadeAgua;
     private ConsumoRacaoViveiro consumoRacaoCiclo;
+    private List<CustoCiclo> custos;
+
 
     public CicloViveiro(LocalDate dataPovoamento, int quantidadePovoada, String laboratorio) {
         this.dataPovoamento = dataPovoamento;
@@ -31,6 +34,7 @@ public class CicloViveiro {
         this.historicoBiometria = new ArrayList<Biometria>();
         this.historicoQualidadeAgua = new ArrayList<QualidadeDeAgua>();
         this.consumoRacaoCiclo = new ConsumoRacaoViveiro();
+        this.custos = new ArrayList<CustoCiclo>();
         this.relatorioFinal = null;
         this.ativo = true;
         this.deletado = false;
@@ -101,8 +105,53 @@ public class CicloViveiro {
     }
 
 
-    //Demais atribútos
+    //Custos Produção
+    public void addCusto(String nome, double valor, LocalDate data) {
+        if (this.custos == null) {
+            this.custos = new ArrayList<>();
+        }
+        if (valor <= 0) {
+            throw new IllegalArgumentException("Valor do custo não pode ser negativo ou igual a 0.");
+        }
+        custos.add(new CustoCiclo(nome, valor, data));
+    }
 
+    public void editarCusto(String id, String nome, double valor) {
+        for (CustoCiclo custo : custos) {
+            if (custo.getId().equals(id)) {
+                custo.setNome(nome);
+                custo.setValor(valor);
+                return;
+            }
+        }
+    }
+
+    public void removerCusto(String id){
+        for (CustoCiclo custo : custos) {
+            if (custo.getId().equals(id) && custo.isAtivo()) {
+                custo.setAtivo(false);
+            }
+        }
+    }
+
+    public List<CustoCiclo> getCustos() {
+        return custos == null ? new ArrayList<>() : new ArrayList<>(custos);
+    }
+
+    public double getTotalCustos() {
+        if (custos == null || custos.isEmpty()) {return 0.0;}
+
+        double totalCustos = 0;
+        for (CustoCiclo custo : custos) {
+            if (custo.isAtivo()) {
+                totalCustos += custo.getValor();
+            }
+        }
+        return totalCustos;
+    }
+
+
+    //Demais atribútos
     public boolean isAtivo() {
         return ativo;
     }
