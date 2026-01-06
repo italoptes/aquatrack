@@ -250,7 +250,7 @@ public class App {
         // Relatório
         app.post("/fazenda/{id}/viveiro/{idViveiro}/ciclo/finalizar", relatorioFinalController::fecharRelatorio);
         app.get("/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro", relatorioFinalController::listarRelatorios);
-        app.get("/fazenda/{id}/viveiro/{idViveiro}/relatorios/{dataDaVenda}/pdf", relatorioFinalController::downloadPdf);
+        app.get("/fazenda/{id}/viveiro/{idViveiro}/relatorios/{idCiclo}/pdf", relatorioFinalController::downloadPdf);
 
         // Biometria
         app.get("/fazendas/{id}/viveiro/{idViveiro}/formulario_biometria", biometriaController::mostrarFormularioBiometria);

@@ -8,6 +8,7 @@ import java.time.temporal.ChronoUnit;
 public class RelatorioFinal {
     private transient CicloViveiro ciclo;
 
+    private String idCiclo;
     private LocalDate dataDaVenda;
     private LocalDate dataPovoamento;
     private double biometriaFinal;
@@ -25,6 +26,7 @@ public class RelatorioFinal {
 
     public RelatorioFinal(CicloViveiro ciclo, double biometriaFinal, double biomassaFinal, LocalDate dataVenda, double precoVenda) {
         this.ciclo = ciclo;
+        this.idCiclo = ciclo.getIdCiclo();
         this.dataDaVenda = dataVenda;
         this.dataPovoamento = ciclo.getDataPovoamento();
         this.biometriaFinal = biometriaFinal;
@@ -53,6 +55,10 @@ public class RelatorioFinal {
     }
 
     // getters e setters...
+
+    public String getIdCiclo() {
+        return idCiclo;
+    }
 
     public CicloViveiro getCiclo() {
         return ciclo;

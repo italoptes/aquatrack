@@ -14,7 +14,7 @@ public class Viveiro {
     private String id;
     private double area;
     private List<Instrucao> instrucoes;
-    private Map<String, CicloViveiro> ciclos;
+    private Map<String, CicloViveiro> ciclos; //Id é chave para o ciclo
     private boolean deletado;
 
     public Viveiro() {
@@ -54,10 +54,10 @@ public class Viveiro {
 
     // Ciclos
     public void addCiclo(CicloViveiro cicloViveiro){
-        ciclos.put(cicloViveiro.getDataPovoamento().toString(), cicloViveiro);
+        ciclos.put(cicloViveiro.getIdCiclo(), cicloViveiro);
     }
     public void encerrarCiclo(CicloViveiro cicloViveiro){
-        ciclos.get(cicloViveiro.getDataPovoamento().toString()).desativar(); //apenas desativa o ciclo
+        ciclos.get(cicloViveiro.getIdCiclo()).desativar(); //apenas desativa o ciclo
     }
     public List<CicloViveiro> getCiclos() { //exibe apenas os que não estao deletados
         List<CicloViveiro> listaCiclos = new ArrayList<>();
