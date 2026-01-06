@@ -83,6 +83,7 @@ public class RelatorioFinalController {
         try {
             double biometriaFinal = Double.parseDouble(ctx.formParam("biometriaFinal"));
             double biomassaFinal = Double.parseDouble(ctx.formParam("biomassaFinal"));
+            double precoVenda = Double.parseDouble(ctx.formParam("precoVenda"));
 
             String diaVenda = ctx.formParam("dia");
             String mesVenda = ctx.formParam("mes");
@@ -99,8 +100,8 @@ public class RelatorioFinalController {
             // Usa o parseData para aceitar vários formatos
             LocalDate dataDaVenda = parseData(dataDaVendaStr);
 
-            cicloViveiroService.gerarRelatorioFinal(usuario, cicloViveiro,  biometriaFinal, biomassaFinal, dataDaVenda);
-            viveiroService.encerrarCiclo(usuario,viveiro, cicloViveiro.getDataPovoamento().toString());
+            cicloViveiroService.gerarRelatorioFinal(usuario, cicloViveiro,  biometriaFinal, biomassaFinal, dataDaVenda, precoVenda);
+            viveiroService.encerrarCiclo(usuario,viveiro, cicloViveiro.getIdCiclo());
             logger.info("Relatório gerado e ciclo finalizado: fazenda={}, viveiro={}, data={}", idFazenda, idViveiro, dataDaVenda);
             ctx.redirect("/fazenda/" + idFazenda + "/viveiro/" + idViveiro + "/abrirViveiro");
 
@@ -134,26 +135,29 @@ public class RelatorioFinalController {
     public void downloadPdf(Context ctx) {
         String idFazenda = ctx.pathParam("id");
         String idViveiro = ctx.pathParam("idViveiro");
-        String dataDaVendaStr = ctx.pathParam("dataDaVenda");
+        String idCiclo = ctx.pathParam("idCiclo");
         Usuario usuario = ctx.sessionAttribute("usuario");
         assert usuario != null;
         ctx.attribute("usuario", usuario);
-        Fazenda fazenda = usuarioService.buscarFazendaPorId(usuario.getId(), idFazenda);
+        Fazenda fazendaUser = usuario.getFazendaPorId(idFazenda);
         try {
-            Viveiro viveiro = fazendaService.getViveiro(fazenda, idViveiro);
-            CicloViveiro cicloViveiro = viveiro.ultimoCiclo();
+            Viveiro viveiro = fazendaService.getViveiro(fazendaUser, idViveiro);
             if (viveiro == null) {
                 throw new IllegalArgumentException("Viveiro não encontrado para o ID: " + idViveiro);
+            }
+            CicloViveiro cicloViveiro = viveiro.getCiclo(idCiclo);
+            if (cicloViveiro == null) {
+                throw new IllegalArgumentException("Ciclo não encontrado: " + idCiclo);
             }
 
             // Pega o relatorio
             RelatorioFinal relatorioFinal = cicloViveiro.getRelatorioFinal();
             if (relatorioFinal == null) {
-                throw new IllegalArgumentException("Relatório não encontrado para a data: " + dataDaVendaStr);
+                throw new IllegalArgumentException("Relatório não encontrado para o ciclo: " + idCiclo);
             }
 
             // Gera o PDF com os dados do relatório já fechado
-            byte[] pdf = relatorioFinalPdfGenerator.gerarPdf(relatorioFinal, fazenda,viveiro);
+            byte[] pdf = relatorioFinalPdfGenerator.gerarPdf(relatorioFinal, fazendaUser,viveiro);
 
             if (pdf == null) {
                 throw new IllegalStateException("Falha ao gerar PDF. Byte array retornou nulo.");
@@ -161,10 +165,10 @@ public class RelatorioFinalController {
 
             // Configura resposta HTTP
             ctx.contentType("application/pdf");
-            ctx.header("Content-Disposition", "inline; filename=relatorio-" + idViveiro + "-" + dataDaVendaStr + ".pdf");
+            ctx.header("Content-Disposition", "inline; filename=relatorio-" + idViveiro + "-" + idCiclo + ".pdf");
             ctx.result(new ByteArrayInputStream(pdf));
 
-            logger.info("PDF gerado com sucesso: fazenda={}, viveiro={}, data={}", idFazenda, idViveiro, dataDaVendaStr);
+            logger.info("PDF gerado com sucesso: fazenda={}, viveiro={}, ciclo={}", idFazenda, idViveiro, idCiclo);
 
         } catch (Exception e) {
             logger.error("Erro ao gerar PDF: fazenda={}, viveiro={}", idFazenda, idViveiro, e);

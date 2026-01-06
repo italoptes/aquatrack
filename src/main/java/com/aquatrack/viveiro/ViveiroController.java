@@ -101,6 +101,7 @@ public class ViveiroController {
                 ctx.attribute("idFazenda", id);
                 ctx.attribute("idViveiro", idViveiro);
                 ctx.attribute("instrucoes",instrucoesRecentes);
+                ctx.attribute("totalCustos", cicloViveiro != null ? cicloViveiro.getTotalCustos() : 0.0);
 
                 if (!viveiro.isCicloAtivo()) {
                     ctx.attribute("info", "O viveiro não tem um ciclo ativo, inicie um para gerencia-lo.");

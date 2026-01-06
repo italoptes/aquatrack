@@ -1,6 +1,7 @@
 package com.aquatrack.cicloViveiro;
 
 import com.aquatrack.biometria.Biometria;
+import com.aquatrack.custo.CustoCiclo;
 import com.aquatrack.fazenda.Fazenda;
 import com.aquatrack.qualidadeDeAgua.QualidadeDeAgua;
 import com.aquatrack.racao.TipoRacao;
@@ -13,7 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CicloViveiro {
-    private LocalDate dataPovoamento; //Data povoamento é o id
+    private String idCiclo;
+    private LocalDate dataPovoamento;
     private int quantidadePovoada;
     private String laboratorio;
     private boolean ativo;     // true enquanto o ciclo está em andamento
@@ -23,22 +25,38 @@ public class CicloViveiro {
     private List<Biometria> historicoBiometria;
     private List<QualidadeDeAgua> historicoQualidadeAgua;
     private ConsumoRacaoViveiro consumoRacaoCiclo;
+    private List<CustoCiclo> custos;
+
 
     public CicloViveiro(LocalDate dataPovoamento, int quantidadePovoada, String laboratorio) {
+        this.idCiclo = gerarId();
         this.dataPovoamento = dataPovoamento;
         this.quantidadePovoada = quantidadePovoada;
         this.laboratorio = laboratorio;
         this.historicoBiometria = new ArrayList<Biometria>();
         this.historicoQualidadeAgua = new ArrayList<QualidadeDeAgua>();
         this.consumoRacaoCiclo = new ConsumoRacaoViveiro();
+        this.custos = new ArrayList<CustoCiclo>();
         this.relatorioFinal = null;
         this.ativo = true;
         this.deletado = false;
     }
 
+    private String gerarId() {
+        return "R-" + java.util.UUID.randomUUID();
+    }
+
+    public String getIdCiclo() {
+        return idCiclo;
+    }
+
+    public void setIdCiclo(String idCiclo) {
+        this.idCiclo = idCiclo;
+    }
+
     //Relatorio
-    public void gerarRelatorioFinal(double biometriaFinal, double biomassaFinal, LocalDate dataVenda) {
-        this.relatorioFinal = new RelatorioFinal(this, biometriaFinal, biomassaFinal, dataVenda);
+    public void gerarRelatorioFinal(double biometriaFinal, double biomassaFinal, LocalDate dataVenda, double precoVenda) {
+        this.relatorioFinal = new RelatorioFinal(this, biometriaFinal, biomassaFinal, dataVenda, precoVenda);
         this.ativo = false; // quando gera relatório, ciclo automaticamente é encerrado
     }
     public RelatorioFinal getRelatorioFinal() {
@@ -101,8 +119,54 @@ public class CicloViveiro {
     }
 
 
-    //Demais atribútos
+    //Custos Produção
+    public void addCusto(String nome, double valor, LocalDate data) {
+        if (this.custos == null) {
+            this.custos = new ArrayList<>();
+        }
+        if (valor <= 0) {
+            throw new IllegalArgumentException("Valor do custo não pode ser negativo ou igual a 0.");
+        }
+        custos.add(new CustoCiclo(nome, valor, data));
+    }
 
+
+    public void removerCusto(String id){
+        for (CustoCiclo custo : custos) {
+            if (custo.getId().equals(id) && custo.isAtivo()) {
+                custo.setAtivo(false);
+            }
+        }
+    }
+
+    public List<CustoCiclo> getCustos() {
+        if (custos == null) {
+            return new ArrayList<>();
+        }
+
+        List<CustoCiclo> ativos = new ArrayList<>();
+        for (CustoCiclo custo : custos) {
+            if (custo.isAtivo()) {
+                ativos.add(custo);
+            }
+        }
+        return ativos;
+    }
+
+    public double getTotalCustos() {
+        if (custos == null || custos.isEmpty()) {return 0.0;}
+
+        double totalCustos = 0;
+        for (CustoCiclo custo : custos) {
+            if (custo.isAtivo()) {
+                totalCustos += custo.getValor();
+            }
+        }
+        return totalCustos;
+    }
+
+
+    //Demais atribútos
     public boolean isAtivo() {
         return ativo;
     }
