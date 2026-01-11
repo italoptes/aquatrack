@@ -23,6 +23,12 @@
     </div>
 
     <!-- Abas + botão Voltar -->
+    <div class="d-flex justify-content-end mb-2">
+        <a th:href="@{/fazenda/{id}(id=${idFazenda})}"
+           class="btn btn-danger btn-sm">
+            Voltar
+        </a>
+    </div>
     <div class="position-relative mb-3">
         <ul class="nav nav-tabs justify-content-center">
             <li class="nav-item">
@@ -67,12 +73,6 @@
                 </a>
             </li>
         </ul>
-
-        <a th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}"
-           class="btn btn-danger btn-sm position-absolute end-0 me-2"
-           style="top:-0.4rem; z-index:2;">
-            Voltar
-        </a>
     </div>
 
     <!-- Card -->
