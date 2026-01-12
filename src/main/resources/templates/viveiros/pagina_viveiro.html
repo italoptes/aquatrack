@@ -35,15 +35,6 @@
         .meta-data { margin-top: .25rem; font-size: .8rem; }
     </style>
 
-
-    <!-- Cabeçalho -->
-    <div class="row my-5">
-        <div class="col">
-            <h1 class="text-center mb-0">Perfil do Viveiro</h1>
-            <p class="text-center mt-0">Aqui você pode gerenciar todos os dados e informações do viveiro.</p>
-        </div>
-    </div>
-
     <!-- Alertas -->
     <div th:if="${info}" class="alert alert-info alert-dismissible fade show" role="alert">
         <span th:text="${info}"></span>
@@ -51,60 +42,67 @@
     </div>
 
     <!-- Abas + botão Voltar -->
-    <div class="d-flex justify-content-end mb-2">
-        <a th:href="@{/fazenda/{id}(id=${idFazenda})}"
-           class="btn btn-danger btn-sm">
-            Voltar
-        </a>
-    </div>
     <div class="position-relative mb-3">
         <ul class="nav nav-tabs justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link active"
-                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Detalhes do Viveiro
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   th:href="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Instruções
-                </a>
-            </li>
+            <div class="d-flex justify-content-center flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link active"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Detalhes do Viveiro
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Instruções
+                    </a>
+                </li>
 
-            <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
-                <a class="nav-link"
-                   th:href="@{/fazendas/{id}/viveiro/{idViveiro}/historico_biometria(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Histórico de Biometria
+                <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
+                    <a class="nav-link"
+                       th:href="@{/fazendas/{id}/viveiro/{idViveiro}/historico_biometria(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Biometria
+                    </a>
+                </li>
+
+                <li class="nav-item text-end" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
+                    <a class="nav-link"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_agua(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Qualidade de Água
+                    </a>
+                </li>
+
+                <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
+                    <a class="nav-link"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_custos(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Custos
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Relatórios
+                    </a>
+                </li>
+            </div>
+            <li class="nav-item ms-auto position-absolute end-0">
+                <a class="btn btn-danger btn-sm voltar-btn" th:href="@{/fazenda/{id}(id=${idFazenda})}">
+                    Voltar
                 </a>
             </li>
-
-            <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
-                <a class="nav-link"
-                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_agua(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Histórico de Qualidade de Água
-                </a>
-            </li>
-
-            <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
-                <a class="nav-link"
-                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_custos(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Histórico de Custos
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link"
-                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Relatórios gerados
-                </a>
-            </li>
-
         </ul>
     </div>
 
+
     <!-- Informações Básicas -->
-    <div class="mb-4">
+    <div>
+        <div class="row mt-5 mb-2">
+            <div class="col">
+                <h1 class="text-center mb-0">Perfil do Viveiro</h1>
+                <p class="text-center mt-0">Aqui você pode gerenciar todos os dados e informações do viveiro.</p>
+            </div>
+        </div>
         <br>
         <h3>Informações Básicas</h3>
         <hr>
