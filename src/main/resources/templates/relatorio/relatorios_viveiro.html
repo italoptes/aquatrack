@@ -75,14 +75,11 @@
         </ul>
     </div>
 
-    <!-- linha divisória suave entre abas e conteúdo -->
-    <hr class="mt-0 mb-4">
-
     <!-- TABELA DE RELATÓRIOS -->
-    <div class="card border">
+    <div class="card border mb-5">
         <div class="card-body px-4 py-4">
-            <h2 class="text-center mb-1">Relatórios Passados</h2>
-            <p class="text-center text-muted mb-3">Selecione um relatório para ver os detalhes</p>
+            <h2 class="text-center">Relatórios do viveiro</h2>
+            <p class="text-center mb-5">Selecione um relatório para ver os detalhes</p>
 
             <table class="table table-striped table-bordered text-center">
                 <thead>
@@ -120,7 +117,7 @@
                 </tr>
 
                 <tr th:if="${relatorios.isEmpty()}">
-                    <td colspan="2">Nenhum relatório disponível</td>
+                    <td colspan="2">Nenhum relatório gerado</td>
                 </tr>
 
                 </tbody>

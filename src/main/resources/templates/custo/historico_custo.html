@@ -76,8 +76,10 @@
     </div>
 
     <!-- Card -->
-    <div class="card shadow-sm p-4">
-        <h2 class="mb-3">Histórico de Custos do Ciclo</h2>
+    <div class="card border mb-5">
+        <div class="card-body px-4 py-4">
+        <h2 class="text-center">Histórico de Custos do Ciclo</h2>
+            <p class="text-center mb-5">Histórico de custos relacionados ao ciclo</p>
 
         <!-- Tabela do Histórico -->
         <div class="mt-4">
@@ -133,7 +135,7 @@
         </div>
 
     </div>
-
+    </div>
     <!-- Modais Remover Custo -->
     <th:block th:each="custo : ${custos}">
         <div class="modal fade" th:id="'modalRemoverCusto__' + ${custo.id}" tabindex="-1" aria-hidden="true">
