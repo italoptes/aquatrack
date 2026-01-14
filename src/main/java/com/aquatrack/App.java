@@ -2,6 +2,7 @@ package com.aquatrack;
 import com.aquatrack.biometria.BiometriaController;
 import com.aquatrack.cicloViveiro.CicloViveiroController;
 import com.aquatrack.cicloViveiro.CicloViveiroService;
+import com.aquatrack.custo.CustoController;
 import com.aquatrack.fazenda.FazendaController;
 import com.aquatrack.fazenda.FazendaService;
 import com.aquatrack.instrucoes.InstrucaoController;
@@ -157,6 +158,7 @@ public class App {
         BiometriaController biometriaController = new BiometriaController(fazendaService, usuarioService, cicloViveiroService);
         QualidadeAguaController qualidadeAguaController = new QualidadeAguaController(fazendaService, usuarioService, cicloViveiroService);
         RelatorioFinalController relatorioFinalController = new RelatorioFinalController(fazendaService, cicloViveiroService, usuarioService, viveiroService);
+        CustoController custoController = new CustoController(fazendaService, usuarioService, cicloViveiroService);
 
         // ===== Cria Usuário Master ====
          usuarioService.criaUsuarioMaster();
@@ -239,10 +241,16 @@ public class App {
         app.post("/fazendas/{id}/viveiro/{idViveiro}/formulario_ciclo_viveiro", cicloViveiroController::iniciarCiclo);
         app.get("/fazendas/{id}/viveiro/{idViveiro}/ciclo/finalizar", cicloViveiroController::finalizarCiclo);
 
+        //Custos
+        app.get("fazenda/{id}/viveiro/{idViveiro}/formulario_custo", custoController::mostrarFormularioCusto);
+        app.post("fazenda/{id}/viveiro/{idViveiro}/custos", custoController::adicionarCusto);
+        app.get("fazenda/{id}/viveiro/{idViveiro}/historico_custos", custoController::listarCustos);
+        app.post("fazenda/{id}/viveiro/{idViveiro}/custos/{idCusto}/remover", custoController::removerCusto);
+
         // Relatório
         app.post("/fazenda/{id}/viveiro/{idViveiro}/ciclo/finalizar", relatorioFinalController::fecharRelatorio);
         app.get("/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro", relatorioFinalController::listarRelatorios);
-        app.get("/fazenda/{id}/viveiro/{idViveiro}/relatorios/{dataDaVenda}/pdf", relatorioFinalController::downloadPdf);
+        app.get("/fazenda/{id}/viveiro/{idViveiro}/relatorios/{idCiclo}/pdf", relatorioFinalController::downloadPdf);
 
         // Biometria
         app.get("/fazendas/{id}/viveiro/{idViveiro}/formulario_biometria", biometriaController::mostrarFormularioBiometria);

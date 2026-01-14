@@ -8,130 +8,138 @@
 <body>
 <section class="container mt-5 pb-5">
 
-    <!-- Cabeçalho centralizado -->
-    <div class="row mt-5 mb-2">
-        <div class="col text-center">
-            <h1 class="mb-0">Instruções do Viveiro</h1>
-            <p class="mt-0">Aqui você pode gerenciar as anotações do viveiro.</p>
-        </div>
-    </div>
-
     <!-- Abas + botão Voltar -->
     <div class="position-relative mb-3">
         <ul class="nav nav-tabs justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link "
-                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Detalhes do Viveiro
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active"
-                   th:href="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Instruções
-                </a>
-            </li>
+            <div class="d-flex justify-content-center flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Detalhes do Viveiro
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active"
+                       th:href="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Instruções
+                    </a>
+                </li>
 
-            <li class="nav-item" >
-                <a class="nav-link"
-                   th:href="@{/fazendas/{id}/viveiro/{idViveiro}/historico_biometria(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Histórico de Biometria
+                <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
+                    <a class="nav-link"
+                       th:href="@{/fazendas/{id}/viveiro/{idViveiro}/historico_biometria(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Biometria
+                    </a>
+                </li>
+
+                <li class="nav-item text-end" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
+                    <a class="nav-link"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_agua(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Qualidade de Água
+                    </a>
+                </li>
+
+                <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
+                    <a class="nav-link"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_custos(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Custos
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Relatórios
+                    </a>
+                </li>
+            </div>
+            <li class="nav-item ms-auto position-absolute end-0">
+                <a class="btn btn-danger btn-sm voltar-btn" th:href="@{/fazenda/{id}(id=${idFazenda})}">
+                    Voltar
                 </a>
             </li>
-
-            <li class="nav-item" >
-                <a class="nav-link"
-                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_agua(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Histórico de Qualidade de Água
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link"
-                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Relatórios gerados
-                </a>
-            </li>
-
         </ul>
-
-        <a th:href="@{/fazenda/{id}(id=${idFazenda})}"
-           class="btn btn-danger btn-sm position-absolute end-0 me-2"
-           style="top:-0.4rem; z-index:2;">
-            Voltar
-        </a>
     </div>
 
-    <!-- Botão alinhado à direita entre título e tabela -->
-    <div class="mb-3 d-flex justify-content-end">
-        <button class="btn btn-primary"
-                th:attr="data-url=@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/nova(id=${idFazenda}, idViveiro=${idViveiro})}"
-                onclick="abrirModal(this)">
-            Adicionar instrução
-        </button>
-    </div>
 
-    <!-- Wrapper com borda + sombra + cantos arredondados -->
-    <div class="border rounded-3 shadow overflow-hidden">
-        <div class="table-responsive">
-            <!-- Tabela com bordas internas e mais respiro -->
-            <table class="table table-hover table-bordered align-middle mb-0">
-                <thead class="table-light sticky-top">
-                <tr class="py-3">
-                    <th class="fs-6 fw-semibold px-4">Título</th>
-                    <th class="fs-6 fw-semibold px-4 text-center">Status</th>
-                    <th class="fs-6 fw-semibold px-4 text-center">Autor</th>
-                    <th class="fs-6 fw-semibold px-4 text-center">Data</th>
-                    <th class="fs-6 fw-semibold px-4 pe-4 text-center">Ações</th>
-                </tr>
-                </thead>
+    <div class="card border mb-5">
+        <div class="card-body px-4 py-4">
+            <h2 class="text-center">Instruções do viveiro</h2>
+            <p class="text-center mb-2">Instruções e anotações adicionadas ao viveiro</p>
+            <!-- Botão alinhado à direita entre título e tabela -->
 
-                <tbody>
-                <tr th:each="instrucao : ${instrucoes}">
-                    <td class="px-4" th:text="${instrucao.titulo}">---</td>
+            <div class="mb-3 d-flex justify-content-end">
+                <button class="btn btn-primary"
+                        th:attr="data-url=@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/nova(id=${idFazenda}, idViveiro=${idViveiro})}"
+                        onclick="abrirModal(this)">
+                    Adicionar instrução
+                </button>
+            </div>
 
-                    <td class="px-4 text-center">
+            <!-- Wrapper com borda + sombra + cantos arredondados -->
+            <div>
+                <div class="table-responsive">
+                    <!-- Tabela com bordas internas e mais respiro -->
+                    <table class="table table-striped table-bordered text-center">
+                        <thead>
+                        <tr class="py-3">
+                            <th class="fs-6 fw-semibold px-4">Título</th>
+                            <th class="fs-6 fw-semibold px-4 text-center">Status</th>
+                            <th class="fs-6 fw-semibold px-4 text-center">Autor</th>
+                            <th class="fs-6 fw-semibold px-4 text-center">Data</th>
+                            <th class="fs-6 fw-semibold px-4 pe-4 text-center">Ações</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="instrucao : ${instrucoes}">
+                            <td class="px-4" th:text="${instrucao.titulo}">---</td>
+
+                            <td class="px-4 text-center">
                         <span class="badge rounded-pill px-3"
                               th:classappend="${instrucao.status != null and instrucao.status.name() == 'CONCLUIDA' ? 'bg-success text-white' :
                         (instrucao.status != null and instrucao.status.name() == 'PENDENTE'  ? 'bg-warning text-white' : 'bg-secondary text-white')}"
                               th:text="${instrucao.status != null ? instrucao.status.name() : '—'}">
                             STATUS
                         </span>
-                    </td>
+                            </td>
 
 
-                    <td class="px-4" th:text="${instrucao.autor}">---</td>
-                    <td class="px-4 text-nowrap" th:text="${#temporals.format(instrucao.dataCriacao, 'dd/MM/yyyy')}">
-                        ---
-                    </td>
+                            <td class="px-4" th:text="${instrucao.autor}">---</td>
+                            <td class="px-4 text-nowrap" th:text="${#temporals.format(instrucao.dataCriacao, 'dd/MM/yyyy')}">
+                                ---
+                            </td>
 
-                    <td class="px-4 pe-4 text-center">
-                        <div class="d-flex justify-content-center gap-2">
-                            <button class="btn btn-sm btn-info" title="Visualizar detalhes"
-                                    th:attr="data-url=@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/{idInstrucao}(id=${idFazenda},idViveiro=${idViveiro},idInstrucao=${instrucao.id})}"
-                                    onclick="abrirModal(this)">Ver
-                            </button>
+                            <td class="px-4 pe-4 text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button class="btn btn-sm btn-info" title="Visualizar detalhes"
+                                            th:attr="data-url=@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/{idInstrucao}(id=${idFazenda},idViveiro=${idViveiro},idInstrucao=${instrucao.id})}"
+                                            onclick="abrirModal(this)">Ver
+                                    </button>
 
-                            <!-- abrir modal de confirmação -->
-                            <button class="btn btn-sm btn-danger" title="Excluir instrução"
-                                    data-bs-toggle="modal"
-                                    th:attr="data-bs-target='#modalRemoverInstrucao__' + ${instrucao.id}">
-                                Excluir
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+                                    <!-- abrir modal de confirmação -->
+                                    <button class="btn btn-sm btn-danger" title="Excluir instrução"
+                                            data-bs-toggle="modal"
+                                            th:attr="data-bs-target='#modalRemoverInstrucao__' + ${instrucao.id}">
+                                        Excluir
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
 
-                <!-- estado vazio -->
-                <tr th:if="${#lists.isEmpty(instrucoes)}">
-                    <td colspan="5" class="text-center py-5">
-                        Nenhuma instrução encontrada.
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                        <!-- estado vazio -->
+                        <tr th:if="${#lists.isEmpty(instrucoes)}">
+                            <td colspan="5" class="text-center py-3">
+                                Nenhuma instrução encontrada.
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+
 
     <!-- container de modal -->
     <div id="modal-container" class="modal fade" tabindex="-1"></div>

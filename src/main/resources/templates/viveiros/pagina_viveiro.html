@@ -35,15 +35,6 @@
         .meta-data { margin-top: .25rem; font-size: .8rem; }
     </style>
 
-
-    <!-- Cabeçalho -->
-    <div class="row my-5">
-        <div class="col">
-            <h1 class="text-center mb-0">Perfil do Viveiro</h1>
-            <p class="text-center mt-0">Aqui você pode gerenciar todos os dados e informações do viveiro.</p>
-        </div>
-    </div>
-
     <!-- Alertas -->
     <div th:if="${info}" class="alert alert-info alert-dismissible fade show" role="alert">
         <span th:text="${info}"></span>
@@ -53,51 +44,65 @@
     <!-- Abas + botão Voltar -->
     <div class="position-relative mb-3">
         <ul class="nav nav-tabs justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link active"
-                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Detalhes do Viveiro
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   th:href="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Instruções
-                </a>
-            </li>
+            <div class="d-flex justify-content-center flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link active"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Detalhes do Viveiro
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Instruções
+                    </a>
+                </li>
 
-            <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
-                <a class="nav-link"
-                   th:href="@{/fazendas/{id}/viveiro/{idViveiro}/historico_biometria(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Histórico de Biometria
+                <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
+                    <a class="nav-link"
+                       th:href="@{/fazendas/{id}/viveiro/{idViveiro}/historico_biometria(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Biometria
+                    </a>
+                </li>
+
+                <li class="nav-item text-end" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
+                    <a class="nav-link"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_agua(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Qualidade de Água
+                    </a>
+                </li>
+
+                <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
+                    <a class="nav-link"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_custos(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Custos
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Relatórios
+                    </a>
+                </li>
+            </div>
+            <li class="nav-item ms-auto position-absolute end-0">
+                <a class="btn btn-danger btn-sm voltar-btn" th:href="@{/fazenda/{id}(id=${idFazenda})}">
+                    Voltar
                 </a>
             </li>
-
-            <li class="nav-item" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
-                <a class="nav-link"
-                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_agua(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Histórico de Qualidade de Água
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link"
-                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Relatórios gerados
-                </a>
-            </li>
-
         </ul>
-
-        <a th:href="@{/fazenda/{id}(id=${idFazenda})}"
-           class="btn btn-danger btn-sm position-absolute end-0 me-2"
-           style="top:-0.4rem; z-index:2;">
-            Voltar
-        </a>
     </div>
 
+
     <!-- Informações Básicas -->
-    <div class="mb-4">
+    <div>
+        <div class="row mt-5 mb-2">
+            <div class="col">
+                <h1 class="text-center mb-0">Perfil do Viveiro</h1>
+                <p class="text-center mt-0">Aqui você pode gerenciar todos os dados e informações do viveiro.</p>
+            </div>
+        </div>
         <br>
         <h3>Informações Básicas</h3>
         <hr>
@@ -113,61 +118,88 @@
         </form>
     </div>
 
-    <!-- Instruções Recentes -->
-    <div class="mb-5">
-        <div class="card h-100 shadow-sm">
+    <!-- Linha: Instruções | Custos -->
+    <div class="row row-cols-1 row-cols-md-2 g-4 mb-5">
 
-            <!-- Cabeçalho escuro como na imagem -->
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <span>Instruções Recentes</span>
-            </div>
+        <!-- Instruções -->
+        <div class="col d-flex">
+            <div class="card h-100 w-100 d-flex flex-column shadow-sm">
 
-            <div class="card-body p-0">
-                <div th:if="${instrucoes != null and !instrucoes.isEmpty()}">
-                    <ul class="list-group list-group-flush">
+                <div class="card-header bg-info text-white">Custos do Ciclo</div>
 
-                        <!-- Item da instrução (reduzi de py-3 para classe .compacto) -->
-                        <li class="list-group-item compacto" th:each="instrucao : ${instrucoes}">
-                            <div class="d-flex justify-content-between align-items-start gap-2">
-                                <div class="flex-grow-1">
-                                    <div class="instrucao-titulo" th:text="${instrucao.titulo}">Título</div>
-                                    <div class="text-muted small instrucao-desc line-clamp-1"
-                                         th:text="${instrucao.descricao}">descrição…</div>
-                                </div>
-
-                                <div class="text-end instrucao-meta">
-      <span class="badge badge-sm rounded-pill d-inline-block"
-            th:classappend="${
-              instrucao.status != null && instrucao.status.name() == 'CONCLUIDA' ? ' bg-success text-white' :
-              (instrucao.status != null && instrucao.status.name() == 'PENDENTE'  ? ' bg-warning text-white' : ' bg-secondary text-white')
-            }"
-            th:text="${instrucao.status != null ? instrucao.status.name() : '---'}">STATUS</span>
-                                    <div class="text-muted meta-data"
-                                         th:text="${#temporals.format(instrucao.dataCriacao, 'dd/MM/yyyy')}">00/00/0000</div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                <div class="card-body flex-grow-1 p-0">
+                    <div class="flex-grow-1">
+                        <div th:if="${instrucoes != null and !instrucoes.isEmpty()}">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item compacto" th:each="instrucao : ${instrucoes}">
+                                    <div class="d-flex justify-content-between align-items-start gap-2">
+                                        <div class="flex-grow-1">
+                                            <div class="instrucao-titulo" th:text="${instrucao.titulo}">Título</div>
+                                            <div class="text-muted small instrucao-desc line-clamp-1"
+                                                 th:text="${instrucao.descricao}">descrição…</div>
+                                        </div>
+                                        <div class="text-end instrucao-meta">
+                            <span class="badge badge-sm rounded-pill"
+                                  th:classappend="${
+                                    instrucao.status != null && instrucao.status.name() == 'CONCLUIDA' ? ' bg-success' :
+                                    (instrucao.status != null && instrucao.status.name() == 'PENDENTE' ? ' bg-warning' : ' bg-secondary')
+                                  }"
+                                  th:text="${instrucao.status}">
+                            </span>
+                                            <div class="text-muted meta-data"
+                                                 th:text="${#temporals.format(instrucao.dataCriacao, 'dd/MM/yyyy')}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div th:if="${instrucoes == null or instrucoes.isEmpty()}"
+                             class="p-4 text-center text-muted">
+                            Nenhuma instrução registrada ainda.
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Sem instruções -->
-                <div th:if="${instrucoes == null or instrucoes.isEmpty()}" class="p-4 text-center text-muted">
-                    Nenhuma instrução registrada ainda.
+                <div class="card-footer d-flex justify-content-end gap-2">
+                    <a th:href="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes(id=${idFazenda}, idViveiro=${idViveiro})}"
+                       class="btn btn-dark">Ver Todas</a>
+
+                    <button class="btn btn-primary"
+                            th:attr="data-url=@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/nova(id=${idFazenda}, idViveiro=${idViveiro})}"
+                            onclick="abrirModal(this)">
+                        Adicionar Instrução
+                    </button>
                 </div>
-            </div>
-
-            <!-- Rodapé com botões alinhados à direita -->
-            <div class="card-footer d-flex justify-content-end gap-2">
-                <a th:href="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes(id=${idFazenda}, idViveiro=${idViveiro})}"
-                   class="btn btn-dark">Ver Todas</a>
-
-                <button class="btn btn-primary"
-                        th:attr="data-url=@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes/nova(id=${idFazenda}, idViveiro=${idViveiro})}"
-                        onclick="abrirModal(this)">
-                    Adicionar Instrução
-                </button>
             </div>
         </div>
+
+
+        <!-- Custos -->
+        <div class="col d-flex" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
+            <div class="card h-100 w-100 d-flex flex-column shadow-sm">
+                <div class="card-header bg-primary text-white">Custos do Ciclo</div>
+
+                <div class="card-body flex-grow-1 d-flex flex-column justify-content-center text-center">
+                    <h6 class="text-muted">Custo Total</h6>
+                    <h2 class="fw-bold text-primary">
+                        R$<span th:text="${#numbers.formatDecimal(totalCustos, 1, 'POINT', 2, 'COMMA')}">0,00</span>
+                    </h2>
+                </div>
+
+                <div class="card-footer padrao d-flex justify-content-end gap-2 mt-auto">
+                    <a class="btn btn-dark"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_custos(id=${idFazenda},idViveiro=${idViveiro})}">
+                        Ver todos
+                    </a>
+                    <a class="btn btn-primary text-white"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/formulario_custo(id=${idFazenda},idViveiro=${idViveiro})}">
+                        Adicionar Custo
+                    </a>
+                </div>
+            </div>
+        </div>
+
     </div>
     <div id="modal-container" class="modal fade" tabindex="-1"></div>
 
@@ -177,7 +209,7 @@
         <hr>
     </div>
 
-    <!-- Linha 1: Ciclo | Consumo -->
+    <!-- Linha 2: Ciclo | Consumo -->
     <div th:class="|row g-4 mb-2 ${cicloViveiro != null and cicloViveiro.ativo ? 'row-cols-1 row-cols-md-2' : 'row-cols-1'}|">
         <!-- Ciclo do Viveiro -->
         <div class="col d-flex">
@@ -243,7 +275,7 @@
         </div>
     </div>
 
-    <!-- Linha 2: Qualidade | Biometria -->
+    <!-- Linha 3: Qualidade | Biometria -->
     <div class="row row-cols-1 row-cols-md-2 g-4" th:if="${cicloViveiro != null and cicloViveiro.ativo}">
         <!-- Qualidade da Água -->
         <div class="col d-flex">

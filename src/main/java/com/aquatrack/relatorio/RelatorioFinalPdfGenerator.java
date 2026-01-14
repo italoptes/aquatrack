@@ -46,6 +46,9 @@ public class RelatorioFinalPdfGenerator {
             // ---------- TABELA 3 ----------
             tabela3(relatorio, fonte, document);
 
+            // ---------- TABELA 4 ----------
+            tabela4(relatorio, fonte, document);
+
             // ---------- RODAPÉ ----------
             rodape("©2025 AquaTrack", fonte.subtitleFont(), document);
 
@@ -63,6 +66,21 @@ public class RelatorioFinalPdfGenerator {
         Paragraph rodape = new Paragraph(string, fonte);
         rodape.setAlignment(Element.ALIGN_CENTER);
         document.add(rodape);
+    }
+
+    private void tabela4(RelatorioFinal relatorio, Fontes fonte, Document document) {
+        PdfPTable table4 = new PdfPTable(3);
+        table4.setWidthPercentage(100);
+        addHeaderCell(table4, "Venda Total (R$)", fonte.headerFont());
+        addHeaderCell(table4, "Despesa Final (R$)", fonte.headerFont());
+        addHeaderCell(table4, "Lucro (R$)", fonte.headerFont());
+
+        addValueCell(table4, String.valueOf(relatorio.getPrecoVenda()), fonte.valueFont());
+        addValueCell(table4, String.valueOf(relatorio.getCustoTotal()), fonte.valueFont());
+        addValueCell(table4, String.valueOf(relatorio.getLucro()), fonte.valueFont());
+
+        document.add(table4);
+        document.add(Chunk.NEWLINE);
     }
 
     private void tabela3(RelatorioFinal relatorio, Fontes fonte, Document document) {

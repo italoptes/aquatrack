@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  aquatrack:
+    build: .
+
+    container_name: aquatrack_server
+  
+    ports:
+      - "8000:8000"
+      
+    restart: always

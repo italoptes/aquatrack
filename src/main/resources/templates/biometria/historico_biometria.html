@@ -10,66 +10,66 @@
 
 <section class="container mt-5">
 
-    <!-- Cabeçalho -->
-    <div class="row my-5">
-        <div class="col">
-            <h1 class="text-center mb-0">Histórico Biometria</h1>
-            <p class="text-center mt-0">Aqui você pode gerenciar todas as análises de biometria.</p>
-        </div>
-    </div>
-
     <!-- Abas + botão Voltar -->
     <div class="position-relative mb-3">
         <ul class="nav nav-tabs justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link "
-                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Detalhes do Viveiro
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   th:href="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Instruções
-                </a>
-            </li>
+            <div class="d-flex justify-content-center flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link "
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/abrirViveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Detalhes do Viveiro
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/fazendas/{id}/viveiros/{idViveiro}/instrucoes(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Instruções
+                    </a>
+                </li>
 
-            <li class="nav-item" >
-                <a class="nav-link active"
-                   th:href="@{/fazendas/{id}/viveiro/{idViveiro}/historico_biometria(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Histórico de Biometria
+                <li class="nav-item" >
+                    <a class="nav-link active"
+                       th:href="@{/fazendas/{id}/viveiro/{idViveiro}/historico_biometria(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Biometria
+                    </a>
+                </li>
+
+                <li class="nav-item" >
+                    <a class="nav-link"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_agua(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Qualidade de Água
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_custos(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Custos
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
+                        Relatórios
+                    </a>
+                </li>
+            </div>
+            <li class="nav-item ms-auto position-absolute end-0">
+                <a class="btn btn-danger btn-sm voltar-btn" th:href="@{/fazenda/{id}(id=${idFazenda})}">
+                    Voltar
                 </a>
             </li>
-
-            <li class="nav-item" >
-                <a class="nav-link"
-                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/historico_agua(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Histórico de Qualidade de Água
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link"
-                   th:href="@{/fazenda/{id}/viveiro/{idViveiro}/relatorio_viveiro(id=${idFazenda}, idViveiro=${idViveiro})}">
-                    Relatórios gerados
-                </a>
-            </li>
-
         </ul>
-
-        <a th:href="@{/fazenda/{id}(id=${idFazenda})}"
-           class="btn btn-danger btn-sm position-absolute end-0 me-2"
-           style="top:-0.4rem; z-index:2;">
-            Voltar
-        </a>
     </div>
 
-    <div class="card shadow-sm p-4">
-        <h2 class="mb-3">Histórico de Biometria</h2>
+    <div class="card border mb-5">
+        <div class="card-body px-4 py-4">
+        <h2 class="text-center">Histórico de Biometria</h2>
+            <p class="text-center mb-5">Tabela de Biometrias coletadas</p>
 
-        <!-- Tabela do Histórico -->
-        <div class="mt-4">
-            <h4>Tabela de Biometrias</h4>
+            <!-- Tabela do Histórico -->
+            <div class="mt-4">
             <table class="table table-striped table-bordered text-center">
                 <thead>
                 <tr>
@@ -91,6 +91,7 @@
             </table>
         </div>
 
+    </div>
     </div>
 </section>
 
