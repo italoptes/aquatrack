@@ -5,6 +5,8 @@
 
 # 🦐 AquaTrack -- Gerenciador de Fazendas de Camarão
 
+##Versão antiga | Deprecated
+
 Sistema web para auxiliar proprietários e funcionários de fazendas aquícolas no **controle de dados, métricas e processos** relacionados ao cultivo de camarões.  
 Permite monitorar **qualidade da água**, **gestão de ração** e **biometria dos camarões**, contribuindo para maior eficiência e sustentabilidade da produção.
 
